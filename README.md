@@ -1,6 +1,22 @@
 # screen
-AWS Side Channels
+The goal of this project are to create a LLVM pass which runs over the S2N codebase on each commit:
 
+Current S2N defenses:
+- constant time routines to maintain speed
+- if any errors in client<->server connection: randomization [10,30]
+- human review for memory, want: taint analysis to verify code paths are constant, memory access patterns side channels
+
+Purpose of this tool, using annotations
+1) A-B no branches
+2) A-C no branches that depend on secret memory
+3) A-D branch that depend on secret memory: print upper bound of set 
+	* proof that no new memory access patterns
+
+Targeting: arm, x86
+
+ 
+# paper survey based on AWS papers
+- writeups in drive
 
 "Hey, You, Get Off of My Cloud: Exploring Information Leakage in Third-Party Compute Clouds", Thomas Ristenpart, Eran Tromer, Hovav Shacham, and Stefan Savage
 
