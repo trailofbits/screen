@@ -18,12 +18,13 @@ Targeting: arm, x86
 ## Running the pass
 Annotations are as follows:
 For full function anaylsis use:
-```__attribute__((annotate("screen_function_paths"))) 
-```
+
+__attribute__((annotate("screen_function_paths"))) 
+
 For analysis in between two instructions use:
-```__attribute__((annotate("screen_paths_start"))) char a = 'a';
-attribute__((annotate("screen_paths_end"))) char b = 'b';
-```
+__attribute__((annotate("screen_paths_start"))) char a = 'a';
+__attribute__((annotate("screen_paths_end"))) char b = 'b';
+
 
 ## Example output
 ```[+] Running screen pass...
