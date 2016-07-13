@@ -15,6 +15,16 @@ Purpose of this tool, using annotations
 
 Targeting: arm, x86
 
+## Running the pass
+Annotations are as follows:
+For full function anaylsis use:
+```__attribute__((annotate("screen_function_paths"))) 
+```
+For analysis in between two instructions use:
+```__attribute__((annotate("screen_paths_start"))) char a = 'a';
+attribute__((annotate("screen_paths_end"))) char b = 'b';
+```
+
 ## Example output
 ```[+] Running screen pass...
 SCreening Paths of Program: tests/test1.bc
