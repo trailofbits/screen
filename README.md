@@ -15,6 +15,27 @@ Purpose of this tool, using annotations
 
 Targeting: arm, x86
 
+## Example output
+```[+] Running screen pass...
+SCreening Paths of Program: tests/test1.bc
+	[-] Found Ending Annotation
+	InstEnd = b
+	[-] Found Starting Annotation
+	InstStart = a
+
+Detected sensitive code region, tracking code paths for function: foo
+
+Detected sensitive code region, tracking code paths for function: main
+
+[+] Dumping annotation path results...
+In between annotated variables
+	[ 5 ] Instructions
+	[ 0 ] Branch Instructions
+
+[+] Dumping function path results...
+Function: foo => Branches: 0
+Function: main => Branches: 3
+```
  
 # paper survey based on AWS papers
 - writeups in drive
