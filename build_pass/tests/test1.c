@@ -1,3 +1,6 @@
+// had it working to get a simple flattening list, but clearly not branch specific
+//main() -> fun1() -> llvm.var.annotation() -> printf() -> llvm.var.annotation() -> printf() -> foo() -> printf() -> printf()
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -25,6 +28,7 @@ int main(int argc, char **argv)
 
 	int a = 0x41414141;
 	int *b = &a;
+	printf("BranchInst approaching...\n");
 	if ( argc != 1)
 		a = fun1();
 	else
