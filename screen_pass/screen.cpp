@@ -13,9 +13,15 @@
 #include <llvm/IRReader/IRReader.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/Support/SourceMgr.h>
+#include <llvm/Support/CommandLine.h>
+
 #include <iostream>
 
 using namespace llvm;
+
+static cl::opt<std::string> kOutputName("screen-output",
+                                        cl::desc("Provide an output file for screen output"),
+                                        cl::Required);
 
 namespace {
 
