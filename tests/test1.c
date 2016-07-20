@@ -16,7 +16,7 @@ int fun1(){
 	__attribute__((annotate("screen_paths_end"))) char b = 'b';
 	printf("Ending character: %c", b);
 	char c = a + b;
-	return 1;
+	return (int) c;
 }
 	
 __attribute__((annotate("screen_function_paths"))) 
