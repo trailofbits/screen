@@ -1,3 +1,8 @@
 build/
 **.bc
 tags
+CMakeFiles
+CMakeScripts
+CMakeCache.txt
+CtestTestfile.cmake
+cmake_install.cmake
