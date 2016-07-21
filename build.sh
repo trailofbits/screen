@@ -2,7 +2,14 @@
 
 BUILD_DIR=$(dirname $0)/build
 LLVM_DIR=llvm
-FILE=clang+llvm-3.8.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
+
+LLVM_VER=3.8.0
+DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
+DIST_VERSION=$(lsb_release -sr)
+
+FILE=clang+llvm-${LLVM_VER}-x86_64-linux-gnu-${DISTRO}-${DIST_VERSION}.tar.xz
+
+
 
 if [ $(uname -s) != 'Linux' ]; then
    echo "[!] Screen build script only supported on Linux"
@@ -16,7 +23,7 @@ cd ${BUILD_DIR}
 
 if [ ! -f ${FILE} ]; then
   echo "[+] Downloading Clang+LLVM.."
-  wget http://llvm.org/releases/3.8.1/${FILE}
+  wget http://llvm.org/releases/${LLVM_VER}/${FILE}
 fi
 
 if [ ! -d ${LLVM_DIR} ]; then
