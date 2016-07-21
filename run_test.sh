@@ -25,7 +25,7 @@ ${LLVM_BIN}/clang -o tests/test1.bc tests/test1.c -c -emit-llvm -Wall -Wshadow -
 ${LLVM_BIN}/clang -o tests/test1 tests/test1.c -Wall -Wshadow -Wextra
 
 echo "[+] Running screen pass..."
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/test1.bc -o tests/test1_xformed.bc -screen -screen-output OUTPUT -screen-start-symbol main 
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/test1.bc -o tests/test1_transformed.bc -screen -screen-output OUTPUT -screen-start-symbol main 
 
 echo
 echo
@@ -34,3 +34,9 @@ echo "B1: main-> printf-> fun1-> anno-> printf-> anno-> printf-> printf"
 echo "B2: main-> printf-> foo-> printf-> printf"
 echo
 echo
+echo "[+] Running screen pass on libs2n..."
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/libs2n.bc -o tests/libs2n_transformed.bc -screen -screen-output OUTPUT -screen-start-symbol s2n_client_hello_send 
+echo
+echo
+
+
