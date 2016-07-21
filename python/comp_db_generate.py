@@ -21,6 +21,10 @@ import argparse
 
 
 class BitcodeCompilation(object):
+    '''
+    Parses a compile_database.json and produces a list of commands to generate
+    bitcode files instead of object files.
+    '''
     def __init__(self, llvm_root, verbose=False):
         self.produced_bc = []
         self.produced_lib_bc = []
@@ -155,10 +159,12 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(dest='cmd')
 
     # Params to generate a compilation shell script
-    gen = subparsers.add_parser('generate')
+    gen = subparsers.add_parser('generate',
+        help="Generate a shell script that will build libraries as bitcode")
 
     # Commands to provide which libraries were built
-    dump = subparsers.add_parser('dump')
+    dump = subparsers.add_parser('dump',
+        help="Produce a list of libraries that were built")
     #dump.add_argument('-d', '--dump-libs', action='store_true',
             #help='Just produce the names of bitcode libraries that would have '+
                #'been generated from this compilation.')
