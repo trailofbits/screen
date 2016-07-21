@@ -21,8 +21,7 @@
 using namespace llvm;
 
 static cl::opt<std::string> kSymbolName("screen-start-symbol",
-                                        cl::desc("Provide a symbol in the program to treat as the _start, main() is set by default"),
-                                        cl::Required);
+                                        cl::desc("Provide a symbol in the program to treat as the _start, main() is set by default"));
 
 static cl::opt<std::string> kOutputName("screen-output",
                                         cl::desc("Provide an output file for screen output"),
@@ -177,9 +176,10 @@ namespace {
         }
 
         void dump_cfg(){
+	    outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
             // dump paths and their function calls
             for(int i = 0;i<cfg_paths_funcs.size();i++){
-                outs()<<"\n\nPATH ["<<i<<"]\n";
+                outs()<<"\nPATH ["<<i<<"]\n";
                 for(int j = 0;j<cfg_paths_funcs[i].size()-1;++j){
                     outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
                 

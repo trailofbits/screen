@@ -28,6 +28,7 @@ __attribute__((annotate("screen_paths_end"))) char b = 'b';
 
 ## Example output
 ```
+[+] Compiling tests...
 [+] Running screen pass...
 SCreening Paths of Program: tests/test1.bc
 	[-] Found Ending Annotation
@@ -45,8 +46,23 @@ In between annotated variables
 	[ 0 ] Branch Instructions
 
 [+] Dumping function path results...
-Function: foo => Branches: 0
-Function: main => Branches: 3
+In annotated function: foo
+	[ 5 ] Instructions
+	[ 0 ] Branch Instructions
+In annotated function: main
+	[ 28 ] Instructions
+	[ 3 ] Branch Instructions
+[ CallInst CFG ]
+Pulling out CallInst paths for each possible program execution path
+
+PATH [0]
+main() -> printf() -> fun1() -> llvm.var.annotation() -> printf() -> llvm.var.annotation() -> printf() -> printf()
+PATH [1]
+main() -> printf() -> foo() -> printf() -> printf()
+
+[+] Verifying paths:
+B1: main-> printf-> fun1-> anno-> printf-> anno-> printf-> printf
+B2: main-> printf-> foo-> printf-> printf
 ```
 # Setup
 1. For the initial setup, run quick_start.sh
