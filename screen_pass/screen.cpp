@@ -89,10 +89,10 @@ namespace {
                 for(BasicBlock &B: F){
                     for(Instruction &I: B){
                         if(IntrinsicInst* ann = dyn_cast<IntrinsicInst>(&I)){
-                            if(ann_start != nullptr && ann->isIdenticalTo(ann_start)){
+                            if(ann->isIdenticalTo(ann_start)){
                                 ann_start_count = true;
                             }
-                            if(ann_end != nullptr && ann->isIdenticalTo(ann_end)){
+                            if(ann->isIdenticalTo(ann_end)){
                                 ann_start_count = false;
                             }
                         }
@@ -123,18 +123,16 @@ namespace {
         void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
             paths_funcs.push_back(f);
             outs()<<f->getName()<<" ";
-            for(Function::iterator bb = f->begin();bb != f->end(); ++bb){
-                for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
-                    if(CallInst *call = dyn_cast<CallInst>(inst)){
-                        // depth first recursion to collect function calls
-                        follow_call(call->getCalledFunction(), paths_funcs);    
-                    }
-                
-                }
-
-            }
-
-            
+	    Function::iterator bb = f->begin();
+	    // gather called functions for that first BB
+	    // TODO: reason about subsequent BB's of the called function (after entry BB) 
+	    for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
+		    if(CallInst *call = dyn_cast<CallInst>(inst)){
+			// depth first recursion to collect function calls
+			follow_call(call->getCalledFunction(), paths_funcs);    
+		    }
+		
+	    }
 
             return;
         }
@@ -142,7 +140,7 @@ namespace {
         void recurse_to_gather_paths(BasicBlock* bb, std::vector<std::vector<Function *>> &cfg_paths_funcs){
             for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
                 if(CallInst *call = dyn_cast<CallInst>(inst)){
-                    // depth first recursion to collect function calls
+                    // depth first recursion to collect function calls inside 1 bb
                     follow_call(call->getCalledFunction(), cfg_paths_funcs[cfg_paths_funcs.size()-1]);    
                 }
             
@@ -160,15 +158,6 @@ namespace {
                     cfg_paths_funcs.push_back(forked);
                 }
                 succ_count += 1;
-                /*// recurse to get call tree of this bb
-                for(BasicBlock::iterator inst = bb_succ->begin(); inst != bb_succ->end(); ++inst){
-                    if(CallInst *call = dyn_cast<CallInst>(inst)){
-                        // depth first recursion to collect function calls
-                        //follow_call(call->getCalledFunction(), cfg_paths_funcs[I]);    
-                    }
-                
-                }*/
-
                 // now recurse through all the bb's successors
                 recurse_to_gather_paths(bb_succ, cfg_paths_funcs);    
             }
@@ -247,10 +236,6 @@ namespace {
 
             // next stage, recover CFG, starting at main do a depth first search for annotation_start
             Function *main = M.getFunction("main");
-            if (main == nullptr) {
-              errs() << "Running on libraries not yet supported";
-              return false;
-            }
             // first function is always main
             std::vector<Function *> first_path;
             first_path.push_back(main);
