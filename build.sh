@@ -34,7 +34,8 @@ if [ "$1" == "debug" ]; then
 else
   BUILD_TYPE="Release"
 fi
-
+echo "[+] Running cmake"
+cd build/llvm
 cmake -DLLVM_ROOT=${LLVM_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
 make -j4
 
