@@ -81,7 +81,6 @@ namespace {
                     int *n = new int[2];
                            n[0] = count_brn;
                     n[1] = count_inst;
-                    outs()<<n[0]<<"\n\n";
                     fns_br[&F] = n;
                 }
 
@@ -122,7 +121,6 @@ namespace {
         
         void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
             paths_funcs.push_back(f);
-            outs()<<f->getName()<<" ";
 	    Function::iterator bb = f->begin();
 	    // gather called functions for that first BB
 	    // TODO: reason about subsequent BB's of the called function (after entry BB) 
