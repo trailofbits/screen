@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC  -fPIC -fvisibility-inlines-hidden -std=c++11 -ffunction-sections -fdata-sections -O3 -DNDEBUG  -Wl,-O3 -Wl,--gc-sections -shared -Wl,-soname,screen.so -o ../lib/screen.so CMakeFiles/screen.dir/screen.cpp.o 
