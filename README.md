@@ -26,6 +26,7 @@ __attribute__((annotate("screen_paths_start"))) char a = 'a';
 __attribute__((annotate("screen_paths_end"))) char b = 'b';
 
 ## Opt Command Line Flags (Manditory)
+```
 -screen
 	Runs main pass
 
@@ -34,6 +35,7 @@ __attribute__((annotate("screen_paths_end"))) char b = 'b';
 
 -screen-start-symbol=<string>                                  
 	Provide a symbol in the program to treat as the _start, , usually main for most cases
+```
 
 ## Example output
 ```
