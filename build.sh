@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ $(uname -s) != 'Linux' ]; then
+   echo "[!] Screen build script only supported on Linux"
+  exit 1
+fi
+
 BUILD_DIR=$(dirname $0)/build
 LLVM_DIR=llvm
 
@@ -8,14 +13,6 @@ DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
 DIST_VERSION=$(lsb_release -sr)
 
 FILE=clang+llvm-${LLVM_VER}-x86_64-linux-gnu-${DISTRO}-${DIST_VERSION}.tar.xz
-
-
-
-if [ $(uname -s) != 'Linux' ]; then
-   echo "[!] Screen build script only supported on Linux"
-  exit 1
-fi
-
 
 echo "[+] Creating '${BUILD_DIR}'"
 mkdir -p ${BUILD_DIR}
