@@ -114,12 +114,12 @@ namespace {
             // out_fd << ann_count << "\n";
 
             outs()<<"\n[+] Dumping annotation path results...\n";
-            out_fd <<"In between annotated variables: "<<"\tInstruction Count: "<<ann_count<<"\tBranch Instruction Count: "<<ann_count_brc<<"\n";
+            out_fd <<"In between annotated variables: "<<"\tInstructions: "<<ann_count<<"\tBranchInstructions: "<<ann_count_brc<<"\n";
             outs()<<"In between annotated variables\n"<<"\t[ "<<ann_count<<" ] Instructions\n"<<"\t[ "<<ann_count_brc<<" ] Branch Instructions\n";
             outs()<<"\n[+] Dumping function path results...\n";
             for(std::map<llvm::Function *,int*>::iterator elem = fns_br.begin(); elem != fns_br.end(); ++elem)
             {
-                out_fd << "In annotated function: "<<elem->first->getName() << "\tInstruction Count: " << elem->second[1] << "\tBranch Instruction Count: " << elem->second[0] << "\n";
+                out_fd << "In annotated function: "<<elem->first->getName() << "\tInstructions: " << elem->second[1] << "\tBranchInstructions: " << elem->second[0] << "\n";
                 outs()<<"In annotated function: "<<(elem->first)->getName()<<"\n"<<"\t[ "<<(elem->second)[1]<<" ] Instructions\n"<<"\t[ "<<(elem->second)[0]<<" ] Branch Instructions\n";
             }
         
