@@ -25,19 +25,32 @@ For analysis in between two instructions use:
 __attribute__((annotate("screen_paths_start"))) char a = 'a';
 __attribute__((annotate("screen_paths_end"))) char b = 'b';
 
+## Opt Command Line Flags (Manditory)
+-screen
+	Runs main pass
+
+-screen-output=<string>                                        
+	Provide an output file for screen output
+
+-screen-start-symbol=<string>                                  
+	Provide a symbol in the program to treat as the _start, , usually main for most cases
 
 ## Example output
 ```
+sophia@litterbox:~/SCR/screen/ $ ./run_test.sh 
 [+] Compiling tests...
 [+] Running screen pass...
 SCreening Paths of Program: tests/test1.bc
-	[-] Found Ending Annotation
+
+[-] Using start symbol: main
+[-] Found Ending Annotation
 	InstEnd = b
-	[-] Found Starting Annotation
+[-] Found Starting Annotation
 	InstStart = a
 
-Detected sensitive code region, tracking code paths for function: foo
 
+[ STARTING MAIN ANALYSIS ]
+Detected sensitive code region, tracking code paths for function: foo
 Detected sensitive code region, tracking code paths for function: main
 
 [+] Dumping annotation path results...
@@ -63,6 +76,7 @@ main() -> printf() -> foo() -> printf() -> printf()
 [+] Verifying paths:
 B1: main-> printf-> fun1-> anno-> printf-> anno-> printf-> printf
 B2: main-> printf-> foo-> printf-> printf
+
 ```
 # Setup
 1. For the initial setup, run quick_start.sh

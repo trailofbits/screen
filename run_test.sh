@@ -21,11 +21,11 @@ if [ ! -d ${LLVM_BIN} ]; then
 fi
 
 echo "[+] Compiling tests..."
-${LLVM_BIN}/clang -o tests/test1.bc tests/test1.c -c -emit-llvm -Wall -Wshadow -Wextra
+${LLVM_BIN}/clang -o tests/test1.bc tests/test1.c -c -emit-llvm -Wall -Wshadow -Wextra 
 ${LLVM_BIN}/clang -o tests/test1 tests/test1.c -Wall -Wshadow -Wextra
 
 echo "[+] Running screen pass..."
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/test1.bc -o tests/test1_xformed.bc -screen -screen-output OUTPUT
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/test1.bc -o tests/test1_xformed.bc -screen -screen-output OUTPUT -screen-start-symbol main 
 
 echo
 echo

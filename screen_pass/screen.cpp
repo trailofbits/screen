@@ -21,7 +21,8 @@
 using namespace llvm;
 
 static cl::opt<std::string> kSymbolName("screen-start-symbol",
-                                        cl::desc("Provide a symbol in the program to treat as the _start, main() is set by default"));
+                                        cl::desc("Provide a symbol in the program to treat as the _start, usually main for most cases"),
+                                        cl::Required);
 
 static cl::opt<std::string> kOutputName("screen-output",
                                         cl::desc("Provide an output file for screen output"),
@@ -35,14 +36,8 @@ namespace {
         std::error_code start_sym_err;
         std::error_code out_fd_err;
     	raw_fd_ostream out_fd;
+	std::string start_sym = kSymbolName;
 
-   /*     screen()
-        : start_sym(kSymbolName)
-        , ModulePass(ID)
-        {
-
-        }
-*/
         screen()
         : out_fd(kOutputName, out_fd_err, OpenFlags::F_RW)
         , ModulePass(ID)
@@ -194,9 +189,9 @@ namespace {
         {
             // runOnFunction is run on every function in each compilation unit
             outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
-            
-            
-            // gather instruction annotations
+	    outs()<<"\n[-] Using start symbol: "<<start_sym<<"\n";
+
+	    // gather instruction annotations
             Function *F = M.getFunction("llvm.var.annotation");
             if(F){
                 for (User* U : F->users()) {
@@ -205,14 +200,14 @@ namespace {
                         ConstantDataArray* annotationStrValArray = dyn_cast<ConstantDataArray> (annotationStrVar->getInitializer());
                         StringRef annotationStrValCString = annotationStrValArray->getAsCString();
                         if(annotationStrValCString == "screen_paths_start"){
-                            outs()<<"\t[-] Found Starting Annotation\n";
+                            outs()<<"[-] Found Starting Annotation\n";
                             Value* annotatedVar = dyn_cast<Value>(annotateCall->getOperand(0)->stripPointerCasts());
                             std::string inst_as_str = annotatedVar->getName().str().c_str();
                             outs()<<"\tInstStart = "<<inst_as_str<<"\n";
                             ann_start = annotateCall;
                         }
                         if(annotationStrValCString == "screen_paths_end"){
-                            outs()<<"\t[-] Found Ending Annotation\n";
+                            outs()<<"[-] Found Ending Annotation\n";
                             Value* annotatedVar = dyn_cast<Value>(annotateCall->getOperand(0)->stripPointerCasts());
                             std::string inst_as_str = annotatedVar->getName().str().c_str();
                             outs()<<"\tInstEnd = "<<inst_as_str<<"\n";
@@ -223,6 +218,7 @@ namespace {
             }    
 
 
+	    outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
             // gather function annotations
             auto global_annos = M.getNamedGlobal("llvm.global.annotations");
             if (global_annos) {
@@ -234,7 +230,7 @@ namespace {
                       auto anno = cast<ConstantDataArray>(cast<GlobalVariable>(e->getOperand(1)->getOperand(0))->getOperand(0))->getAsCString();
 
                       if (anno == "screen_function_paths") { 
-                        outs()<<"\nDetected sensitive code region, tracking code paths for function: "<<fn->getName()<<"\n";
+                        outs()<<"Detected sensitive code region, tracking code paths for function: "<<fn->getName()<<"\n";
                         // add to array or something: 
                         mod_fns.push_back(fn); 
                     }
@@ -246,7 +242,11 @@ namespace {
             simple_demo(M);
 
             // next stage, recover CFG, starting at main do a depth first search for annotation_start
-            Function *main = M.getFunction("main");
+            Function *main = M.getFunction(start_sym);
+	    if(!main){
+		outs()<<"[ ERROR ] no start symbol "<<start_sym<<"\n";
+	    	return false;
+	    }
             // first function is always main
             std::vector<Function *> first_path;
             first_path.push_back(main);
