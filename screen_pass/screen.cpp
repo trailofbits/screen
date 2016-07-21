@@ -20,6 +20,10 @@
 
 using namespace llvm;
 
+static cl::opt<std::string> kSymbolName("screen-start-symbol",
+                                        cl::desc("Provide a symbol in the program to treat as the _start, main() is set by default"),
+                                        cl::Required);
+
 static cl::opt<std::string> kOutputName("screen-output",
                                         cl::desc("Provide an output file for screen output"),
                                         cl::Required);
@@ -29,9 +33,17 @@ namespace {
     using sys::fs::OpenFlags;
     struct screen : public ModulePass {
 
+        std::error_code start_sym_err;
         std::error_code out_fd_err;
     	raw_fd_ostream out_fd;
 
+   /*     screen()
+        : start_sym(kSymbolName)
+        , ModulePass(ID)
+        {
+
+        }
+*/
         screen()
         : out_fd(kOutputName, out_fd_err, OpenFlags::F_RW)
         , ModulePass(ID)
@@ -108,11 +120,12 @@ namespace {
             // out_fd << ann_count << "\n";
 
             outs()<<"\n[+] Dumping annotation path results...\n";
+            out_fd <<"In between annotated variables: "<<"\tInstruction Count: "<<ann_count<<"\tBranch Instruction Count: "<<ann_count_brc<<"\n";
             outs()<<"In between annotated variables\n"<<"\t[ "<<ann_count<<" ] Instructions\n"<<"\t[ "<<ann_count_brc<<" ] Branch Instructions\n";
             outs()<<"\n[+] Dumping function path results...\n";
             for(std::map<llvm::Function *,int*>::iterator elem = fns_br.begin(); elem != fns_br.end(); ++elem)
             {
-                out_fd << elem->first->getName() << "\t" << elem->second[1] << "\t" << elem->second[0] << "\n";
+                out_fd << "In annotated function: "<<elem->first->getName() << "\tInstruction Count: " << elem->second[1] << "\tBranch Instruction Count: " << elem->second[0] << "\n";
                 outs()<<"In annotated function: "<<(elem->first)->getName()<<"\n"<<"\t[ "<<(elem->second)[1]<<" ] Instructions\n"<<"\t[ "<<(elem->second)[0]<<" ] Branch Instructions\n";
             }
         
