@@ -6,3 +6,4 @@ CMakeScripts
 CMakeCache.txt
 CtestTestfile.cmake
 cmake_install.cmake
+Makefile
