@@ -21,5 +21,5 @@ set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include (LLVMUtils)
 
 
-add_subdirectory(tests)
+# add_subdirectory(tests)
 add_subdirectory(screen_pass)
