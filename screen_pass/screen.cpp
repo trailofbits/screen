@@ -94,10 +94,10 @@ namespace {
                 for(BasicBlock &B: F){
                     for(Instruction &I: B){
                         if(IntrinsicInst* ann = dyn_cast<IntrinsicInst>(&I)){
-                            if(ann->isIdenticalTo(ann_start)){
+                            if(ann_start != nullptr && ann->isIdenticalTo(ann_start)){
                                 ann_start_count = true;
                             }
-                            if(ann->isIdenticalTo(ann_end)){
+                            if(ann_end != nullptr && ann->isIdenticalTo(ann_end)){
                                 ann_start_count = false;
                             }
                         }
