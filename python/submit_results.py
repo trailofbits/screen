@@ -4,11 +4,13 @@ import sys
 import argparse
 import datetime
 
+try:
+    import boto3 
+except ImportError:
+    import pip
+    pip.main(['install', 'boto3'])
 
-import sys
-print('Running: {}'.format(sys.executable))
-
-import boto3 
+    import boto3
 
 client = boto3.client('dynamodb')
 res = boto3.resource('dynamodb')
