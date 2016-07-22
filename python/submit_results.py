@@ -4,6 +4,10 @@ import sys
 import argparse
 import datetime
 
+
+import sys
+print('Running: {}'.format(sys.executable))
+
 import boto3 
 
 client = boto3.client('dynamodb')
