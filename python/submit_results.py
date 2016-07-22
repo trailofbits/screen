@@ -67,9 +67,6 @@ if __name__ == '__main__':
 
     o = parse_results(args.results)
 
-    client = boto3.client('dynamodb')
-    resource = boto3.resource('dynamodb')
-
     o['commit'] = args.commit
     o['timestamp'] = datetime.datetime.now().isoformat()
 
