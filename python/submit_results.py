@@ -12,8 +12,9 @@ except ImportError:
 
     import boto3
 
-client = boto3.client('dynamodb')
-res = boto3.resource('dynamodb')
+region = 'us-east-1'
+client = boto3.client('dynamodb', region_name=region)
+res = boto3.resource('dynamodb', region_name=region)
 
 def get_table(table_name, key_name='commit'):
     try:
