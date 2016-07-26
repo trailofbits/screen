@@ -47,7 +47,6 @@ namespace {
 
         static char ID; 
         std::vector<std::vector<Function *>> cfg_paths_funcs;
-        std::vector<Function*> mod_fns;
         std::map<llvm::Function *,int*> fns_br;
         //TODO: intelligently pair annotations, check if same parent function, then proxmity in code? (inst count of func to determine this)
         llvm::IntrinsicInst* ann_start = NULL;
@@ -58,7 +57,7 @@ namespace {
             return "screen_pass";
         }
 
-        void simple_demo(Module &M){
+        void simple_demo(Module &M, std::vector<Function*> mod_fns){
         
             // old way: the basic count branches and instructions when everything is in the same function, ignoring callinst, demo     
             int ann_count = 0;    
@@ -171,7 +170,7 @@ namespace {
         }
 
         void dump_cfg(){
-	    outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+            outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
             // dump paths and their function calls
             for(int i = 0;i<cfg_paths_funcs.size();i++){
                 outs()<<"\nPATH ["<<i<<"]\n";
@@ -185,6 +184,40 @@ namespace {
         
         }
 
+        std::vector<Function*> collectAnnotatedFunctions(const Module &M) {
+            std::vector<Function*> annotatedFunctions;
+
+            auto gAnnotationsPtr = M.getNamedGlobal("llvm.global.annotations");
+            if (!gAnnotationsPtr)
+              return annotatedFunctions;
+
+            auto gAnnotations =
+                cast<ConstantArray>(gAnnotationsPtr->getOperand(0));
+
+            // Go through all annotations
+            for (auto i = gAnnotations->op_begin(); i != gAnnotations->op_end();
+                    i++) {
+                auto annotation = cast<ConstantStruct>(*i);
+  
+                // Get the Function* that this attribute applies to
+                auto function = dyn_cast<Function>(annotation->getOperand(0)->getOperand(0));
+                if (!function)
+                    continue;
+  
+                // If we do have a function, pull out its name and make sure
+                // it's what we're looking for
+                auto v = cast<GlobalVariable>(annotation->getOperand(1)->getOperand(0));
+                auto label = cast<ConstantDataArray>(v->getOperand(0))->getAsCString();
+  
+                if (label == "screen_function_paths") { 
+                    outs() << "Detected sensitive code region, tracking code " <<
+                              "paths for function: "<<function->getName()<<"\n";
+                    annotatedFunctions.push_back(function); 
+                }
+            }
+            return annotatedFunctions;
+            
+        }
         virtual bool runOnModule(Module &M) 
         {
             // runOnFunction is run on every function in each compilation unit
@@ -220,26 +253,10 @@ namespace {
 
 	    outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
             // gather function annotations
-            auto global_annos = M.getNamedGlobal("llvm.global.annotations");
-            if (global_annos) {
-                  auto a = cast<ConstantArray>(global_annos->getOperand(0));
-                  for (int i=0; i<a->getNumOperands(); i++) {
-                    auto e = cast<ConstantStruct>(a->getOperand(i));
-
-                    if (auto fn = dyn_cast<Function>(e->getOperand(0)->getOperand(0))) {
-                      auto anno = cast<ConstantDataArray>(cast<GlobalVariable>(e->getOperand(1)->getOperand(0))->getOperand(0))->getAsCString();
-
-                      if (anno == "screen_function_paths") { 
-                        outs()<<"Detected sensitive code region, tracking code paths for function: "<<fn->getName()<<"\n";
-                        // add to array or something: 
-                        mod_fns.push_back(fn); 
-                    }
-                  }
-                }
-            }    
+            auto annotatedFunctions = collectAnnotatedFunctions(M);
     
             // DEMO: putting this in a function to save it and make it more readable
-            simple_demo(M);
+            simple_demo(M, annotatedFunctions);
 
             // next stage, recover CFG, starting at main do a depth first search for annotation_start
             Function *main = M.getFunction(start_sym);
