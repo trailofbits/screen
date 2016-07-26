@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd $(dirname $0)
 LLVM_BIN=build/llvm/bin
 case $OSTYPE in
   darwin*) 
