@@ -182,12 +182,55 @@ std::string start_sym = kSymbolName;
         return { kInvalidAnnotation, "" };
     }
 
-    // @brief Given a module and a map of regions we are interested in, do the
-    // actual analysis and return a map of RegionStats results.
-    RegionStatsMap getAnnotatedInstructionStats(const Module &M,
-            RegionMap &spans) {
+    // @brief Find all functions in a module M that have screen annotations
+    // applied to them.
+    std::vector<const Function*> collectAnnotatedFunctions(const Module &M)
+    {
+        std::vector<const Function*> annotatedFunctions;
+
+        auto gAnnotationsPtr = M.getNamedGlobal("llvm.global.annotations");
+        if (!gAnnotationsPtr)
+          return annotatedFunctions;
+
+        auto gAnnotations =
+            cast<ConstantArray>(gAnnotationsPtr->getOperand(0));
+
+        // Go through all annotations
+        for (auto i = gAnnotations->op_begin(); i != gAnnotations->op_end();
+                i++) {
+            auto annotation = cast<ConstantStruct>(*i);
+
+            // Get the Function* that this attribute applies to
+            auto function = dyn_cast<Function>(annotation->getOperand(0)->getOperand(0));
+            if (!function)
+                continue;
+
+            // If we do have a function, pull out its name and make sure
+            // it's what we're looking for
+            auto v = cast<GlobalVariable>(annotation->getOperand(1)->getOperand(0));
+            auto label = cast<ConstantDataArray>(v->getOperand(0))->getAsCString();
+
+            auto annotationString = std::string(label);
+            if (annotationString.compare(0, m_prefix.length(), m_prefix) == 0) {
+                outs() << "Detected sensitive code region, tracking code " <<
+                          "paths for function: "<<function->getName()<<"\n";
+                annotatedFunctions.push_back(function); 
+            }
+        }
+        return annotatedFunctions;
+        
+    }
+
+    // @brief Given a module, find all relevant regions we are interested in and
+    // do the actual analysis.
+    //
+    // @return map of RegionStats results.
+    RegionStatsMap getAnnotatedInstructionStats(const Module &M)
+    {
 
         RegionStatsMap inProgress, completed;
+
+        auto spans = collectAnnotatedSpans(M);
 
         for (const Function &F: M)
         {
@@ -281,9 +324,7 @@ std::string start_sym = kSymbolName;
     // @brief Entry point for the basic passes
     void simple_demo(Module &M){
 
-        auto spans = collectAnnotatedSpans(M);
-        auto spanStats = getAnnotatedInstructionStats(M, spans);
-
+        auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
         outs() << "Span results: " << spanStats.size() << "\n";
@@ -367,44 +408,6 @@ std::string start_sym = kSymbolName;
         
         }
     
-    }
-
-    // @brief Find all functions in a module M that have screen annotations
-    // applied to them.
-    std::vector<const Function*> collectAnnotatedFunctions(const Module &M) {
-        std::vector<const Function*> annotatedFunctions;
-
-        auto gAnnotationsPtr = M.getNamedGlobal("llvm.global.annotations");
-        if (!gAnnotationsPtr)
-          return annotatedFunctions;
-
-        auto gAnnotations =
-            cast<ConstantArray>(gAnnotationsPtr->getOperand(0));
-
-        // Go through all annotations
-        for (auto i = gAnnotations->op_begin(); i != gAnnotations->op_end();
-                i++) {
-            auto annotation = cast<ConstantStruct>(*i);
-
-            // Get the Function* that this attribute applies to
-            auto function = dyn_cast<Function>(annotation->getOperand(0)->getOperand(0));
-            if (!function)
-                continue;
-
-            // If we do have a function, pull out its name and make sure
-            // it's what we're looking for
-            auto v = cast<GlobalVariable>(annotation->getOperand(1)->getOperand(0));
-            auto label = cast<ConstantDataArray>(v->getOperand(0))->getAsCString();
-
-            auto annotationString = std::string(label);
-            if (annotationString.compare(0, m_prefix.length(), m_prefix) == 0) {
-                outs() << "Detected sensitive code region, tracking code " <<
-                          "paths for function: "<<function->getName()<<"\n";
-                annotatedFunctions.push_back(function); 
-            }
-        }
-        return annotatedFunctions;
-        
     }
 
     // @brief Take an IntrinsicInstr representing an annotation and return its
