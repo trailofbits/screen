@@ -99,7 +99,17 @@ struct ScreenPass : public ModulePass {
     {
         if (isa<BranchInst>(I)) {
             stats.branches += 1;
-        }
+        
+	    // get Condition of the branch instruction
+	    if(cast<BranchInst>(I).isConditional()){
+	    	Value *condition = cast<BranchInst>(I).getCondition();
+		if (!condition || !condition->hasOneUse())
+		      return;
+	
+		condition->dump();
+	    }
+
+	}
         stats.instructions += 1;
     }
 
