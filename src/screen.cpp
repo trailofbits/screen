@@ -169,11 +169,16 @@ struct ScreenPass : public ModulePass {
         std::string end = "_end";
         std::string prefix{kPrefix};
 
-        auto differing = 
-            std::mismatch(std::begin(annotation), std::end(annotation),
-                          std::begin(prefix), std::end(prefix));
+        auto a_ptr = annotation.begin();
+        auto p_ptr = prefix.begin();
 
-        std::string postfix(differing.first, annotation.end());
+        for( ; *a_ptr == *p_ptr && a_ptr != annotation.end() &&
+                                   p_ptr != prefix.end();
+               a_ptr++, p_ptr++) {
+        }
+
+
+        std::string postfix(a_ptr, annotation.end());
 
         if (std::equal(start.rbegin(), start.rend(), annotation.rbegin())) {
             // 6 = strlen("_start")
