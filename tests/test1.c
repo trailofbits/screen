@@ -9,14 +9,38 @@ void foo(int a) {
 	printf("%d", a);	
 	return;
 }
+
+int fun1();
+int fun2();
+int fun3();
+int fun4();
 		
 int fun1(){
 	__attribute__((annotate("screen_paths_start"))) char a = 'a';
-	printf("Starting character: %c", a);
+	printf("starting character: %c", a);
 	__attribute__((annotate("screen_paths_end"))) char b = 'b';
 	printf("Ending character: %c", b);
 	char c = a + b;
+        fun2();
 	return (int) c;
+}
+
+int fun2(){
+	__attribute__((annotate("screen_paths2_start"))) char a = 'a';
+	printf("starting character: %c", a);
+        fun3();
+        return 0;
+}
+
+int fun3() {
+  fun4();
+  return 0;
+}
+
+int fun4() {
+	__attribute__((annotate("screen_paths2_end"))) char b = 'b';
+        (void) b;
+        return 0;
 }
 	
 __attribute__((annotate("screen_function_paths"))) 
