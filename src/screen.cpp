@@ -17,8 +17,13 @@
 #include <llvm/Support/CommandLine.h>
 
 #include <iostream>
+#include <algorithm>
+#include <set>
+
+#include "traverse.h"
 
 using namespace llvm;
+using namespace screen;
 
 static cl::opt<std::string> kSymbolName("screen-start-symbol",
                                         cl::desc("Provide a symbol in the program to treat as the _start, usually main for most cases"),
@@ -32,28 +37,20 @@ static cl::opt<std::string> kOutputName("screen-output",
 namespace {
 
 
-void traverseInstructions(const Function &F,
-                          std::function<void(const Instruction &I)> Cb)
-{
-    for (const BasicBlock &BB: F) {
-        for (const Instruction &I: BB) {
-            Cb(I);
-        }
-    }
-}
 
 using sys::fs::OpenFlags;
-struct screen : public ModulePass {
+
+struct ScreenPass : public ModulePass {
 
     std::error_code start_sym_err;
     std::error_code out_fd_err;
     raw_fd_ostream out_fd;
-std::string start_sym = kSymbolName;
+    std::string start_sym = kSymbolName;
     std::string m_prefix;
 
 
 
-    screen()
+    ScreenPass()
     : out_fd(kOutputName, out_fd_err, OpenFlags::F_RW)
     , ModulePass(ID)
     , m_prefix("screen_")
@@ -115,6 +112,21 @@ std::string start_sym = kSymbolName;
         stats.instructions += 1;
     }
 
+    // @brief Take an IntrinsicInstr representing an annotation and return its
+    // string value.
+    std::string annotationToString(const IntrinsicInst &I) {
+        GlobalVariable* annotationStrVar =
+            dyn_cast<GlobalVariable>(I.getOperand(1)->stripPointerCasts());
+
+        ConstantDataArray* annotationStrValArray =
+            dyn_cast<ConstantDataArray> (annotationStrVar->getInitializer());
+
+        StringRef annotationStrValCString =
+            annotationStrValArray->getAsCString();
+
+        return std::string {annotationStrValCString};
+    }
+
     // @brief Return some basic statistics in the form of RegionStats objects
     // about a collection of annotated functions in a module.
     FuncStatsMap getAnnotatedFunctionStats(const Module &M)
@@ -126,9 +138,11 @@ std::string start_sym = kSymbolName;
         auto accFunc = [this](FuncStatsMap &map, const Function *F) -> FuncStatsMap& {
             RegionStats info;
 
-            traverseInstructions(*F, [&info, this](const Instruction &I) {
+            TraverseLinearly T;
+            T.setCallback([&info, this](const Instruction &I) {
                 surveyInstruction(I, info);
             });
+            T.traverse(F);
 
             map[F] = info;
             return map;
@@ -234,7 +248,8 @@ std::string start_sym = kSymbolName;
 
         for (const Function &F: M)
         {
-            traverseInstructions(F, [&] (const Instruction &I) {
+            TraverseLinearly T;
+            T.setCallback( [&] (const Instruction &I) {
                 // First, check if we need to update our currently tracked-
                 // regions (i.e. if we just entered or left a region.
                 for (auto namedSpan : spans) {
@@ -265,6 +280,7 @@ std::string start_sym = kSymbolName;
                     surveyInstruction(I, info.second);
                 }
             });
+            T.traverse(&F);
         }
 
         // Anything still in progress at this point is an unfinished block.
@@ -351,18 +367,24 @@ std::string start_sym = kSymbolName;
 
     }
     
+    // Take a function, add it to |paths_func|, then iterate through all calls
+    // that go from here
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
+
         paths_funcs.push_back(f);
-    Function::iterator bb = f->begin();
-    // gather called functions for that first BB
-    // TODO: reason about subsequent BB's of the called function (after entry BB) 
-    for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
-        if(CallInst *call = dyn_cast<CallInst>(inst)){
-        // depth first recursion to collect function calls
-        follow_call(call->getCalledFunction(), paths_funcs);    
+        outs() << "Visiting: " << f->getName() << "\n";
+       
+        Function::iterator bb = f->begin();
+
+        // gather called functions for that first BB
+        // TODO: reason about subsequent BB's of the called function (after entry BB) 
+        for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
+            if(CallInst *call = dyn_cast<CallInst>(inst)){
+                // depth first recursion to collect function calls
+                follow_call(call->getCalledFunction(), paths_funcs);    
+            }
+        
         }
-    
-    }
 
         return;
     }
@@ -410,46 +432,45 @@ std::string start_sym = kSymbolName;
     
     }
 
-    // @brief Take an IntrinsicInstr representing an annotation and return its
-    // string value.
-    std::string annotationToString(const IntrinsicInst &I) {
-        GlobalVariable* annotationStrVar = dyn_cast<GlobalVariable> (I.getOperand(1)->stripPointerCasts());
-        ConstantDataArray* annotationStrValArray = dyn_cast<ConstantDataArray> (annotationStrVar->getInitializer());
-        StringRef annotationStrValCString = annotationStrValArray->getAsCString();
-        return std::string {annotationStrValCString};
+    void descendFromFunction(Function *F) {
+        std::vector<Function *> first_path;
+        first_path.push_back(F);
+
+        cfg_paths_funcs.push_back(first_path);
+    
+        int current_bb_num = 0;    
+        Function::iterator bb = F->begin();
+
+        recurse_to_gather_paths(&*bb, cfg_paths_funcs);
+
+        dump_cfg();
     }
+
+    
 
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
         outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
         outs()<<"\n[-] Using start symbol: "<<start_sym<<"\n";
-
-    // gather instruction annotations
-    //
-
-
         outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
-        // gather function annotations
-        // DEMO: putting this in a function to save it and make it more readable
+
         simple_demo(M);
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
         Function *main = M.getFunction(start_sym);
-    if(!main){
-    outs()<<"[ ERROR ] no start symbol "<<start_sym<<"\n";
-        return false;
-    }
-        // first function is always main
-        std::vector<Function *> first_path;
-        first_path.push_back(main);
-        cfg_paths_funcs.push_back(first_path);
-    
-        int current_bb_num = 0;    
-        Function::iterator bb = main->begin();
-        recurse_to_gather_paths(&*bb, cfg_paths_funcs);
+        if(!main){
+            outs()<<"[ ERROR ] no start symbol "<<start_sym<<"\n";
+            return false;
+        }
 
-        dump_cfg();
+        // first function is always main
+        // descendFromFunction(main);
+        //
+        TraverseCfg T;
+        T.setCallback([](const Instruction &I) {
+        });
+        T.traverse(main);
 
         return true;
     }
@@ -459,6 +480,6 @@ std::string start_sym = kSymbolName;
 }
 
 
-char screen::ID = 0;
-static RegisterPass<screen> X("screen", "screen", false, false);
+char ScreenPass::ID = 0;
+static RegisterPass<ScreenPass> X("screen", "screen", false, false);
 
