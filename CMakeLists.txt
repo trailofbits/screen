@@ -23,7 +23,7 @@ include (LLVMUtils)
 ######
 # Use the compiler we just got to build screen as well
 set (CMAKE_CXX_COMPILER "${LLVM_ROOT}/bin/clang++")
-set (CMAKE_CC_COMPILER "${LLVM_ROOT}/bin/clang")
+set (CMAKE_C_COMPILER "${LLVM_ROOT}/bin/clang")
 
 set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic")
