@@ -106,7 +106,7 @@ struct ScreenPass : public ModulePass {
 		if (!condition || !condition->hasOneUse())
 		      return;
 	
-		condition->dump();
+		// condition->dump(); 
 	    }
 
 	}
