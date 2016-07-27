@@ -55,6 +55,7 @@ struct ScreenPass : public ModulePass {
     ~ScreenPass()
     {
       out_fd << "]";
+      out_fd.close();
     }
 
     static char ID; 
@@ -230,8 +231,8 @@ struct ScreenPass : public ModulePass {
 
             auto annotationString = std::string(label);
             if (annotationString.compare(0, kPrefix.length(), kPrefix) == 0) {
-                outs() << "Detected sensitive code region, tracking code " <<
-                          "paths for function: "<<function->getName()<<"\n";
+                // outs() << "Detected sensitive code region, tracking code " <<
+                //           "paths for function: "<<function->getName()<<"\n";
                 annotatedFunctions.push_back(function); 
             }
         }
@@ -290,7 +291,7 @@ struct ScreenPass : public ModulePass {
         // Anything still in progress at this point is an unfinished block.
         // TODO: This will not be true once we use this code for CFG traversals
         for (auto &info : inProgress) {
-            outs() << "[W] Unfinished block: " << info.first << "\n";
+            errs() << "[W] Unfinished block: " << info.first << "\n";
         }
         return completed;
     }
@@ -347,28 +348,26 @@ struct ScreenPass : public ModulePass {
         auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        outs() << "Span results: " << spanStats.size() << "\n";
+        // outs() << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
 
-            outs() << " - name: " << name << ", branches: " << r.branches
-                   << ", instructions " << r.instructions << "\n";
+            // outs() << " - name: " << name << ", branches: " << r.branches
+            //        << ", instructions " << r.instructions << "\n";
 
         }
 
-        outs() << "Func results: " << funcStats.size() << "\n";
+        // outs() << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
 
-            outs() << " - func name: " << f->getName() << ", branches: "
-                   << span.branches << ", instructions " << span.instructions
-                   << "\n";
+            // outs() << " - func name: " << f->getName() << ", branches: "
+            //        << span.branches << ", instructions " << span.instructions
+            //        << "\n";
+
             dumpRegionStats(f->getName(), span);
-                 
-            //out_fd << f->getName() << "\t" << span.branches << "\t"
-                   //<< span.instructions << "\n";
         }
 
     }
@@ -378,7 +377,7 @@ struct ScreenPass : public ModulePass {
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
 
         paths_funcs.push_back(f);
-        outs() << "Visiting: " << f->getName() << "\n";
+        // outs() << "Visiting: " << f->getName() << "\n";
        
         Function::iterator bb = f->begin();
 
@@ -424,15 +423,15 @@ struct ScreenPass : public ModulePass {
     }
 
     void dump_cfg(){
-        outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+        // outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
         for(size_t i = 0;i<cfg_paths_funcs.size();i++){
-            outs()<<"\nPATH ["<<i<<"]\n";
+            // outs()<<"\nPATH ["<<i<<"]\n";
             for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
+                // outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
-            outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
+            // outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
         
         }
     
@@ -458,7 +457,7 @@ struct ScreenPass : public ModulePass {
 
         out_fd << "{ \"" << name << "\":   \n{"
                << "     \"branches\": " << R.branches << ",\n"
-               << "     \"instructions\": " << R.instructions;
+               << "     \"instructions\": " << R.instructions << "\n";
 
         auto path = R.callPath;
         if (!path.empty()) {
@@ -530,10 +529,11 @@ struct ScreenPass : public ModulePass {
         for (auto stats : completed) {
           auto span = stats.second;
 
-          outs() << "Name: " << stats.first << "\n";
+          // outs() << "Name: " << stats.first << "\n";
 
           dumpRegionStats(stats.first, stats.second);
 
+          /* 
           auto path = span.callPath;
           for (size_t i = 0; i < path.size(); i++) {
             outs() << path[i]->getName();
@@ -542,6 +542,7 @@ struct ScreenPass : public ModulePass {
             }
           }
           outs() << "\n";
+          */
         }
 
     }
@@ -549,9 +550,9 @@ struct ScreenPass : public ModulePass {
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
-        outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
-        outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
-        outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
+        // outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
+        // outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
+        // outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
 
         simple_demo(M);
 
