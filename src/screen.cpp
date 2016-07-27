@@ -161,16 +161,17 @@ struct ScreenPass : public ModulePass {
     //
     std::pair<AnnotationType, std::string>
     parseAnnotation(std::string annotation) {
-       if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
-           return {kInvalidAnnotation, ""};
-       }
+        if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
+            return {kInvalidAnnotation, ""};
+        }
 
         std::string start = "_start";
         std::string end = "_end";
+        std::string prefix{kPrefix};
 
         auto differing = 
             std::mismatch(std::begin(annotation), std::end(annotation),
-                          std::begin(kPrefix), std::end(kPrefix));
+                          std::begin(prefix), std::end(prefix));
 
         std::string postfix(differing.first, annotation.end());
 
