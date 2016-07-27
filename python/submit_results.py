@@ -44,7 +44,9 @@ def parse_results(filename):
     '''
     d = {}
     with open(filename, 'r') as f:
-        results = json.load(f)
+        contents = f.read()
+        print("Loading: ", contents)
+        results = json.load(contents)
         for obj in results:
             d.update(obj)
     return d
