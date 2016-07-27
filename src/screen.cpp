@@ -17,6 +17,7 @@
 #include <llvm/Support/CommandLine.h>
 
 #include <iostream>
+#include<numeric>
 #include <algorithm>
 #include <set>
 
@@ -26,33 +27,28 @@ using namespace llvm;
 using namespace screen;
 
 static cl::opt<std::string> kSymbolName("screen-start-symbol",
-                                        cl::desc("Provide a symbol in the program to treat as the _start, usually main for most cases"),
-                                        cl::Required);
+    cl::desc("A function at which to start the analysis, main for most cases"),
+    cl::Required);
 
 static cl::opt<std::string> kOutputName("screen-output",
-                                        cl::desc("Provide an output file for screen output"),
-                                        cl::Required);
+    cl::desc("Provide an output file for screen output"),
+    cl::Required);
 
 
 namespace {
 
-
-
-using sys::fs::OpenFlags;
+// using sys::fs::OpenFlags;
 
 struct ScreenPass : public ModulePass {
-
-    std::error_code start_sym_err;
     std::error_code out_fd_err;
     raw_fd_ostream out_fd;
     std::string start_sym = kSymbolName;
     std::string m_prefix;
 
 
-
     ScreenPass()
-    : out_fd(kOutputName, out_fd_err, OpenFlags::F_RW)
-    , ModulePass(ID)
+    : ModulePass(ID)
+    , out_fd(kOutputName, out_fd_err, sys::fs::OpenFlags::F_RW)
     , m_prefix("screen_")
     {
 
@@ -438,7 +434,6 @@ struct ScreenPass : public ModulePass {
 
         cfg_paths_funcs.push_back(first_path);
     
-        int current_bb_num = 0;    
         Function::iterator bb = F->begin();
 
         recurse_to_gather_paths(&*bb, cfg_paths_funcs);
