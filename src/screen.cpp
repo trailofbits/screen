@@ -34,34 +34,27 @@ static cl::opt<std::string> kOutputName("screen-output",
     cl::desc("Provide an output file for screen output"),
     cl::Required);
 
+static cl::opt<std::string> kPrefix("screen-prefix", cl::Optional,
+    cl::desc("The prefix for screen annotations"), cl::init("screen_"));
 
 namespace {
-
-// using sys::fs::OpenFlags;
 
 struct ScreenPass : public ModulePass {
     std::error_code out_fd_err;
     raw_fd_ostream out_fd;
-    std::string start_sym = kSymbolName;
-    std::string m_prefix;
-
 
     ScreenPass()
     : ModulePass(ID)
     , out_fd(kOutputName, out_fd_err, sys::fs::OpenFlags::F_RW)
-    , m_prefix("screen_")
     {
 
     }
 
     static char ID; 
     std::vector<std::vector<Function *>> cfg_paths_funcs;
-    std::map<llvm::Function *,int*> fns_br;
 
     //TODO: intelligently pair annotations, check if same parent function, then
     //proxmity in code? (inst count of func to determine this)
-
-    std::vector<std::string> annotations;
 
     // @brief A generally unprocessed LLVM instruction span. Used to mark code
     // areas of interest.
@@ -166,7 +159,7 @@ struct ScreenPass : public ModulePass {
     //
     std::pair<AnnotationType, std::string>
     parseAnnotation(std::string annotation) {
-       if (annotation.compare(0, m_prefix.length(), m_prefix) != 0) {
+       if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
            return {kInvalidAnnotation, ""};
        }
 
@@ -175,7 +168,7 @@ struct ScreenPass : public ModulePass {
 
         auto differing = 
             std::mismatch(std::begin(annotation), std::end(annotation),
-                          std::begin(m_prefix), std::end(m_prefix));
+                          std::begin(kPrefix), std::end(kPrefix));
 
         std::string postfix(differing.first, annotation.end());
 
@@ -221,7 +214,7 @@ struct ScreenPass : public ModulePass {
             auto label = cast<ConstantDataArray>(v->getOperand(0))->getAsCString();
 
             auto annotationString = std::string(label);
-            if (annotationString.compare(0, m_prefix.length(), m_prefix) == 0) {
+            if (annotationString.compare(0, kPrefix.length(), kPrefix) == 0) {
                 outs() << "Detected sensitive code region, tracking code " <<
                           "paths for function: "<<function->getName()<<"\n";
                 annotatedFunctions.push_back(function); 
@@ -447,15 +440,15 @@ struct ScreenPass : public ModulePass {
     {
         // runOnFunction is run on every function in each compilation unit
         outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
-        outs()<<"\n[-] Using start symbol: "<<start_sym<<"\n";
+        outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
         outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
 
         simple_demo(M);
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
-        Function *main = M.getFunction(start_sym);
+        Function *main = M.getFunction(kSymbolName);
         if(!main){
-            outs()<<"[ ERROR ] no start symbol "<<start_sym<<"\n";
+            outs()<<"[ ERROR ] no start symbol "<<kSymbolName<<"\n";
             return false;
         }
 
