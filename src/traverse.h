@@ -21,7 +21,9 @@ public:
         m_cb = cb;
     }
 
-    // @brief The 'entry point' to start the traversal
+    // @brief The 'entry point' to start the traversal. This will execute the
+    // callback provided by 'setCallback' on every instructino in the order that
+    // is implemented by a deriving class.
     virtual bool traverse(const llvm::Function *F) = 0;
 
 protected:
@@ -32,27 +34,42 @@ protected:
 // in a functino, top-down.
 class TraverseLinearly : public Traverser {
 public:
+    // @brief Traverse the instructions of a function top-down.
     virtual bool traverse(const llvm::Function *F) override;
 };
+
 
 // @brief TraverseCfg invokes a registered callback for every instruction in a 
 // function and all functions it calls, recursively.
 class TraverseCfg : public Traverser {
 public:
 
+    using VisitedPath = std::vector<const llvm::Function *>;
+
+    // @brief Traverse the instructions of a control flow graph anchored at F.
     virtual bool traverse(const llvm::Function *F) override;
 
     // @brief Return the path that we took so far.
-    std::vector<const llvm::Function *> &pathVisited(void);
+    VisitedPath pathVisited(std::string name);
+
+    void startPath(std::string name) {
+        m_visitedMap[name] = m_visited.size() - 1;
+    }
+
+    void endPath(std::string name) {
+        m_visitedMap.erase(name);
+    }
 
 private:
     bool traverse(const llvm::BasicBlock *BB);
 
-    std::vector<const llvm::Function *> m_visited;
+    VisitedPath m_visited;
 
     enum BBState {kUnvisited, kInProgress, kVisited};
 
     llvm::DenseMap<const llvm::BasicBlock *, BBState> m_stateMap;
+
+    std::map<std::string, VisitedPath::size_type> m_visitedMap;
 };
 } // namespace screen
 

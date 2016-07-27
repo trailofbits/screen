@@ -28,19 +28,23 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
     // outgoing calls.
     for (const Instruction &I: *BB) {
 
+        // Invoke our user callback on each instruction of current block
+        m_cb(I);
+
         if(const CallInst *C = dyn_cast<CallInst>(&I)) {
             const Function *called = C->getCalledFunction();
 
             if (called == nullptr)
                 continue;
 
-            if (called->isIntrinsic())
+            // Invoke the callback when it's an annotation so it can decide on
+            // whether to start or end tracking
+            if (called->isIntrinsic() &&
+                     !called->getName().startswith("llvm.var.annotation"))
                 continue;
 
             traverse(called);
         }
-        // Invoke our user callback on each instruction of current block
-        m_cb(I);
     }
 
     // Recurse into all successor blocks
@@ -80,9 +84,17 @@ bool TraverseCfg::traverse(const Function *F)
     m_visited.pop_back();
     return true;
 }
-std::vector<const llvm::Function *> &TraverseCfg::pathVisited(void)
+
+TraverseCfg::VisitedPath TraverseCfg::pathVisited(std::string name)
 {
-    return m_visited;
+    auto start = m_visitedMap.find(name);
+
+    if (start == m_visitedMap.end())
+        return VisitedPath{};
+
+    VisitedPath path(m_visited.begin() + start->second, m_visited.end());
+
+    return path;
 }
 
 } // namespace screen

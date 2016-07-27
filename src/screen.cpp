@@ -76,6 +76,8 @@ struct ScreenPass : public ModulePass {
         int branches;
         int instructions;
 
+        std::vector<const Function *> callPath;
+
     };
 
     // @brief A map of Function* to the statistics about it
@@ -436,6 +438,67 @@ struct ScreenPass : public ModulePass {
 
     
 
+    void cfgReworkDemo(const Module &M)
+    {
+
+        Function *entry = M.getFunction(kSymbolName);
+        if(!entry){
+            errs() << "[ ERROR ] no start symbol "<<kSymbolName<<"\n";
+            return;
+        }
+
+        RegionStatsMap inProgress, completed;
+
+        auto spans = collectAnnotatedSpans(M);
+
+        TraverseCfg T;
+        T.setCallback([&](const Instruction &I) {
+            // First, check if we need to update our currently tracked-
+            // regions (i.e. if we just entered or left a region.
+            for (auto namedSpan : spans) {
+
+                auto name = namedSpan.first;
+                auto span = namedSpan.second;
+
+                // If we see a starting instruction, just tag it as started
+                if (I.isIdenticalTo(span.start)) {
+                    inProgress[name].start = span.start;
+                    T.startPath(name);
+
+                // But once we see an ending instruction, we can now 
+                // consider this span finished and move the region being
+                // tracked to the completed map.
+                } else if (I.isIdenticalTo(span.end)) {
+                    auto trackedSpan = inProgress[name];
+
+                    trackedSpan.end = span.end;
+                    trackedSpan.callPath = T.pathVisited(name);
+
+                    completed[name] = trackedSpan;
+                    inProgress.erase(name);
+                }
+            }
+
+            // Just a plain old instruction, add it to current counters.
+            for (auto &info : inProgress) {
+                surveyInstruction(I, info.second);
+            }
+        });
+        T.traverse(entry);
+
+        for (auto stats : completed) {
+          outs() << "Name: " << stats.first << "\n";
+          auto path = stats.second.callPath;
+          for (size_t i = 0; i < path.size(); i++) {
+            outs() << path[i]->getName();
+            if (i != path.size() - 1)
+              outs() << " -> ";
+          }
+          outs() << "\n";
+        }
+
+    }
+
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
@@ -446,19 +509,8 @@ struct ScreenPass : public ModulePass {
         simple_demo(M);
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
-        Function *main = M.getFunction(kSymbolName);
-        if(!main){
-            outs()<<"[ ERROR ] no start symbol "<<kSymbolName<<"\n";
-            return false;
-        }
 
-        // first function is always main
-        // descendFromFunction(main);
-        //
-        TraverseCfg T;
-        T.setCallback([](const Instruction &I) {
-        });
-        T.traverse(main);
+        cfgReworkDemo(M);
 
         return true;
     }
