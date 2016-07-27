@@ -411,9 +411,9 @@ struct ScreenPass : public ModulePass {
     void dump_cfg(){
         outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
-        for(int i = 0;i<cfg_paths_funcs.size();i++){
+        for(size_t i = 0;i<cfg_paths_funcs.size();i++){
             outs()<<"\nPATH ["<<i<<"]\n";
-            for(int j = 0;j<cfg_paths_funcs[i].size()-1;++j){
+            for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
                 outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
