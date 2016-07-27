@@ -21,6 +21,14 @@ cd ${BUILD_DIR}
 if [ ! -f ${FILE} ]; then
   echo "[+] Downloading Clang+LLVM.."
   wget http://llvm.org/releases/${LLVM_VER}/${FILE}
+
+  if [ "$?" != "0" ]; then
+    echo "[!] Unsupported operating system."
+    echo "[!]  Check http://llvm.org/releases/${LLVM_VER}/ to see what LLVM"
+    echo "[!]  packages are available."
+    exit 2
+  fi
+
 fi
 
 if [ ! -d ${LLVM_DIR} ]; then
