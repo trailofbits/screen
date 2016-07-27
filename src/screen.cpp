@@ -42,12 +42,19 @@ namespace {
 struct ScreenPass : public ModulePass {
     std::error_code out_fd_err;
     raw_fd_ostream out_fd;
+    bool started;
 
     ScreenPass()
     : ModulePass(ID)
     , out_fd(kOutputName, out_fd_err, sys::fs::OpenFlags::F_RW)
+    , started(false)
     {
+      out_fd << "[";
+    }
 
+    ~ScreenPass()
+    {
+      out_fd << "]";
     }
 
     static char ID; 
@@ -368,8 +375,10 @@ struct ScreenPass : public ModulePass {
             outs() << " - func name: " << f->getName() << ", branches: "
                    << span.branches << ", instructions " << span.instructions
                    << "\n";
-            out_fd << f->getName() << "\t" << span.branches << "\t"
-                   << span.instructions << "\n";
+            dumpRegionStats(f->getName(), span);
+                 
+            //out_fd << f->getName() << "\t" << span.branches << "\t"
+                   //<< span.instructions << "\n";
         }
 
     }
@@ -452,7 +461,33 @@ struct ScreenPass : public ModulePass {
         dump_cfg();
     }
 
-    
+    void dumpRegionStats(const std::string &name, const RegionStats &R)
+    {
+        if (started)
+            out_fd << ", ";
+
+        out_fd << "{ \"" << name << "\":   \n{"
+               << "     \"branches\": " << R.branches << ",\n"
+               << "     \"instructions\": " << R.instructions;
+
+        auto path = R.callPath;
+        if (!path.empty()) {
+               out_fd << ",\n     \"cfg\": [";
+
+            for (size_t i = 0; i < path.size(); i++) {
+              out_fd << "\"" << path[i]->getName() << "\"";
+              if (i != path.size() - 1) {
+                  out_fd << ", ";
+              }
+                
+            }
+            out_fd << "]\n";
+        }
+
+        out_fd << "}\n}\n";
+
+        started = true;
+    }
 
     void cfgReworkDemo(const Module &M)
     {
@@ -503,12 +538,18 @@ struct ScreenPass : public ModulePass {
         T.traverse(entry);
 
         for (auto stats : completed) {
+          auto span = stats.second;
+
           outs() << "Name: " << stats.first << "\n";
-          auto path = stats.second.callPath;
+
+          dumpRegionStats(stats.first, stats.second);
+
+          auto path = span.callPath;
           for (size_t i = 0; i < path.size(); i++) {
             outs() << path[i]->getName();
-            if (i != path.size() - 1)
-              outs() << " -> ";
+            if (i != path.size() - 1) {
+                outs() << " -> ";
+            }
           }
           outs() << "\n";
         }

@@ -3,6 +3,7 @@
 import sys
 import argparse
 import datetime
+import json
 
 try:
     import boto3 
@@ -43,18 +44,9 @@ def parse_results(filename):
     '''
     d = {}
     with open(filename, 'r') as f:
-        n = 0
-        for line in f:
-            n += 1
-            try:
-                name, instructions, branches = line.strip().split('\t')
-            except ValueError as e:
-                sys.stderr.write("Malformed results file (line {})\n".format(n))
-                sys.exit(1)
-            d[name] = {
-                        'instructions': int(instructions),
-                        'branches': int(branches)
-                      }
+        results = json.load(f)
+        for obj in results:
+            d.update(obj)
     return d
 
 if __name__ == '__main__':
@@ -65,13 +57,15 @@ if __name__ == '__main__':
             dest='commit')
     args = parser.parse_args()
 
-    o = parse_results(args.results)
+    results = parse_results(args.results)
 
-    o['commit'] = args.commit
-    o['timestamp'] = datetime.datetime.now().isoformat()
+    entry = {}
+    entry['commit'] = args.commit
+    entry['timestamp'] = datetime.datetime.now().isoformat()
+    entry['results'] = results
 
     table = get_table('screen')
-    res = table.put_item(Item=o)
+    res = table.put_item(Item=entry)
     print(res)
 
 
