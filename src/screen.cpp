@@ -17,6 +17,7 @@
 #include <llvm/Support/CommandLine.h>
 
 #include <iostream>
+#include <fstream>
 #include <numeric>
 #include <algorithm>
 #include <set>
@@ -41,14 +42,14 @@ namespace {
 
 struct ScreenPass : public ModulePass {
     std::error_code out_fd_err;
-    raw_fd_ostream out_fd;
+    std::ofstream out_fd;
     bool started;
 
     ScreenPass()
     : ModulePass(ID)
-    , out_fd(kOutputName, out_fd_err, sys::fs::OpenFlags::F_RW)
     , started(false)
     {
+      out_fd.open(kOutputName);
       out_fd << "[";
     }
 
@@ -475,7 +476,7 @@ struct ScreenPass : public ModulePass {
               if (!path[i]) {
                 continue;
               }
-              out_fd << "\"" << path[i]->getName() << "\"";
+              out_fd << "\"" << path[i]->getName().str() << "\"";
               if (i != path.size() - 1) {
                   out_fd << ", ";
               }
