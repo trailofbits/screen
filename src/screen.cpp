@@ -525,6 +525,12 @@ struct ScreenPass : public ModulePass {
                     trackedSpan.end = span.end;
                     trackedSpan.callPath = T.pathVisited(name);
 
+                    outs() << "Storing path visited: \n   ";
+                    for (auto F : trackedSpan.callPath) {
+                      outs() << F.getName() << " -> ";
+                    }
+                    outs() << "\n";
+
                     completed[name] = trackedSpan;
 
                     inProgress.erase(name);
