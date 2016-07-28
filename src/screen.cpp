@@ -17,7 +17,7 @@
 #include <llvm/Support/CommandLine.h>
 
 #include <iostream>
-#include<numeric>
+#include <numeric>
 #include <algorithm>
 #include <set>
 
@@ -54,8 +54,6 @@ struct ScreenPass : public ModulePass {
 
     ~ScreenPass()
     {
-      out_fd << "]";
-      out_fd.close();
     }
 
     static char ID; 
@@ -463,11 +461,11 @@ struct ScreenPass : public ModulePass {
     void dumpRegionStats(const std::string &name, const RegionStats &R)
     {
         if (started)
-            out_fd << ", ";
+            out_fd << ",";
 
-        out_fd << "{ \"" << name << "\":   \n{"
+        out_fd << "{ \"" << name << "\": {\n"
                << "     \"branches\": " << R.branches << ",\n"
-               << "     \"instructions\": " << R.instructions << "\n";
+               << "     \"instructions\": " << R.instructions;
 
         auto path = R.callPath;
         if (!path.empty()) {
@@ -481,9 +479,12 @@ struct ScreenPass : public ModulePass {
                 
             }
             out_fd << "]\n";
+        } else {
+          out_fd << "\n";
         }
 
-        out_fd << "}\n}\n";
+        out_fd << "}}\n";
+        out_fd.flush();
 
         started = true;
     }
@@ -519,12 +520,13 @@ struct ScreenPass : public ModulePass {
                 // consider this span finished and move the region being
                 // tracked to the completed map.
                 } else if (I.isIdenticalTo(span.end)) {
-                    auto trackedSpan = inProgress[name];
+                    RegionStats trackedSpan = inProgress[name];
 
                     trackedSpan.end = span.end;
                     trackedSpan.callPath = T.pathVisited(name);
 
                     completed[name] = trackedSpan;
+
                     inProgress.erase(name);
                 }
             }
@@ -536,8 +538,8 @@ struct ScreenPass : public ModulePass {
         });
         T.traverse(entry);
 
-        for (auto stats : completed) {
-          auto span = stats.second;
+        for (auto &stats : completed) {
+          // auto span = stats.second;
 
           // outs() << "Name: " << stats.first << "\n";
 
@@ -564,11 +566,15 @@ struct ScreenPass : public ModulePass {
         // outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
         // outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
 
-        simple_demo(M);
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
 
         cfgReworkDemo(M);
+
+        simple_demo(M);
+
+        out_fd << "]\n";
+        out_fd.flush();
 
         return true;
     }
