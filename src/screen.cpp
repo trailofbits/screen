@@ -527,7 +527,7 @@ struct ScreenPass : public ModulePass {
 
                     outs() << "Storing path visited: \n   ";
                     for (auto F : trackedSpan.callPath) {
-                      outs() << F.getName() << " -> ";
+                      outs() << F->getName() << " -> ";
                     }
                     outs() << "\n";
 
