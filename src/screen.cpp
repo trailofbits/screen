@@ -239,7 +239,7 @@ struct ScreenPass : public ModulePass {
 
             auto annotationString = std::string(label);
             if (annotationString.compare(0, kPrefix.length(), kPrefix) == 0) {
-                // outs() << "Detected sensitive code region, tracking code " <<
+                // errs() << "Detected sensitive code region, tracking code " <<
                 //           "paths for function: "<<function->getName()<<"\n";
                 annotatedFunctions.push_back(function); 
             }
@@ -356,22 +356,22 @@ struct ScreenPass : public ModulePass {
         auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        // outs() << "Span results: " << spanStats.size() << "\n";
+        // errs() << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
 
-            // outs() << " - name: " << name << ", branches: " << r.branches
+            // errs() << " - name: " << name << ", branches: " << r.branches
             //        << ", instructions " << r.instructions << "\n";
 
         }
 
-        // outs() << "Func results: " << funcStats.size() << "\n";
+        // errs() << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
 
-            // outs() << " - func name: " << f->getName() << ", branches: "
+            // errs() << " - func name: " << f->getName() << ", branches: "
             //        << span.branches << ", instructions " << span.instructions
             //        << "\n";
 
@@ -385,7 +385,7 @@ struct ScreenPass : public ModulePass {
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
 
         paths_funcs.push_back(f);
-        // outs() << "Visiting: " << f->getName() << "\n";
+        // errs() << "Visiting: " << f->getName() << "\n";
        
         Function::iterator bb = f->begin();
 
@@ -431,15 +431,15 @@ struct ScreenPass : public ModulePass {
     }
 
     void dump_cfg(){
-        // outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+        // errs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
         for(size_t i = 0;i<cfg_paths_funcs.size();i++){
-            // outs()<<"\nPATH ["<<i<<"]\n";
+            // errs()<<"\nPATH ["<<i<<"]\n";
             for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                // outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
+                // errs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
-            // outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
+            // errs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
         
         }
     
@@ -528,21 +528,21 @@ struct ScreenPass : public ModulePass {
                     trackedSpan.end = span.end;
                     trackedSpan.callPath = T.pathVisited(name);
 
-                    outs() << "Storing path visited: \n   ";
+                    errs() << "Storing path visited: \n   ";
                     for (auto F : trackedSpan.callPath) {
                       (void) F;
                     }
 
-                    outs() << "Iterated: \n   ";
+                    errs() << "Iterated: \n   ";
 
                     for (auto F : trackedSpan.callPath) {
-                      outs() << "{\n";
+                      errs() << "{\n";
                       if (F) {
-                        outs() << F << " -> ";
+                        errs() << F << " -> ";
                       }
-                      outs() << "}\n";
+                      errs() << "}\n";
                     }
-                    outs() << "\n";
+                    errs() << "\n";
 
                     completed[name] = trackedSpan;
 
@@ -560,19 +560,19 @@ struct ScreenPass : public ModulePass {
         for (auto &stats : completed) {
           // auto span = stats.second;
 
-          // outs() << "Name: " << stats.first << "\n";
+          // errs() << "Name: " << stats.first << "\n";
 
           dumpRegionStats(stats.first, stats.second);
 
           /* 
           auto path = span.callPath;
           for (size_t i = 0; i < path.size(); i++) {
-            outs() << path[i]->getName();
+            errs() << path[i]->getName();
             if (i != path.size() - 1) {
-                outs() << " -> ";
+                errs() << " -> ";
             }
           }
-          outs() << "\n";
+          errs() << "\n";
           */
         }
 
@@ -581,9 +581,9 @@ struct ScreenPass : public ModulePass {
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
-        // outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
-        // outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
-        // outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
+        // errs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
+        // errs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
+        // errs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
 
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
