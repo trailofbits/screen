@@ -465,11 +465,13 @@ struct ScreenPass : public ModulePass {
         if (started)
             out_fd << ",";
 
+        std::vector<const Function *> path(R.callPath.begin(), R.callPath.end());
+
         out_fd << "{ \"" << name << "\": {\n"
                << "     \"branches\": " << R.branches << ",\n"
                << "     \"instructions\": " << R.instructions;
 
-        auto path = R.callPath;
+        //auto path = R.callPath;
         if (!path.empty()) {
                out_fd << ",\n     \"cfg\": [";
 
