@@ -7,6 +7,8 @@
 
 #include "traverse.h"
 
+#include <iostream>
+
 namespace screen {
 using namespace llvm;
 
@@ -91,6 +93,10 @@ TraverseCfg::VisitedPath TraverseCfg::pathVisited(std::string name)
 
     if (start == m_visitedMap.end())
         return VisitedPath{};
+
+    for (auto x : m_visited) {
+      std::cout << x->getName().str() << "-> ";
+    }
 
     VisitedPath path(m_visited.begin() + start->second, m_visited.end());
 
