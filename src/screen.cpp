@@ -358,22 +358,22 @@ struct ScreenPass : public ModulePass {
         auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        // errs() << "Span results: " << spanStats.size() << "\n";
+        // outs() << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
 
-            // errs() << " - name: " << name << ", branches: " << r.branches
+            // outs() << " - name: " << name << ", branches: " << r.branches
             //        << ", instructions " << r.instructions << "\n";
 
         }
 
-        // errs() << "Func results: " << funcStats.size() << "\n";
+        // outs() << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
 
-            // errs() << " - func name: " << f->getName() << ", branches: "
+            // outs() << " - func name: " << f->getName() << ", branches: "
             //        << span.branches << ", instructions " << span.instructions
             //        << "\n";
 
@@ -387,7 +387,7 @@ struct ScreenPass : public ModulePass {
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
 
         paths_funcs.push_back(f);
-        // errs() << "Visiting: " << f->getName() << "\n";
+        // outs() << "Visiting: " << f->getName() << "\n";
        
         Function::iterator bb = f->begin();
 
@@ -433,15 +433,15 @@ struct ScreenPass : public ModulePass {
     }
 
     void dump_cfg(){
-        // errs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+        // outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
         for(size_t i = 0;i<cfg_paths_funcs.size();i++){
-            // errs()<<"\nPATH ["<<i<<"]\n";
+            // outs()<<"\nPATH ["<<i<<"]\n";
             for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                // errs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
+                // outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
-            // errs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
+            // outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
         
         }
     
@@ -476,10 +476,7 @@ struct ScreenPass : public ModulePass {
                out_fd << ",\n     \"cfg\": [";
 
             for (size_t i = 0; i < path.size(); i++) {
-              if (!path[i]) {
-                continue;
-              }
-              out_fd << "\"" << path[i]->getName().str() << "\"";
+              out_fd << "\"" << reinterpret_cast<unsigned long long>(path[i]) << "\"";
               if (i != path.size() - 1) {
                   out_fd << ", ";
               }
@@ -500,7 +497,7 @@ struct ScreenPass : public ModulePass {
     {
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
-            errs() << "[ ERROR ] no start symbol "<<kSymbolName<<"\n";
+            errs() << "[E] no start symbol " << kSymbolName << "\n";
             return;
         }
 
@@ -531,22 +528,6 @@ struct ScreenPass : public ModulePass {
                     trackedSpan.end = span.end;
                     trackedSpan.callPath = T.pathVisited(name);
 
-                    errs() << "Storing path visited: \n   ";
-                    for (auto F : trackedSpan.callPath) {
-                      (void) F;
-                    }
-
-                    errs() << "Iterated: \n   ";
-
-                    for (auto F : trackedSpan.callPath) {
-                      errs() << "{\n";
-                      if (F) {
-                        errs() << F << " -> ";
-                      }
-                      errs() << "}\n";
-                    }
-                    errs() << "\n";
-
                     completed[name] = trackedSpan;
 
                     inProgress.erase(name);
@@ -563,19 +544,19 @@ struct ScreenPass : public ModulePass {
         for (auto &stats : completed) {
           // auto span = stats.second;
 
-          // errs() << "Name: " << stats.first << "\n";
+          // outs() << "Name: " << stats.first << "\n";
 
           dumpRegionStats(stats.first, stats.second);
 
           /* 
           auto path = span.callPath;
           for (size_t i = 0; i < path.size(); i++) {
-            errs() << path[i]->getName();
+            outs() << path[i]->getName();
             if (i != path.size() - 1) {
-                errs() << " -> ";
+                outs() << " -> ";
             }
           }
-          errs() << "\n";
+          outs() << "\n";
           */
         }
 
