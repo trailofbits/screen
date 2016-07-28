@@ -83,8 +83,6 @@ bool TraverseCfg::traverse(const Function *F)
     if (F->begin() == F->end())
         return false;
 
-    outs() << "[D] Adding " << F->getName() << "\n";
-
     m_visited.push_back(F);
 
     traverse(&F->getEntryBlock());
@@ -99,12 +97,6 @@ TraverseCfg::VisitedPath TraverseCfg::pathVisited(std::string name)
 
     if (start == m_visitedMap.end())
         return VisitedPath{};
-
-    outs() << "[D] Requested path: ";
-    for (auto x : m_visited) {
-      outs() << x->getName().str() << " -> ";
-    }
-    outs() << "\n";
 
     VisitedPath path(m_visited.begin() + start->second, m_visited.end());
 

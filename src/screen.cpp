@@ -38,16 +38,21 @@ static cl::opt<std::string> kOutputName("screen-output",
 static cl::opt<std::string> kPrefix("screen-prefix", cl::Optional,
     cl::desc("The prefix for screen annotations"), cl::init("screen_"));
 
+static cl::opt<bool> kDebugFlag("screen-debug", cl::Optional,
+    cl::desc("Print extra debug information"), cl::init(false));
+
 namespace {
 
 struct ScreenPass : public ModulePass {
     std::error_code out_fd_err;
     std::ofstream out_fd;
     bool started;
+    raw_ostream &O;
 
     ScreenPass()
     : ModulePass(ID)
     , started(false)
+    , O(kDebugFlag ? outs() : nulls())
     {
       out_fd.open(kOutputName);
       out_fd << "[";
@@ -358,24 +363,24 @@ struct ScreenPass : public ModulePass {
         auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        // outs() << "Span results: " << spanStats.size() << "\n";
+        O << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
 
-            // outs() << " - name: " << name << ", branches: " << r.branches
-            //        << ", instructions " << r.instructions << "\n";
+            O << " - name: " << name << ", branches: " << r.branches
+              << ", instructions " << r.instructions << "\n";
 
         }
 
-        // outs() << "Func results: " << funcStats.size() << "\n";
+        O << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
 
-            // outs() << " - func name: " << f->getName() << ", branches: "
-            //        << span.branches << ", instructions " << span.instructions
-            //        << "\n";
+            O << " - func name: " << f->getName() << ", branches: "
+              << span.branches << ", instructions " << span.instructions
+              << "\n";
 
             dumpRegionStats(f->getName(), span);
         }
@@ -387,7 +392,6 @@ struct ScreenPass : public ModulePass {
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
 
         paths_funcs.push_back(f);
-        // outs() << "Visiting: " << f->getName() << "\n";
        
         Function::iterator bb = f->begin();
 
@@ -433,15 +437,15 @@ struct ScreenPass : public ModulePass {
     }
 
     void dump_cfg(){
-        // outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+        O <<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
         for(size_t i = 0;i<cfg_paths_funcs.size();i++){
-            // outs()<<"\nPATH ["<<i<<"]\n";
+            O <<"\nPATH ["<<i<<"]\n";
             for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                // outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
+                O <<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
-            // outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
+            O <<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
         
         }
     
@@ -476,7 +480,7 @@ struct ScreenPass : public ModulePass {
                out_fd << ",\n     \"cfg\": [";
 
             for (size_t i = 0; i < path.size(); i++) {
-              out_fd << "\"" << reinterpret_cast<unsigned long long>(path[i]) << "\"";
+              out_fd << "\"" << path[i]->getName().str() << "\"";
               if (i != path.size() - 1) {
                   out_fd << ", ";
               }
@@ -542,22 +546,7 @@ struct ScreenPass : public ModulePass {
         T.traverse(entry);
 
         for (auto &stats : completed) {
-          // auto span = stats.second;
-
-          // outs() << "Name: " << stats.first << "\n";
-
           dumpRegionStats(stats.first, stats.second);
-
-          /* 
-          auto path = span.callPath;
-          for (size_t i = 0; i < path.size(); i++) {
-            outs() << path[i]->getName();
-            if (i != path.size() - 1) {
-                outs() << " -> ";
-            }
-          }
-          outs() << "\n";
-          */
         }
 
     }
@@ -571,7 +560,7 @@ struct ScreenPass : public ModulePass {
 
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
-
+        //
         cfgReworkDemo(M);
 
         simple_demo(M);
@@ -580,6 +569,7 @@ struct ScreenPass : public ModulePass {
         out_fd.flush();
 
         return true;
+
     }
 
 };

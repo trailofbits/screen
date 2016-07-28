@@ -61,11 +61,11 @@ public:
     }
 
 private:
+    enum BBState {kUnvisited, kInProgress, kVisited};
+
     bool traverse(const llvm::BasicBlock *BB);
 
     VisitedPath m_visited;
-
-    enum BBState {kUnvisited, kInProgress, kVisited};
 
     llvm::DenseMap<const llvm::BasicBlock *, BBState> m_stateMap;
 
