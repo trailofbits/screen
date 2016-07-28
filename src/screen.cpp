@@ -472,6 +472,9 @@ struct ScreenPass : public ModulePass {
                out_fd << ",\n     \"cfg\": [";
 
             for (size_t i = 0; i < path.size(); i++) {
+              if (!path[i]) {
+                continue;
+              }
               out_fd << "\"" << path[i]->getName() << "\"";
               if (i != path.size() - 1) {
                   out_fd << ", ";
@@ -527,7 +530,9 @@ struct ScreenPass : public ModulePass {
 
                     outs() << "Storing path visited: \n   ";
                     for (auto F : trackedSpan.callPath) {
-                      outs() << F->getName() << " -> ";
+                      if (F) {
+                        outs() << F << " -> ";
+                      }
                     }
                     outs() << "\n";
 
