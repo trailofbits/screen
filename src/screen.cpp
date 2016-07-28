@@ -51,6 +51,7 @@ struct ScreenPass : public ModulePass {
     {
       out_fd.open(kOutputName);
       out_fd << "[";
+      out_fd.flush();
     }
 
     ~ScreenPass()
@@ -495,7 +496,6 @@ struct ScreenPass : public ModulePass {
 
     void cfgReworkDemo(const Module &M)
     {
-
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
             errs() << "[ ERROR ] no start symbol "<<kSymbolName<<"\n";
