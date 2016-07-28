@@ -530,9 +530,17 @@ struct ScreenPass : public ModulePass {
 
                     outs() << "Storing path visited: \n   ";
                     for (auto F : trackedSpan.callPath) {
+                      (void) F;
+                    }
+
+                    outs() << "Iterated: \n   ";
+
+                    for (auto F : trackedSpan.callPath) {
+                      outs() << "{\n";
                       if (F) {
                         outs() << F << " -> ";
                       }
+                      outs() << "}\n";
                     }
                     outs() << "\n";
 
