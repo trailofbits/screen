@@ -70,6 +70,10 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
 
 bool TraverseCfg::traverse(const Function *F)
 {
+    
+    if (F == nullptr)
+        return false;
+
     // Ignore this if we have visited this in the current iteration
     auto existing = std::find(m_visited.begin(), m_visited.end(), F);
     if (existing != m_visited.end()) 
@@ -78,6 +82,8 @@ bool TraverseCfg::traverse(const Function *F)
     // Ignore if we have no function body (definition has not been linked yet)
     if (F->begin() == F->end())
         return false;
+
+    outs() << "[D] Adding " << F->getName() << "\n";
 
     m_visited.push_back(F);
 
@@ -94,9 +100,11 @@ TraverseCfg::VisitedPath TraverseCfg::pathVisited(std::string name)
     if (start == m_visitedMap.end())
         return VisitedPath{};
 
+    outs() << "[D] Requested path: ";
     for (auto x : m_visited) {
-      std::cout << x->getName().str() << "-> ";
+      outs() << x->getName().str() << " -> ";
     }
+    outs() << "\n";
 
     VisitedPath path(m_visited.begin() + start->second, m_visited.end());
 
