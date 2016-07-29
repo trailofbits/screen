@@ -15,6 +15,7 @@
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/Support/SourceMgr.h>
 #include <llvm/Support/CommandLine.h>
+#include <llvm/IR/Instructions.h>
 
 #include <iostream>
 #include <fstream>
@@ -101,45 +102,74 @@ struct ScreenPass : public ModulePass {
 
     using RegionStatsMap = std::map<std::string, RegionStats>;
 
+    // @brief A BranchCond is a set of the compare isntruction and its' predicate and operands
+    // CmpInst::FCMP_FALSE == 0
+    struct BranchCond {
+        BranchCond() :inst(nullptr) ,pred(CmpInst::FCMP_FALSE), ops() { }
+
+        const Instruction *inst;
+	CmpInst::Predicate pred;
+	std::vector<Value*> ops;
+    };
+    std::vector<BranchCond> BranchCondVec;
+
     virtual const char *getPassName() const 
     {
         return "screen";
     }
 
 
-    void handle_cmp(CmpInst *cmpInst) {
+    // TODO reason about bounds and call this when we need constraint information
+    void reason_cmp_sets(std::vector<BranchCond> compares){
 
-	if (cmpInst->getNumOperands() >= 2) {
-	    // if op1 is constant
-	    Value *firstOperand = cmpInst->getOperand(0);
-	    if (ConstantInt *CI = dyn_cast<ConstantInt>(firstOperand)){
+        for(std::vector<BranchCond>::iterator br = compares.begin(); br != compares.end(); br++){
+	    // reason about operand values
+	    if (ConstantInt *CI = dyn_cast<ConstantInt>(br->ops[0])){
 		CI->dump();
 	    }else{
 	    	// value is a variable, trace uses
-		for (Value::use_iterator i = firstOperand->use_begin(), e = firstOperand->use_end(); i != e; ++i){
-		    if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+		for (Value::use_iterator i = (br->ops[0])->use_begin(), e = (br->ops[0])->use_end(); i != e; ++i){
+		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
 	        	outs()<<"use oeprand 1\n"; 
 		    	Inst->dump();
-		    }
+		    }*/
 	        }		
 	    }
-	    
-	    // if op2 is constant
-	    Value *secondOperand = cmpInst->getOperand(1);
-	    if (ConstantInt *CI2 = dyn_cast<ConstantInt>(secondOperand)){
+	    if (ConstantInt *CI2 = dyn_cast<ConstantInt>(br->ops[1])){
 		CI2->dump();
 	    }else{
 	    	// value is a variable, trace uses
-		for (Value::use_iterator i = secondOperand->use_begin(), e = secondOperand->use_end(); i != e; ++i){
-		    if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+		for (Value::use_iterator i = (br->ops[1])->use_begin(), e = (br->ops[1])->use_end(); i != e; ++i){
+		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
 		        outs()<<"use operand 2\n"; 
 		    	Inst->dump();
-		    }
+		    }*/
 	        }		
 
 	    }
-	}
+        }	    
+    
+    }
 
+
+    void handle_cmp(CmpInst *cmpInst) {
+
+	// a valid cmp must have 2 operands
+	if (cmpInst->getNumOperands() >= 2) {
+	    // get operands
+	    Value *firstOperand = cmpInst->getOperand(0);
+	    Value *secondOperand = cmpInst->getOperand(1);
+	    // get predicate
+	    CmpInst::Predicate p = cmpInst->getPredicate();
+	    // store <inst> <pred> <op1> <op2>
+	    BranchCond cmp_set;
+	    cmp_set.inst = cmpInst;
+	    cmp_set.pred = p;
+	    cmp_set.ops.push_back(firstOperand);
+	    cmp_set.ops.push_back(secondOperand);
+	    BranchCondVec.push_back(cmp_set);
+	    
+	}
     }
     // @brief Helper method that actually handles the accounting of instructions
     // This is called from function analysis and arbitrary span analysis.
