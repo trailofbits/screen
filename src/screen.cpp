@@ -106,6 +106,41 @@ struct ScreenPass : public ModulePass {
         return "screen";
     }
 
+
+    void handle_cmp(CmpInst *cmpInst) {
+
+	if (cmpInst->getNumOperands() >= 2) {
+	    // if op1 is constant
+	    Value *firstOperand = cmpInst->getOperand(0);
+	    if (ConstantInt *CI = dyn_cast<ConstantInt>(firstOperand)){
+		CI->dump();
+	    }else{
+	    	// value is a variable, trace uses
+		for (Value::use_iterator i = firstOperand->use_begin(), e = firstOperand->use_end(); i != e; ++i){
+		    if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+	        	outs()<<"use oeprand 1\n"; 
+		    	Inst->dump();
+		    }
+	        }		
+	    }
+	    
+	    // if op2 is constant
+	    Value *secondOperand = cmpInst->getOperand(1);
+	    if (ConstantInt *CI2 = dyn_cast<ConstantInt>(secondOperand)){
+		CI2->dump();
+	    }else{
+	    	// value is a variable, trace uses
+		for (Value::use_iterator i = secondOperand->use_begin(), e = secondOperand->use_end(); i != e; ++i){
+		    if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+		        outs()<<"use operand 2\n"; 
+		    	Inst->dump();
+		    }
+	        }		
+
+	    }
+	}
+
+    }
     // @brief Helper method that actually handles the accounting of instructions
     // This is called from function analysis and arbitrary span analysis.
     void surveyInstruction(const Instruction &I, RegionStats &stats)
@@ -118,8 +153,11 @@ struct ScreenPass : public ModulePass {
 	    	Value *condition = cast<BranchInst>(I).getCondition();
 		if (!condition || !condition->hasOneUse())
 		      return;
-	
-		// condition->dump(); 
+
+		if(llvm::CmpInst *CondInst = llvm::dyn_cast<llvm::CmpInst>(condition)){
+			handle_cmp(CondInst);
+		}
+
 	    }
 
 	}
