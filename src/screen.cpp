@@ -90,7 +90,7 @@ struct ScreenPass : public ModulePass {
         int branches;
         int instructions;
 
-        std::vector<const Function *> callPath;
+        TraverseCfg::VisitedPath callPath;
 
     };
 
@@ -537,7 +537,7 @@ struct ScreenPass : public ModulePass {
         if (started)
             out_fd << ",";
 
-        std::vector<const Function *> path(R.callPath.begin(), R.callPath.end());
+        const TraverseCfg::VisitedPath path(R.callPath.begin(), R.callPath.end());
 
         out_fd << "{ \"" << name << "\": {\n"
                << "     \"branches\": " << R.branches << ",\n"
@@ -548,10 +548,10 @@ struct ScreenPass : public ModulePass {
                out_fd << ",\n     \"cfg\": [";
 
             for (size_t i = 0; i < path.size(); i++) {
-              out_fd << "\"" << path[i]->getName().str() << "\"";
-              if (i != path.size() - 1) {
-                  out_fd << ", ";
-              }
+                out_fd << "\"" << path[i].second->getName().str() << "\"";
+                if (i != path.size() - 1) {
+                    out_fd << ", ";
+                }
                 
             }
             out_fd << "]\n";

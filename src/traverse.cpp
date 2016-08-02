@@ -45,7 +45,7 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
                      !called->getName().startswith("llvm.var.annotation"))
                 continue;
 
-            traverse(called);
+            traverse(called, C);
         }
     }
 
@@ -68,14 +68,15 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
     return true;
 }
 
-bool TraverseCfg::traverse(const Function *F)
+bool TraverseCfg::traverse(const Function *F, const CallInst *CI)
 {
     
     if (F == nullptr)
         return false;
 
     // Ignore this if we have visited this in the current iteration
-    auto existing = std::find(m_visited.begin(), m_visited.end(), F);
+    auto existing = std::find_if(m_visited.begin(), m_visited.end(),
+            [F](Breadcrumb b) { return b.second == F; });
     if (existing != m_visited.end()) 
         return false;
 
@@ -83,7 +84,7 @@ bool TraverseCfg::traverse(const Function *F)
     if (F->begin() == F->end())
         return false;
 
-    m_visited.push_back(F);
+    m_visited.push_back(std::make_pair(CI, F));
 
     traverse(&F->getEntryBlock());
 
