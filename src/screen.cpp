@@ -120,35 +120,22 @@ struct ScreenPass : public ModulePass {
 
 
     // TODO reason about bounds and call this when we need constraint information
-    void reason_cmp_sets(std::vector<BranchCond> compares){
+    int reason_cmp_ops(Value *op){
 
-        for(std::vector<BranchCond>::iterator br = compares.begin(); br != compares.end(); br++){
 	    // reason about operand values
-	    if (ConstantInt *CI = dyn_cast<ConstantInt>(br->ops[0])){
-		CI->dump();
+	    if (ConstantInt *CI = dyn_cast<ConstantInt>(op)){
+		return CI->getSExtValue();
 	    }else{
-	    	// value is a variable, trace uses
-		for (Value::use_iterator i = (br->ops[0])->use_begin(), e = (br->ops[0])->use_end(); i != e; ++i){
+		// value is a variable, trace uses
+		for (Value::use_iterator i = (op)->use_begin(), e = (op)->use_end(); i != e; ++i){
 		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
-	        	outs()<<"use oeprand 1\n"; 
-		    	Inst->dump();
+			outs()<<"use oeprand 1\n"; 
+			Inst->dump();
 		    }*/
-	        }		
+		}		
 	    }
-	    if (ConstantInt *CI2 = dyn_cast<ConstantInt>(br->ops[1])){
-		CI2->dump();
-	    }else{
-	    	// value is a variable, trace uses
-		for (Value::use_iterator i = (br->ops[1])->use_begin(), e = (br->ops[1])->use_end(); i != e; ++i){
-		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
-		        outs()<<"use operand 2\n"; 
-		    	Inst->dump();
-		    }*/
-	        }		
-
-	    }
-        }	    
     
+	    return -1;
     }
 
     void get_bounds_operand(Value *op, int &lower, int &higher){
@@ -572,8 +559,13 @@ struct ScreenPass : public ModulePass {
         }
         int count = 0;	
         for (auto &BranchCond : BranchCondVec) {
-            out_fd << "     \"cmp_predicate_"<<count<<"\": " << BranchCond.pred << ",\n";
-            count += 1;
+	    std::string predicate = "";
+	    if (BranchCond.pred == 40){
+	    	predicate = "signed_less_than";
+	    } 
+            out_fd << "     \"cmp_inst_"<<count<<"\": " << predicate << ", " << reason_cmp_ops((BranchCond.ops)[0]) << ", " << reason_cmp_ops((BranchCond.ops)[1]) << ",\n";
+	    
+	    count += 1;
 	}
 
         out_fd << "}}\n";
