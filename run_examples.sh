@@ -24,8 +24,8 @@ if [ ! -d ${LLVM_BIN} ]; then
 fi
 
 echo "[+] Compiling example side channel programs..."
-${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function.bc examples/01_annotated_function.c -c -emit-llvm -Wall -Wshadow -Wextra 
-${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function examples/01_annotated_function.c -Wall -Wshadow -Wextra
+${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function.bc examples/01_annotated_function.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas 
+${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function examples/01_annotated_function.c -Wall -Wshadow -Wextra -Wno-unknown-pragmas
 
 echo "[+] Running screen pass..."
 echo "[ EXAMPLE ONE ]"
