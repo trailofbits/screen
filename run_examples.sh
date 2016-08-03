@@ -28,9 +28,15 @@ ${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function.bc examples/01_
 ${LLVM_BIN}/clang -I./include/ -o examples/01_annotated_function examples/01_annotated_function.c -Wall -Wshadow -Wextra -Wno-unknown-pragmas
 
 echo "[+] Running screen pass..."
+echo
 echo "[ EXAMPLE ONE ]"
+echo "Description: for loop with modifiable and un-modifiable bounds."
+echo "[-] Ouput"
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/01_annotated_function.bc -o examples/01_annotated_function_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
-
+echo "[-] Expected Output"
+echo "    less than operand"
+echo "    variable"
+echo "    constant: 4"
 echo
 echo
 echo

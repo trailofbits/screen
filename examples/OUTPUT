@@ -1,5 +1,6 @@
 [{ "pow_int": {
      "branches": 4,
-     "instructions": 23
+     "instructions": 24,
+     "cmp_predicate_0": 40,
 }}
 ]

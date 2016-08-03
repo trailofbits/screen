@@ -157,7 +157,7 @@ struct ScreenPass : public ModulePass {
     
     } 
 
-    void handle_cmp(BranchInst *brInst, CmpInst *cmpInst) {
+    void handle_cmp(CmpInst *cmpInst) {
 
 	// a valid cmp must have 2 operands
 	if (cmpInst->getNumOperands() >= 2) {
@@ -173,11 +173,13 @@ struct ScreenPass : public ModulePass {
 	    cmp_set.ops.push_back(firstOperand);
 	    cmp_set.ops.push_back(secondOperand);
 	    BranchCondVec.push_back(cmp_set);
-	    
+	    // add storage or reasoning of true/false branch destination
+
+
 	    // reason about operands bounds
-	    int lower = 0;
-	    int upper = 0;
-	    get_bounds_variable();	
+	    //int lower = 0;
+	    //int upper = 0;
+	    //get_bounds_variable();	
 	}
     }
     // @brief Helper method that actually handles the accounting of instructions
@@ -194,7 +196,7 @@ struct ScreenPass : public ModulePass {
 		      return;
 
 		if(llvm::CmpInst *CondInst = llvm::dyn_cast<llvm::CmpInst>(condition)){
-			handle_cmp(cast<BranchInst>(I), CondInst);
+			handle_cmp(CondInst);
 		}
 
 	    }
@@ -459,7 +461,7 @@ struct ScreenPass : public ModulePass {
               << span.branches << ", instructions " << span.instructions
               << "\n";
 
-            dumpRegionStats(f->getName(), span);
+            dumpRegionStats(f->getName(), span, BranchCondVec);
         }
         for (auto b : BranchCondVec) {
             auto c = b.inst;
@@ -544,7 +546,7 @@ struct ScreenPass : public ModulePass {
         dump_cfg();
     }
 
-    void dumpRegionStats(const std::string &name, const RegionStats &R)
+    void dumpRegionStats(const std::string &name, const RegionStats &R, std::vector<BranchCond> cmps)
     {
         if (started)
             out_fd << ",";
@@ -553,11 +555,11 @@ struct ScreenPass : public ModulePass {
 
         out_fd << "{ \"" << name << "\": {\n"
                << "     \"branches\": " << R.branches << ",\n"
-               << "     \"instructions\": " << R.instructions;
+               << "     \"instructions\": " << R.instructions << ",\n";
 
         //auto path = R.callPath;
         if (!path.empty()) {
-               out_fd << ",\n     \"cfg\": [";
+               out_fd << "     \"cfg\": [";
 
             for (size_t i = 0; i < path.size(); i++) {
                 out_fd << "\"" << path[i].second->getName().str() << "\"";
@@ -567,9 +569,12 @@ struct ScreenPass : public ModulePass {
                 
             }
             out_fd << "]\n";
-        } else {
-          out_fd << "\n";
         }
+        int count = 0;	
+        for (auto &BranchCond : BranchCondVec) {
+            out_fd << "     \"cmp_predicate_"<<count<<"\": " << BranchCond.pred << ",\n";
+            count += 1;
+	}
 
         out_fd << "}}\n";
         out_fd.flush();
@@ -626,7 +631,7 @@ struct ScreenPass : public ModulePass {
         T.traverse(entry);
 
         for (auto &stats : completed) {
-          dumpRegionStats(stats.first, stats.second);
+          dumpRegionStats(stats.first, stats.second, BranchCondVec);
         }
 
     }
