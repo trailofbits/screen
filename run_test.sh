@@ -39,11 +39,11 @@ echo "[+] Running screen pass on libs2n..."
 #${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/libs2n.bc -o tests/libs2n_transformed.bc -screen -screen-output tests/OUTPUT_S2N -screen-start-symbol s2n_client_key_recv #  s2n_client_hello_send 
  #  s2n_client_hello_send 
  # s2n_client_key_recv
-${LLVM_BIN}/opt \
-  -load build/lib/screen.${EXT} -screen \
-  -screen-output tests/OUTPUT_S2N \
-  -screen-debug \
-  -screen-start-symbol s2n_client_key_recv tests/libs2n.bc -o tests/libs2n_transformed.bc 
+#${LLVM_BIN}/opt \
+#  -load build/lib/screen.${EXT} -screen \
+#  -screen-output tests/OUTPUT_S2N \
+#  -screen-debug \
+#  -screen-start-symbol s2n_client_key_recv tests/libs2n.bc -o tests/libs2n_transformed.bc 
 echo
 echo
 

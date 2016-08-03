@@ -151,8 +151,13 @@ struct ScreenPass : public ModulePass {
     
     }
 
+    void get_bounds_operand(Value *op, int &lower, int &higher){
+    	// call into llvm-sra project
+    
+    
+    } 
 
-    void handle_cmp(CmpInst *cmpInst) {
+    void handle_cmp(BranchInst *brInst, CmpInst *cmpInst) {
 
 	// a valid cmp must have 2 operands
 	if (cmpInst->getNumOperands() >= 2) {
@@ -169,6 +174,10 @@ struct ScreenPass : public ModulePass {
 	    cmp_set.ops.push_back(secondOperand);
 	    BranchCondVec.push_back(cmp_set);
 	    
+	    // reason about operands bounds
+	    int lower = 0;
+	    int upper = 0;
+	    get_bounds_variable();	
 	}
     }
     // @brief Helper method that actually handles the accounting of instructions
@@ -185,7 +194,7 @@ struct ScreenPass : public ModulePass {
 		      return;
 
 		if(llvm::CmpInst *CondInst = llvm::dyn_cast<llvm::CmpInst>(condition)){
-			handle_cmp(CondInst);
+			handle_cmp(cast<BranchInst>(I), CondInst);
 		}
 
 	    }
@@ -452,7 +461,10 @@ struct ScreenPass : public ModulePass {
 
             dumpRegionStats(f->getName(), span);
         }
-
+        for (auto b : BranchCondVec) {
+            auto c = b.inst;
+	    c->dump(); 
+        }
     }
     
     // Take a function, add it to |paths_func|, then iterate through all calls

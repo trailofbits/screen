@@ -16,18 +16,19 @@ int fun3();
 int fun4();
 		
 int fun1(){
-	__attribute__((annotate("screen_paths_start"))) char a = 'a';
-	printf("starting character: %c", a);
-	__attribute__((annotate("screen_paths_end"))) char b = 'b';
-	printf("Ending character: %c", b);
+	//__attribute__((annotate("screen_paths_start"))) char a = 'a';
+	//printf("starting character: %c", a);
+	//__attribute__((annotate("screen_paths_end"))) char b = 'b';
+	//printf("Ending character: %c", b);
+	int a = 2;
+	int b = 3;
 	char c = a + b;
         fun2();
 	return (int) c;
 }
 
 int fun2(){
-	__attribute__((annotate("screen_paths2_start"))) char a = 'a';
-	printf("starting character: %c", a);
+	printf("starting character:");
         fun3();
         return 0;
 }
@@ -42,11 +43,19 @@ int fun4() {
         (void) b;
         return 0;
 }
-	
+
+int fun0(){
+
+	fun2();
+	return 0;
+}
+
 __attribute__((annotate("screen_function_paths"))) 
 int main(int argc, char **argv)
 {
 
+	__attribute__((annotate("screen_paths2_start"))) char aa = 'a';
+	(void) aa;
 	(void)argc;
 	(void)argv;
 
@@ -56,7 +65,7 @@ int main(int argc, char **argv)
 	if ( argc != 1)
 		a = fun1();
 	else
-		foo(a);
+		fun0(a);
 
 	printf("a = %u *b = %u\n", a, *b);
 }

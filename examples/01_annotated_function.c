@@ -11,4 +11,7 @@ float pow_int(float base, int exponent)
 
     return base;
 }
+int main(){
 
+	return pow_int(2, 4);
+}
