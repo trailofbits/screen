@@ -128,10 +128,10 @@ struct ScreenPass : public ModulePass {
 	    }else{
 		// value is a variable, trace uses
 		for (Value::use_iterator i = (op)->use_begin(), e = (op)->use_end(); i != e; ++i){
-		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+		    if (LoadInst *Inst = dyn_cast<LoadInst>(*i)) {
 			outs()<<"use oeprand 1\n"; 
 			Inst->dump();
-		    }*/
+		    }
 		}		
 	    }
     
@@ -449,10 +449,6 @@ struct ScreenPass : public ModulePass {
               << "\n";
 
             dumpRegionStats(f->getName(), span, BranchCondVec);
-        }
-        for (auto b : BranchCondVec) {
-            auto c = b.inst;
-	    c->dump(); 
         }
     }
     
