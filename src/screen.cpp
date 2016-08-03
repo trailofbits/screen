@@ -15,9 +15,11 @@
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/Support/SourceMgr.h>
 #include <llvm/Support/CommandLine.h>
+#include <llvm/IR/Instructions.h>
 
 #include <iostream>
-#include<numeric>
+#include <fstream>
+#include <numeric>
 #include <algorithm>
 #include <set>
 
@@ -37,17 +39,29 @@ static cl::opt<std::string> kOutputName("screen-output",
 static cl::opt<std::string> kPrefix("screen-prefix", cl::Optional,
     cl::desc("The prefix for screen annotations"), cl::init("screen_"));
 
+static cl::opt<bool> kDebugFlag("screen-debug", cl::Optional,
+    cl::desc("Print extra debug information"), cl::init(false));
+
 namespace {
 
 struct ScreenPass : public ModulePass {
     std::error_code out_fd_err;
-    raw_fd_ostream out_fd;
+    std::ofstream out_fd;
+    bool started;
+    raw_ostream &O;
 
     ScreenPass()
     : ModulePass(ID)
-    , out_fd(kOutputName, out_fd_err, sys::fs::OpenFlags::F_RW)
+    , started(false)
+    , O(kDebugFlag ? outs() : nulls())
     {
+      out_fd.open(kOutputName);
+      out_fd << "[";
+      out_fd.flush();
+    }
 
+    ~ScreenPass()
+    {
     }
 
     static char ID; 
@@ -76,7 +90,7 @@ struct ScreenPass : public ModulePass {
         int branches;
         int instructions;
 
-        std::vector<const Function *> callPath;
+        TraverseCfg::VisitedPath callPath;
 
     };
 
@@ -88,18 +102,95 @@ struct ScreenPass : public ModulePass {
 
     using RegionStatsMap = std::map<std::string, RegionStats>;
 
+    // @brief A BranchCond is a set of the compare isntruction and its' predicate and operands
+    // CmpInst::FCMP_FALSE == 0
+    struct BranchCond {
+        BranchCond() :inst(nullptr) ,pred(CmpInst::FCMP_FALSE), ops() { }
+
+        const Instruction *inst;
+	CmpInst::Predicate pred;
+	std::vector<Value*> ops;
+    };
+    std::vector<BranchCond> BranchCondVec;
+
     virtual const char *getPassName() const 
     {
         return "screen";
     }
 
+
+    // TODO reason about bounds and call this when we need constraint information
+    void reason_cmp_sets(std::vector<BranchCond> compares){
+
+        for(std::vector<BranchCond>::iterator br = compares.begin(); br != compares.end(); br++){
+	    // reason about operand values
+	    if (ConstantInt *CI = dyn_cast<ConstantInt>(br->ops[0])){
+		CI->dump();
+	    }else{
+	    	// value is a variable, trace uses
+		for (Value::use_iterator i = (br->ops[0])->use_begin(), e = (br->ops[0])->use_end(); i != e; ++i){
+		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+	        	outs()<<"use oeprand 1\n"; 
+		    	Inst->dump();
+		    }*/
+	        }		
+	    }
+	    if (ConstantInt *CI2 = dyn_cast<ConstantInt>(br->ops[1])){
+		CI2->dump();
+	    }else{
+	    	// value is a variable, trace uses
+		for (Value::use_iterator i = (br->ops[1])->use_begin(), e = (br->ops[1])->use_end(); i != e; ++i){
+		    /*if (Instruction *Inst = dyn_cast<Instruction>(*i)) {
+		        outs()<<"use operand 2\n"; 
+		    	Inst->dump();
+		    }*/
+	        }		
+
+	    }
+        }	    
+    
+    }
+
+
+    void handle_cmp(CmpInst *cmpInst) {
+
+	// a valid cmp must have 2 operands
+	if (cmpInst->getNumOperands() >= 2) {
+	    // get operands
+	    Value *firstOperand = cmpInst->getOperand(0);
+	    Value *secondOperand = cmpInst->getOperand(1);
+	    // get predicate
+	    CmpInst::Predicate p = cmpInst->getPredicate();
+	    // store <inst> <pred> <op1> <op2>
+	    BranchCond cmp_set;
+	    cmp_set.inst = cmpInst;
+	    cmp_set.pred = p;
+	    cmp_set.ops.push_back(firstOperand);
+	    cmp_set.ops.push_back(secondOperand);
+	    BranchCondVec.push_back(cmp_set);
+	    
+	}
+    }
     // @brief Helper method that actually handles the accounting of instructions
     // This is called from function analysis and arbitrary span analysis.
     void surveyInstruction(const Instruction &I, RegionStats &stats)
     {
         if (isa<BranchInst>(I)) {
             stats.branches += 1;
-        }
+        
+	    // get Condition of the branch instruction
+	    if(cast<BranchInst>(I).isConditional()){
+	    	Value *condition = cast<BranchInst>(I).getCondition();
+		if (!condition || !condition->hasOneUse())
+		      return;
+
+		if(llvm::CmpInst *CondInst = llvm::dyn_cast<llvm::CmpInst>(condition)){
+			handle_cmp(CondInst);
+		}
+
+	    }
+
+	}
         stats.instructions += 1;
     }
 
@@ -161,18 +252,24 @@ struct ScreenPass : public ModulePass {
     //
     std::pair<AnnotationType, std::string>
     parseAnnotation(std::string annotation) {
-       if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
-           return {kInvalidAnnotation, ""};
-       }
+        if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
+            return {kInvalidAnnotation, ""};
+        }
 
         std::string start = "_start";
         std::string end = "_end";
+        std::string prefix{kPrefix};
 
-        auto differing = 
-            std::mismatch(std::begin(annotation), std::end(annotation),
-                          std::begin(kPrefix), std::end(kPrefix));
+        auto a_ptr = annotation.begin();
+        auto p_ptr = prefix.begin();
 
-        std::string postfix(differing.first, annotation.end());
+        for( ; *a_ptr == *p_ptr && a_ptr != annotation.end() &&
+                                   p_ptr != prefix.end();
+               a_ptr++, p_ptr++) {
+        }
+
+
+        std::string postfix(a_ptr, annotation.end());
 
         if (std::equal(start.rbegin(), start.rend(), annotation.rbegin())) {
             // 6 = strlen("_start")
@@ -217,8 +314,8 @@ struct ScreenPass : public ModulePass {
 
             auto annotationString = std::string(label);
             if (annotationString.compare(0, kPrefix.length(), kPrefix) == 0) {
-                outs() << "Detected sensitive code region, tracking code " <<
-                          "paths for function: "<<function->getName()<<"\n";
+                // errs() << "Detected sensitive code region, tracking code " <<
+                //           "paths for function: "<<function->getName()<<"\n";
                 annotatedFunctions.push_back(function); 
             }
         }
@@ -277,7 +374,7 @@ struct ScreenPass : public ModulePass {
         // Anything still in progress at this point is an unfinished block.
         // TODO: This will not be true once we use this code for CFG traversals
         for (auto &info : inProgress) {
-            outs() << "[W] Unfinished block: " << info.first << "\n";
+            errs() << "[W] Unfinished block: " << info.first << "\n";
         }
         return completed;
     }
@@ -334,26 +431,26 @@ struct ScreenPass : public ModulePass {
         auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        outs() << "Span results: " << spanStats.size() << "\n";
+        O << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
 
-            outs() << " - name: " << name << ", branches: " << r.branches
-                   << ", instructions " << r.instructions << "\n";
+            O << " - name: " << name << ", branches: " << r.branches
+              << ", instructions " << r.instructions << "\n";
 
         }
 
-        outs() << "Func results: " << funcStats.size() << "\n";
+        O << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
 
-            outs() << " - func name: " << f->getName() << ", branches: "
-                   << span.branches << ", instructions " << span.instructions
-                   << "\n";
-            out_fd << f->getName() << "\t" << span.branches << "\t"
-                   << span.instructions << "\n";
+            O << " - func name: " << f->getName() << ", branches: "
+              << span.branches << ", instructions " << span.instructions
+              << "\n";
+
+            dumpRegionStats(f->getName(), span);
         }
 
     }
@@ -363,7 +460,6 @@ struct ScreenPass : public ModulePass {
     void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
 
         paths_funcs.push_back(f);
-        outs() << "Visiting: " << f->getName() << "\n";
        
         Function::iterator bb = f->begin();
 
@@ -409,15 +505,15 @@ struct ScreenPass : public ModulePass {
     }
 
     void dump_cfg(){
-        outs()<<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
+        O <<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
         // dump paths and their function calls
-        for(int i = 0;i<cfg_paths_funcs.size();i++){
-            outs()<<"\nPATH ["<<i<<"]\n";
-            for(int j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                outs()<<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
+        for(size_t i = 0;i<cfg_paths_funcs.size();i++){
+            O <<"\nPATH ["<<i<<"]\n";
+            for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
+                O <<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
             
             }
-            outs()<<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
+            O <<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
         
         }
     
@@ -436,14 +532,44 @@ struct ScreenPass : public ModulePass {
         dump_cfg();
     }
 
-    
+    void dumpRegionStats(const std::string &name, const RegionStats &R)
+    {
+        if (started)
+            out_fd << ",";
+
+        const TraverseCfg::VisitedPath path(R.callPath.begin(), R.callPath.end());
+
+        out_fd << "{ \"" << name << "\": {\n"
+               << "     \"branches\": " << R.branches << ",\n"
+               << "     \"instructions\": " << R.instructions;
+
+        //auto path = R.callPath;
+        if (!path.empty()) {
+               out_fd << ",\n     \"cfg\": [";
+
+            for (size_t i = 0; i < path.size(); i++) {
+                out_fd << "\"" << path[i].second->getName().str() << "\"";
+                if (i != path.size() - 1) {
+                    out_fd << ", ";
+                }
+                
+            }
+            out_fd << "]\n";
+        } else {
+          out_fd << "\n";
+        }
+
+        out_fd << "}}\n";
+        out_fd.flush();
+
+        started = true;
+    }
 
     void cfgReworkDemo(const Module &M)
     {
-
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
-            errs() << "[ ERROR ] no start symbol "<<kSymbolName<<"\n";
+            errs() << "[E] no start symbol " << kSymbolName << "\n";
             return;
         }
 
@@ -469,12 +595,13 @@ struct ScreenPass : public ModulePass {
                 // consider this span finished and move the region being
                 // tracked to the completed map.
                 } else if (I.isIdenticalTo(span.end)) {
-                    auto trackedSpan = inProgress[name];
+                    RegionStats trackedSpan = inProgress[name];
 
                     trackedSpan.end = span.end;
                     trackedSpan.callPath = T.pathVisited(name);
 
                     completed[name] = trackedSpan;
+
                     inProgress.erase(name);
                 }
             }
@@ -486,15 +613,8 @@ struct ScreenPass : public ModulePass {
         });
         T.traverse(entry);
 
-        for (auto stats : completed) {
-          outs() << "Name: " << stats.first << "\n";
-          auto path = stats.second.callPath;
-          for (size_t i = 0; i < path.size(); i++) {
-            outs() << path[i]->getName();
-            if (i != path.size() - 1)
-              outs() << " -> ";
-          }
-          outs() << "\n";
+        for (auto &stats : completed) {
+          dumpRegionStats(stats.first, stats.second);
         }
 
     }
@@ -502,17 +622,22 @@ struct ScreenPass : public ModulePass {
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
-        outs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
-        outs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
-        outs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
+        // errs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
+        // errs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
+        // errs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
+
+
+        // next stage, recover CFG, starting at main do a depth first search for annotation_start
+        //
+        cfgReworkDemo(M);
 
         simple_demo(M);
 
-        // next stage, recover CFG, starting at main do a depth first search for annotation_start
-
-        cfgReworkDemo(M);
+        out_fd << "]\n";
+        out_fd.flush();
 
         return true;
+
     }
 
 };

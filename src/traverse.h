@@ -43,11 +43,20 @@ public:
 // function and all functions it calls, recursively.
 class TraverseCfg : public Traverser {
 public:
+    // Each entry in the traversal path is identified by the call instruction
+    // that led us here and the function that served as the target.
+    //
+    // The CallInst can be null
+    using Breadcrumb = std::pair<const llvm::CallInst*, const llvm::Function *>;
 
-    using VisitedPath = std::vector<const llvm::Function *>;
+    using VisitedPath = std::vector<Breadcrumb>;
 
-    // @brief Traverse the instructions of a control flow graph anchored at F.
-    virtual bool traverse(const llvm::Function *F) override;
+    // @brief Traverse the instructions of a control flow graph anchored at the
+    // function F.
+    virtual bool traverse(const llvm::Function *F) override
+    {
+        return traverse(F, nullptr);
+    }
 
     // @brief Return the path that we took so far.
     VisitedPath pathVisited(std::string name);
@@ -61,11 +70,13 @@ public:
     }
 
 private:
+    enum BBState {kUnvisited, kInProgress, kVisited};
+
     bool traverse(const llvm::BasicBlock *BB);
 
-    VisitedPath m_visited;
+    bool traverse(const llvm::Function *F, const llvm::CallInst *CI);
 
-    enum BBState {kUnvisited, kInProgress, kVisited};
+    VisitedPath m_visited;
 
     llvm::DenseMap<const llvm::BasicBlock *, BBState> m_stateMap;
 
