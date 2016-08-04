@@ -49,9 +49,20 @@ echo "[-] Ouput"
 ${LLVM_BIN}/opt -mem2reg examples/02_annotated_region_simple.bc -o examples/02_annotated_region_simple.bc
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/02_annotated_region_simple.bc -o examples/02_annotated_region_simple_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
 echo "[-] Expected Output"
-echo "    less than operand"
-echo "    variable"
-echo "    constant: 4"
+echo "    equals predicate, local variable, NULL"
+echo "    not equals predicate, local variable, constant 1" 
+echo "    equals predicate, local variable, constant 2135247942 ( or 0x7f454c46 )"
+echo 
+cat examples/OUTPUT 
+echo
+echo "[ EXAMPLE THREE ]"
+echo "Description: program incrementally steps through functions."
+echo "[-] Ouput"
+${LLVM_BIN}/opt -mem2reg examples/03_interprocedural_basic.bc -o examples/03_interprocedural_basic.bc
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/03_interprocedural_basic.bc -o examples/03_interprocedural_basic_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
+echo "[-] Expected Output"
+echo "    <no cmp instructions to handle>"
+echo 
 cat examples/OUTPUT 
 echo
 echo

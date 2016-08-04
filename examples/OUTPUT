@@ -1,11 +1,6 @@
-[{ "main": {
-     "branches": 6,
-     "instructions": 31,
-     "cfg": ["main"],
-     "cmp_inst_0": ["equals", "local_var", "NULL"]
-,
-     "cmp_inst_1": ["not_equals", "local_var", "1"]
-,
-     "cmp_inst_2": ["equals", "local_var", "2135247942"]
+[{ "steps": {
+     "branches": 0,
+     "instructions": 6,
+     "cfg": ["step_one", "step_two", "step_three", "step_four"]
 }}
 ]
