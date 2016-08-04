@@ -9,6 +9,10 @@ float pow_int(float base, int exponent)
         result *= base;
     }
 
+    for (int i = 0; i < 4; i++) {
+        result *= base;
+    }
+
     return result;
 }
 int main(int argc, char *argv[]){

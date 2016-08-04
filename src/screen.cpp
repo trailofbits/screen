@@ -129,6 +129,8 @@ struct ScreenPass : public ModulePass {
 		std::ostringstream os;
 		os << CI->getSExtValue();
 		ret = os.str();
+	    }else if(dyn_cast<ConstantPointerNull>(op)){
+	        ret = "NULL"; 
 	    }else{
 		// value is a variable, trace uses
 		int use_counter = 0;
@@ -169,6 +171,8 @@ struct ScreenPass : public ModulePass {
 	    Value *secondOperand = cmpInst->getOperand(1);
 	    // get predicate
 	    CmpInst::Predicate p = cmpInst->getPredicate();
+	    //cmpInst->dump();
+	    //outs()<<p<<"\n";
 	    // store <inst> <pred> <op1> <op2>
 	    BranchCond cmp_set;
 	    cmp_set.inst = cmpInst;
@@ -574,6 +578,10 @@ struct ScreenPass : public ModulePass {
 	    std::string predicate = "";
 	    if (BranchCond.pred == 40){
 	    	predicate = "signed_less_than";
+	    }else if(BranchCond.pred == 32){
+	    	predicate = "equals";
+	    }else if(BranchCond.pred == 33){
+	    	predicate = "not_equals";
 	    } 
             if(!path.empty()){
 	    	out_fd << ",\n";
