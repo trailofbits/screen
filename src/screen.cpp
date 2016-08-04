@@ -24,6 +24,7 @@
 #include <set>
 
 #include "traverse.h"
+#include <sstream>
 
 using namespace llvm;
 using namespace screen;
@@ -120,22 +121,37 @@ struct ScreenPass : public ModulePass {
 
 
     // TODO reason about bounds and call this when we need constraint information
-    int reason_cmp_ops(Value *op){
+    std::string reason_cmp_ops(Value *op){ 
+	    std::string ret = "";
 
-	    // reason about operand values
+	    // reason about operand values, if there is a store it takes care of it
 	    if (ConstantInt *CI = dyn_cast<ConstantInt>(op)){
-		return CI->getSExtValue();
+		std::ostringstream os;
+		os << CI->getSExtValue();
+		ret = os.str();
 	    }else{
 		// value is a variable, trace uses
-		for (Value::use_iterator i = (op)->use_begin(), e = (op)->use_end(); i != e; ++i){
-		    if (LoadInst *Inst = dyn_cast<LoadInst>(*i)) {
-			outs()<<"use oeprand 1\n"; 
-			Inst->dump();
+		int use_counter = 0;
+		int phi_counter = 0;
+		for (auto &U : op->uses())
+		{
+		    if(Instruction *temp = dyn_cast<Instruction>(U)){
+			use_counter += 1;
+			if(temp->getOpcode() == Instruction::PHI){
+			    phi_counter += 1;
+			}
 		    }
-		}		
+		}
+		if(phi_counter > 0 || use_counter > 0){
+		    ret = "local_var";
+			// this case for locally declared variables
+		}else{
+		    ret = "external_var";
+		
+		}
 	    }
-    
-	    return -1;
+	    // this case for 100% user controlled variables
+	    return ret;
     }
 
     void get_bounds_operand(Value *op, int &lower, int &higher){
@@ -551,7 +567,7 @@ struct ScreenPass : public ModulePass {
                 }
                 
             }
-            out_fd << "]\n";
+            out_fd << "]";
         }
         int count = 0;	
         for (auto &BranchCond : BranchCondVec) {
@@ -559,11 +575,18 @@ struct ScreenPass : public ModulePass {
 	    if (BranchCond.pred == 40){
 	    	predicate = "signed_less_than";
 	    } 
-            out_fd << "     \"cmp_inst_"<<count<<"\": " << predicate << ", " << reason_cmp_ops((BranchCond.ops)[0]) << ", " << reason_cmp_ops((BranchCond.ops)[1]) << ",\n";
+            if(!path.empty()){
+	    	out_fd << ",\n";
+	    }
+	    std::string reason1 = reason_cmp_ops((BranchCond.ops)[0]);
+	    std::string reason2 = reason_cmp_ops((BranchCond.ops)[1]);
+	    out_fd << "     \"cmp_inst_"<<count<<"\": [\"" << predicate << "\", \"" << reason1 << "\", \"" << reason2 << "\"]\n";
 	    
 	    count += 1;
 	}
-
+	if(count == 0){
+		out_fd<<"\n";
+	}
         out_fd << "}}\n";
         out_fd.flush();
 

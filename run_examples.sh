@@ -32,6 +32,7 @@ echo
 echo "[ EXAMPLE ONE ]"
 echo "Description: for loop with modifiable and un-modifiable bounds."
 echo "[-] Ouput"
+${LLVM_BIN}/opt -mem2reg examples/01_annotated_function.bc -o examples/01_annotated_function.bc
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/01_annotated_function.bc -o examples/01_annotated_function_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
 echo "[-] Expected Output"
 echo "    less than operand"

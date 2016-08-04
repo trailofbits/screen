@@ -5,17 +5,13 @@ float pow_int(float base, int exponent)
 {
     float result = 1.0f;
 
-    for (int i = 0; i < 4; i++) {
-        result *= base;
-    }
-
     for (int i = 0; i < exponent; i++) {
         result *= base;
     }
 
-    return base;
+    return result;
 }
-int main(){
+int main(int argc, char *argv[]){
 
-	return pow_int(2, 4);
+	return pow_int(2, argc);
 }

@@ -1,7 +1,6 @@
 [{ "pow_int": {
-     "branches": 8,
-     "instructions": 39,
-     "cmp_inst_0": signed_less_than, -1, 4,
-     "cmp_inst_1": signed_less_than, -1, -1,
+     "branches": 4,
+     "instructions": 10,
+     "cmp_inst_0": ["signed_less_than", "local_var", "external_var"]
 }}
 ]
