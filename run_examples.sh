@@ -65,6 +65,17 @@ echo "    <no cmp instructions to handle>"
 echo 
 cat examples/OUTPUT 
 echo
+echo "[ EXAMPLE FOUR ]"
+echo "Description: program incrementally steps through functions. "
+echo "There are TWO possible execution paths, the first has one cmp, the second has 2 cmps."
+echo "[-] Ouput"
+${LLVM_BIN}/opt -mem2reg examples/04_interprocedural_forked.bc -o examples/04_interprocedural_forked.bc
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/04_interprocedural_forked.bc -o examples/04_interprocedural_forked_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
+echo "[-] Expected Output"
+echo "    equals predicate, local variable, constant 0"
+echo 
+cat examples/OUTPUT 
+echo
 echo
 
 
