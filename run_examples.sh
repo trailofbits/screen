@@ -17,7 +17,6 @@ case $OSTYPE in
     ;;
 esac
 
-
 if [ ! -d ${LLVM_BIN} ]; then
   echo "[!] LLVM not found. Run ./build.sh"
   exit 1
@@ -76,7 +75,6 @@ echo "    equals predicate, local variable, constant 0"
 echo 
 cat examples/OUTPUT 
 echo
-exit
 echo "[ EXAMPLE FIVE ]"
 echo "Description: program incrementally steps through functions. "
 echo "There are TWO possible execution paths, the first has one cmp, the second has 2 cmps."
@@ -84,7 +82,7 @@ echo "[-] Ouput"
 ${LLVM_BIN}/opt -mem2reg examples/05_basic_loop.bc -o examples/05_basic_loop.bc
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} examples/05_basic_loop.bc -o examples/05_basic_loop_transformed.bc -screen -screen-output examples/OUTPUT -screen-start-symbol main 
 echo "[-] Expected Output"
-echo "    equals predicate, local variable, constant 0"
+echo "    equals predicate, local variable, local variable"
 echo 
 cat examples/OUTPUT 
 echo
