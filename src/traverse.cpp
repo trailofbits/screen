@@ -60,7 +60,7 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
                 return false;
             }
         } else if (state == kInProgress) {
-            return false;
+            //TODO: figure out why this is true too return false;
         }
     }
 
