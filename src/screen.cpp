@@ -46,7 +46,6 @@ static cl::opt<bool> kDebugFlag("screen-debug", cl::Optional,
 namespace {
 
 struct ScreenPass : public ModulePass {
-    std::error_code out_fd_err;
     std::ofstream out_fd;
     bool started;
     raw_ostream &O;
@@ -63,6 +62,7 @@ struct ScreenPass : public ModulePass {
 
     ~ScreenPass()
     {
+        out_fd.close();
     }
 
     static char ID; 
@@ -91,7 +91,7 @@ struct ScreenPass : public ModulePass {
         int branches;
         int instructions;
 
-        TraverseCfg::VisitedPath callPath;
+        std::vector<TraverseCfg::VisitedPath> callPaths;
 
     };
 
@@ -554,24 +554,32 @@ struct ScreenPass : public ModulePass {
         if (started)
             out_fd << ",";
 
-        const TraverseCfg::VisitedPath path(R.callPath.begin(), R.callPath.end());
-
         out_fd << "{ \"" << name << "\": {\n"
                << "     \"branches\": " << R.branches << ",\n"
                << "     \"instructions\": " << R.instructions << ",\n";
 
-        //auto path = R.callPath;
-        if (!path.empty()) {
-               out_fd << "     \"cfg\": [";
+        if (!R.callPaths.empty()) {
+               out_fd << "     \"cfg\": [\n";
 
-            for (size_t i = 0; i < path.size(); i++) {
-                out_fd << "\"" << path[i].second->getName().str() << "\"";
-                if (i != path.size() - 1) {
+            for (size_t p = 0; p < R.callPaths.size(); p++) {
+                const auto &path = R.callPaths[p];
+
+                out_fd << "              [";
+                for (size_t i = 0; i < path.size(); i++) {
+                    out_fd << "\"" << path[i].second->getName().str() << "\"";
+                    if (i != path.size() - 1) {
+                        out_fd << ", ";
+                    }
+                }
+
+                out_fd << "]";
+                if (p != R.callPaths.size()-1) {
                     out_fd << ", ";
                 }
-                
+                out_fd << "\n";
+
             }
-            out_fd << "]";
+            out_fd << "       ]";
         }
         int count = 0;	
         for (auto &BranchCond : BranchCondVec) {
@@ -583,7 +591,7 @@ struct ScreenPass : public ModulePass {
 	    }else if(BranchCond.pred == 33){
 	    	predicate = "not_equals";
 	    } 
-            if(!path.empty()){
+            if(!R.callPaths.empty()){
 	    	out_fd << ",\n";
 	    }
 	    std::string reason1 = reason_cmp_ops((BranchCond.ops)[0]);
@@ -631,14 +639,19 @@ struct ScreenPass : public ModulePass {
                 // consider this span finished and move the region being
                 // tracked to the completed map.
                 } else if (I.isIdenticalTo(span.end)) {
-                    RegionStats trackedSpan = inProgress[name];
+                    if (completed.find(name) != completed.end()) {
+                        completed[name].callPaths.push_back(T.pathVisited(name));
+                    } else {
+                        RegionStats trackedSpan = inProgress[name];
 
-                    trackedSpan.end = span.end;
-                    trackedSpan.callPath = T.pathVisited(name);
+                        trackedSpan.end = span.end;
 
-                    completed[name] = trackedSpan;
+                        trackedSpan.callPaths.push_back(T.pathVisited(name));
 
-                    inProgress.erase(name);
+                        completed[name] = trackedSpan;
+
+                        inProgress.erase(name);
+                    }
                 }
             }
 
@@ -667,7 +680,7 @@ struct ScreenPass : public ModulePass {
         //
         cfgReworkDemo(M);
 
-        simple_demo(M);
+        // simple_demo(M);
 
         out_fd << "]\n";
         out_fd.flush();

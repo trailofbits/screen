@@ -60,6 +60,7 @@ bool TraverseCfg::traverse(const llvm::BasicBlock *BB)
                 return false;
             }
         } else if (state == kInProgress) {
+            // return false;
             //TODO: figure out why this is true too return false;
         }
     }
@@ -77,8 +78,9 @@ bool TraverseCfg::traverse(const Function *F, const CallInst *CI)
     // Ignore this if we have visited this in the current iteration
     auto existing = std::find_if(m_visited.begin(), m_visited.end(),
             [F](Breadcrumb b) { return b.second == F; });
-    if (existing != m_visited.end()) 
+    if (existing != m_visited.end())  {
         return false;
+    } 
 
     // Ignore if we have no function body (definition has not been linked yet)
     if (F->begin() == F->end())
