@@ -18,7 +18,7 @@
 #define SCREEN_START(name) \
   _Pragma("GCC push") \
   _Pragma("GCC diagnostic ignored \"-Wattributes\"") \
-  char __screen_ ## name ## _start  \
+  volatile char __screen_ ## name ## _start  \
     __attribute__((annotate(_SCREEN_PREFIX #name "_start"))); \
   (void) __screen_ ## name ## _start; \
   _Pragma("GCC pop")
@@ -30,8 +30,8 @@
 #define SCREEN_END(name) \
   _Pragma("GCC push") \
   _Pragma("GCC diagnostic ignored \"-Wattributes\"") \
-  char __screen_ ## name ## _end \
-  __attribute__((annotate(_SCREEN_PREFIX #name "_end"))); \
+  volatile char __screen_ ## name ## _end \
+  __attribute__((annotate(_SCREEN_PREFIX #name "_end"))) = __LINE__; \
   (void) __screen_ ## name ## _end; \
   _Pragma("GCC pop")
 
