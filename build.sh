@@ -56,5 +56,5 @@ fi
 
 echo "[+] Running cmake"
 cmake -DLLVM_ROOT=${LLVM_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-make -j4 VERBOSE=1 screen
+make -j4 VERBOSE=1 screen range
 

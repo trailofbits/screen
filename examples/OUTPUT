@@ -1,7 +1,9 @@
-[{ "forked": {
-     "branches": 1,
+[{ "basic_loop": {
+     "branches": 4,
      "instructions": 11,
-     "cfg": ["step_one", "step_two", "step_three", "step_four_a", "step_five"],
-     "cmp_inst_0": ["equals", "local_var", "0"]
+     "cfg": [
+              ["main"]
+       ],
+     "cmp_inst_0": ["signed_less_than", "local_var", "local_var"]
 }}
 ]

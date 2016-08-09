@@ -13,13 +13,11 @@ int main (int argc, char *argv[])
     }*/
 
     amount = atoi(argv[1]);
-
     SCREEN_START(basic_loop);
 
     for (int i = 0; i < amount; i++) {
         printf("Running %d.\n", i);
     }
-
     printf("Done.\n");
 
     SCREEN_END(basic_loop);
