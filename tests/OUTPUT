@@ -1,9 +1,0 @@
-[{ "paths2": {
-     "branches": 1,
-     "instructions": 27,
-     "cfg": [
-              ["main", "fun1", "fun2", "fun3", "fun4"]
-       ],
-     "cmp_inst_0": ["not_equals", "local_var", "1"]
-}}
-]
