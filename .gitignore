@@ -1,5 +1,7 @@
 build/
 **.bc
+**.ll
+**.o
 tags
 CMakeFiles
 CMakeScripts
