@@ -49,7 +49,7 @@ Flow::Flow(Flow* flow){
 //Most basic join operation possible.
 Flow* Flow::join(Flow* other){
 	//join bottom-bottom gives you bottom. Anything else gives you top.
-	errs()<< "I just entered into the superclassed join... \n";
+	outs()<< "I just entered into the superclassed join... \n";
 	if (this->basic==BOTTOM && other->basic==BOTTOM)
 		return new Flow(BOTTOM);
 	else

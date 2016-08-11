@@ -90,7 +90,7 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 	//join bottom-bottom gives you bottom. Anything else gives you top.
 	RangeAnalysisFlow* other =
 			static_cast<RangeAnalysisFlow*>(otherSuper);
-//	errs()<< "I just entered into the sublcassed join... \n";
+//	outs()<< "I just entered into the sublcassed join... \n";
 
 	if (this->basic == BOTTOM && other->basic == BOTTOM)
 		return new RangeAnalysisFlow(BOTTOM);
@@ -116,11 +116,11 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(other);
 	for (map<string, RangeDomainElement>::iterator it = this->value.begin(); it != this->value.end(); it++) {
 				if (f->value.find(it->first) == f->value.end()) {
-					errs() << "New key\n";
+					outs() << "New key\n";
 					// They don't have the same key! We're good!
 					f->value[it->first] = it->second;
 				} else {
-					errs() << "Existing key\n";
+					outs() << "Existing key\n";
 					// Oh no! They do have the same key! We need to check if they have
 					// the same values! if they do then we're good
 					RangeDomainElement otherVal = other->value.find(it->first)->second;

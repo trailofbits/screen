@@ -1,19 +1,4 @@
-//
-//  RangeAnalysisPass.cpp
-//  
-//
-//  Created by Costas Zarifis on 22/05/2014.
-//
-//
-
-/*
- * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
- * took hours to install :).
- */
 #include "RangeAnalysis.h"
-
-// You can actually check out the opcodes in this address:
-// 	http://code.woboq.org/userspace/llvm/include/llvm/IR/Instruction.def.html
 
 #define ADD 8 //This is the opcode for the add instruction
 #define FADD 9 //This is the opcode for the add instruction
@@ -28,7 +13,7 @@
 #define FREM 19 //This is the opcode for the floating point mod instruction
 #define SHL 20 //This is the opcode for the Shift left (logical) instruction
 #define LSHR 21 //This is the opcode for the Shift right (logical) instruction
-#define ASHR 22 //This is the opcode for the Shift right (arithmetic) instruction
+#define ASHR 25 //This is the opcode for the Shift right (arithmetic) instruction
 // Logical operators (integer operands)
 /*122	HANDLE_BINARY_INST(20, Shl  , BinaryOperator) // Shift left  (logical)
  123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
@@ -48,21 +33,23 @@
 #define SITOFP 39 // SInt -> floating point
 #define FPTRUNC 40 //Truncate floating point
 #define FPEXT 41 // Extend floating point
-#define PHI 48 // Extend floating point
+#define PHI 53 // Extend floating point
 
 
 
 Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		int NodeId) {
+
 	RangeAnalysisFlow* inFlow = static_cast<RangeAnalysisFlow*>(in);
 	RangeAnalysisFlow * output;
 	int loopCount;
+	outs()<< inst->getOpcode()<<"\n";
 	//Just need to check if we have seen this basic block a few times.
 	//If we have seen this a few times, change ALL VARIABLES that are changing to TOP
 	if (nodeCount.find(NodeId) != nodeCount.end())
 	{
 		loopCount = nodeCount[NodeId].nodeVisitCounter;
-		if (loopCount >= 3)
+		if (loopCount >= 1000)
 		{
 			//ANY VARIABLES THAT DID NOT CHANGE MUST BE SET TO TOP!!!
 			//THIS SHOULD SET SOME VARIABLES TO TOP!!!!
@@ -97,7 +84,6 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 	}
 
 	switch (inst->getOpcode()) {
-
 	case ADD:
 	case SUB:
 	case MUL:
@@ -138,7 +124,7 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		break;
 	}
 #ifdef DEBUGRANGE
-	errs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
+	outs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
 #endif
 	return output;
 }
@@ -146,6 +132,7 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 		Instruction* instruction) {
 
+	//outs()<<"HERE Cast\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	map<string, RangeDomainElement> value;
 	Value *retVal = instruction;
@@ -162,8 +149,8 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 			if (f->value.find(casting->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
 #ifdef RANGEDEBUG
-				errs() << "Undefined variable!\n";
-				errs() << "Variable: " << casting->getName()
+				outs() << "Undefined variable!\n";
+				outs() << "Variable: " << casting->getName()
 						<< " was not found \n";
 #endif
 			} else {
@@ -226,6 +213,7 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 //For the tricky case of range arithmetic ops
 RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		RangeDomainElement rightRange, unsigned opcode) {
+	//outs()<<"HERE compute range\n";
 	RangeDomainElement resRange;
 	float mulDivCombos[4];
 	int shiftCombos[4];
@@ -409,6 +397,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 		Instruction* instruction) {
 
+	//outs()<<"HERE Pjhi\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 
 	RangeDomainElement leftVal;
@@ -420,7 +409,7 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 	Value *K = instruction;
 	string regName = K->getName();
 #ifdef RANGEDEBUG
-	errs() << "Instruction : " << regName << " left " << leftOperand->getName()
+	outs() << "Instruction : " << regName << " left " << leftOperand->getName()
 			<< " right " << rightOperand->getName() << "\n";
 #endif
 
@@ -439,7 +428,7 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 		else
 			{rightVal = f->value.find(rightOperand->getName())->second;}
 #ifdef RANGEDEBUG
-		errs() << "leftVal: " << leftVal.upper << " , " << leftVal.lower
+		outs() << "leftVal: " << leftVal.upper << " , " << leftVal.lower
 				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
 				<< "\n";
 #endif
@@ -450,10 +439,10 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 
 		RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 #ifdef RANGEDEBUG
-		errs() << "input" << leftVal.upper << " , " << leftVal.lower
+		outs() << "input" << leftVal.upper << " , " << leftVal.lower
 				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
 				<< "\n";
-		errs() << "outcome: " << maxRange.upper << " , " << maxRange.lower
+		outs() << "outcome: " << maxRange.upper << " , " << maxRange.lower
 				<< "\n";
 #endif
 		value[regName] = maxRange;
@@ -492,6 +481,7 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 		Instruction* instruction, unsigned opcode) {
 
+	//outs()<<"HERE FLOATING\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	RangeDomainElement leftRange, rightRange;
 	Value *leftOperand = instruction->getOperand(0);
@@ -499,6 +489,8 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 	map<string, RangeDomainElement> value;
 	Value *K = instruction;
 	string regName = K->getName();
+	rightOperand->dump();
+	leftOperand->dump();
 
 // Checking if left operand is a constant
 	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
@@ -534,11 +526,11 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 			if (f->value.find(rightOperand->getName()) == f->value.end()) {
 #ifdef RANGEDEBUG
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the right operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs() << "Oh no! Something went wrong!\n";
+				outs() << "Undefined variable!\n";
+				outs() << "Apparently the right operand of the op is";
+				outs() << " a variable but this is the first time we ";
+				outs() << "come across this variable!!\n";
 #endif
 			}
 
@@ -567,15 +559,15 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
 			// Ok, cool! the right part is a constant...
 			//leftOperand->getName()
-
+			outs()<<"Right is a constant\n";
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
 #ifdef DEBUGRANGE
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs() << "Oh no! Something went terribly wrong!\n";
+				outs() << "Undefined variable!\n";
+				outs() << "Apparently the left operand of the op is";
+				outs() << " a variable but this is the first time we ";
+				outs() << "come across this variable!!\n";
 #endif
 			} else {
 				// Hmm, I guess we're good...
@@ -604,16 +596,10 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 					| (f->value.find(rightOperand->getName()) == f->value.end())) {
 #ifdef RANGEDEBUG
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs() << "Oh no! Something went terribly wrong!\n";
 #endif
 			} else {
 
-				//HERE WE ARE COMPUTING OPS USING A RANGE OF VALUES, NOT THE PLAIN ABSOLUTES
-				// Hmm, I guess we're good...
 				RangeDomainElement resRange, rightRange, leftRange =
 						f->value.find(leftOperand->getName())->second;
 
@@ -641,6 +627,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 
 RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		Instruction* instruction, unsigned opcode) {
+	//outs()<<"HERE execute ASHR\n";
 	RangeDomainElement leftRange, rightRange, resRange;
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -648,6 +635,8 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 	map<string, RangeDomainElement> value;
 	Value *K = instruction;
 	string regName = K->getName();
+	rightOperand->dump();
+	leftOperand->dump();
 
 // Checking if left operand is a constant
 	if (ConstantInt *CILeft = dyn_cast<ConstantInt>(leftOperand)) {
@@ -658,8 +647,9 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			leftRange = getOperandValue(CILeft);
 			rightRange = getOperandValue(CIRight);
 
+			outs()<<"COMPUTING OP RANGE!!!\n";
 			resRange = computeOpRange(leftRange, rightRange, opcode);//Get precise information
-
+			outs()<<resRange.upper<<" "<<resRange.lower<<"\n";
 			//float resVal = leftVal + rightVal;
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -672,14 +662,16 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			f = tmp;
 		} else {
 			// ok so the right operand is a variable
+			rightOperand->dump();
+			CILeft->dump();
 			if (f->value.find(rightOperand->getName()) == f->value.end()) {
 #ifdef DEBUGRANGE
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the right operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs() << "Oh no! Something went wrong!\n";
+				outs() << "Undefined variable!\n";
+				outs() << "Apparently the right operand of the op is";
+				outs() << " a variable but this is the first time we ";
+				outs() << "come across this variable!!\n";
 #endif
 			}
 
@@ -706,14 +698,15 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		// this variable has at the moment.
 		if (ConstantInt *CIRight = dyn_cast<ConstantInt>(rightOperand)) {
 			// Ok, cool! the right part is a constant...
-
+			outs()<<"RIGHT SIDE IS A CONSTANT\n";
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs()<< f->value.size() << "\n";
+				outs() << "Oh no! Something went terribly wrong!\n";
+				outs() << "Undefined variable!\n";
+				outs() << "Apparently the left operand of the op is";
+				outs() << " a variable but this is the first time we ";
+				outs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -739,11 +732,11 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 					| (f->value.find(rightOperand->getName()) == f->value.end())) {
 #ifdef RANGEDEBUG
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
+				outs() << "Oh no! Something went terribly wrong!\n";
+				outs() << "Undefined variable!\n";
+				outs() << "Apparently the left operand of the op is";
+				outs() << " a variable but this is the first time we ";
+				outs() << "come across this variable!!\n";
 #endif
 			} else {
 				// Hmm, I guess we're good...
@@ -768,10 +761,12 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		}
 
 	}
+	//outs()<<"HERE \n";
 	return f;
 }
 
 Flow * RangeAnalysis::initialize() {
+	//outs()<<"HERE initialize\n";
 	return new RangeAnalysisFlow(RangeAnalysisFlow::BOTTOM);
 }
 
@@ -787,6 +782,7 @@ RangeAnalysis::RangeAnalysis(Function & F) :
 //Delete (set to top) all variables with different ranges. This is a utility function for merging, specifically for looping
 //control structures in the range analysis
 void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B) {
+	//outs()<<"HERE 3\n";
 	for (map<string, RangeDomainElement>::iterator it = B->value.begin();
 			it != B->value.end(); it++) {
 
@@ -856,6 +852,7 @@ RangeDomainElement getOperandValue(Value* Operand)
 		}
 	}
 
+	//outs()<<"HERE 4\n";
 return OpValue;
 }
 

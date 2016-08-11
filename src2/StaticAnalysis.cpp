@@ -7,7 +7,7 @@
 //
 
 /**
- * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
+ * Note : use the outs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
  * took hours to install :).
  */
 #include "StaticAnalysis.h"
@@ -65,9 +65,9 @@ void StaticAnalysis::runWorklist() {
 			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
 			Flow* new_out = out->join(current->outgoing[i]->flow);
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-			errs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
+			//outs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
 			if (!(new_out->equals(current->outgoing[i]->flow))){
-				errs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
+				//outs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
 				current->outgoing[i]->flow->copy(new_out);
 				worklist.push(current->outgoing[i]->destination);
 			}

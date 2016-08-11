@@ -43,7 +43,7 @@ namespace {
     	//The pure static analysis. Functional testing
     	for (unsigned int i = 0 ; i < RangeAnalyses.size() ; i++){
         	RangeAnalyses[i]->runWorklist();
-        	OS << "\nPrint CFG (with flow) : " << "\n";
+        	OS << "\nPrint CFG (with flow) : " <<RangeAnalyses[i]->functionName<< "\n";
         	RangeAnalyses[i]->JSONCFG(OS);
     	}
 
