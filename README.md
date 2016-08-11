@@ -1,5 +1,7 @@
 # screen
-The goal of this project are to create a LLVM pass which runs over the S2N codebase on each commit and performs compiler assisted invariant detection, this lets us find every such deviation automatically, on every checkin.
+The goal of this project are to create a LLVM pass which runs over the S2N codebase on each commit and performs compiler assisted invariant detection.
+
+This lets us find every control-flow and variable range deviation automatically, on every checkin.
 
 
 Current S2N defenses:
