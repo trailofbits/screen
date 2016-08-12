@@ -391,6 +391,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		break;
 	}
 
+	outs()<<"VARIABLE RANGE "<< resRange.lower <<" "<<resRange.upper<<"\n";
 	return resRange;
 }
 
@@ -647,7 +648,6 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			leftRange = getOperandValue(CILeft);
 			rightRange = getOperandValue(CIRight);
 
-			outs()<<"COMPUTING OP RANGE!!!\n";
 			resRange = computeOpRange(leftRange, rightRange, opcode);//Get precise information
 			outs()<<resRange.upper<<" "<<resRange.lower<<"\n";
 			//float resVal = leftVal + rightVal;
@@ -698,15 +698,11 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		// this variable has at the moment.
 		if (ConstantInt *CIRight = dyn_cast<ConstantInt>(rightOperand)) {
 			// Ok, cool! the right part is a constant...
-			outs()<<"RIGHT SIDE IS A CONSTANT\n";
+		//	outs()<<"RIGHT SIDE IS A CONSTANT\n";
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
 				outs()<< f->value.size() << "\n";
 				outs() << "Oh no! Something went terribly wrong!\n";
-				outs() << "Undefined variable!\n";
-				outs() << "Apparently the left operand of the op is";
-				outs() << " a variable but this is the first time we ";
-				outs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -733,10 +729,6 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 #ifdef RANGEDEBUG
 				// Oh no! Read the error message!
 				outs() << "Oh no! Something went terribly wrong!\n";
-				outs() << "Undefined variable!\n";
-				outs() << "Apparently the left operand of the op is";
-				outs() << " a variable but this is the first time we ";
-				outs() << "come across this variable!!\n";
 #endif
 			} else {
 				// Hmm, I guess we're good...
