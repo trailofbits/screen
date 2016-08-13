@@ -39,7 +39,7 @@ echo
 echo
 echo "[+] Running range analysis pass..."
 ./build/llvm/bin/opt -load ./build/lib/range.dylib tests/test2.bc -o tests/test2.bc -mem2reg -instnamer
-echo ./build/llvm/bin/opt -load ./build/lib/range.dylib -range_analysis < tests/test2.bc -analyze 
+./build/llvm/bin/opt -load ./build/lib/range.dylib -range_analysis  -range-debug tests/test2.bc -o tests/test2.bc
 #${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/libs2n.bc -o tests/libs2n_transformed.bc -screen -screen-output tests/OUTPUT_S2N -screen-start-symbol s2n_client_key_recv #  s2n_client_hello_send 
  #  s2n_client_hello_send 
  # s2n_client_key_recv

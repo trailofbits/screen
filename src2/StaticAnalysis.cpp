@@ -195,6 +195,7 @@ Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst, int NodeI
 //	case:
 //
 //	}
+	outs()<<"in flaw static execute flow\n";
 	return new Flow(Flow::TOP);
 }
 

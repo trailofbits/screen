@@ -36,10 +36,10 @@
 #define PHI 53 // Extend floating point
 
 
-
 Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		int NodeId) {
 
+	outs()<<"in range analysis flow\n";
 	RangeAnalysisFlow* inFlow = static_cast<RangeAnalysisFlow*>(in);
 	RangeAnalysisFlow * output;
 	int loopCount;
@@ -761,6 +761,9 @@ Flow * RangeAnalysis::initialize() {
 	//outs()<<"HERE initialize\n";
 	return new RangeAnalysisFlow(RangeAnalysisFlow::BOTTOM);
 }
+
+
+
 
 RangeAnalysis::RangeAnalysis(Function & F) :
 		StaticAnalysis() {
