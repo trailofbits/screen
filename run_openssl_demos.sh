@@ -23,12 +23,12 @@ fi
 
 echo "[+] Compiling openssl demos..."
 ${LLVM_BIN}/clang -I./include/ -o openssl_demos/master.bc openssl_demos/master.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter 
-${LLVM_BIN}/clang -I./include/ -o openssl_demos/master openssl_demos/master.c -Wall -Wshadow -Wextra
 
 echo "[+] Running screen pass..."
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol main 
 
 echo
+cat openssl_demos/OUTPUT
 echo
 echo "[+] Verifying paths:"
 echo "B1: "

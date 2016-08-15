@@ -1,1 +1,6 @@
-[]
+[{ "tls1_enc": {
+     "branches": 3,
+     "instructions": 20,
+     "cmp_inst_0": ["equals", "local_var", "-1"]
+}}
+]

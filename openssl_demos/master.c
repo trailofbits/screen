@@ -20,23 +20,20 @@ SCREEN(openssl_one)
 int tls1_enc()
 {
     int tmpret;
-    int numpipes = 1;
     int ret = 0;
     
     // vulnerable code extracted from: https://github.com/openssl/openssl/commit/94777c9c86a2b2ea2726c49d6c8f61078558beba
-    for (int ctr = 0; ctr < numpipes; ctr++) {
-	tmpret = tls1_cbc_remove_padding();
-	if (tmpret == -1) // git commit introduces this branch
-	    return -1;
-	/*
-	 *  0: (in non-constant time) if the record is publicly invalid.
-	 *  1: if the padding was valid
-	 * -1: otherwise.
-	 *
-	 * so 1 and -1 must be handled in timing-independent code, not 1 and 0
-	 */
-	ret &= tmpret;
-    }
+    tmpret = tls1_cbc_remove_padding();
+    if (tmpret == -1) // git commit introduces this branch
+	return -1;
+    /*
+     *  0: (in non-constant time) if the record is publicly invalid.
+     *  1: if the padding was valid
+     * -1: otherwise.
+     *
+     * so 1 and -1 must be handled in timing-independent code, not 1 and 0
+     */
+    ret &= tmpret;
 
     return ret;
 }
