@@ -172,7 +172,6 @@ struct ScreenPass : public ModulePass {
 	    // get predicate
 	    CmpInst::Predicate p = cmpInst->getPredicate();
 	    //cmpInst->dump();
-	    //outs()<<p<<"\n";
 	    // store <inst> <pred> <op1> <op2>
 	    BranchCond cmp_set;
 	    cmp_set.inst = cmpInst;
@@ -444,12 +443,12 @@ struct ScreenPass : public ModulePass {
     }
 
     // @brief Entry point for the basic passes
-    void simple_demo(Module &M){
+    void function_annotation_stats(Module &M){
 
-        auto spanStats = getAnnotatedInstructionStats(M);
+        //auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        O << "Span results: " << spanStats.size() << "\n";
+        /*O << "Span results: " << spanStats.size() << "\n";
         for (auto entry : spanStats) {
             auto name = entry.first;
             auto r = entry.second;
@@ -457,7 +456,7 @@ struct ScreenPass : public ModulePass {
             O << " - name: " << name << ", branches: " << r.branches
               << ", instructions " << r.instructions << "\n";
 
-        }
+        }*/
 
         O << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
@@ -616,7 +615,7 @@ struct ScreenPass : public ModulePass {
             errs() << "[E] no start symbol " << kSymbolName << "\n";
             return;
         }
-
+	
         RegionStatsMap inProgress, completed;
 
         auto spans = collectAnnotatedSpans(M);
@@ -680,7 +679,7 @@ struct ScreenPass : public ModulePass {
         //
         cfgReworkDemo(M);
 
-        // simple_demo(M);
+        function_annotation_stats(M);
 
         out_fd << "]\n";
         out_fd.flush();
