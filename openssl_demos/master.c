@@ -1,3 +1,5 @@
+#include <time.h>    // time()
+#include <screen.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -14,6 +16,7 @@ int tls1_cbc_remove_padding(){
     	return -1;	
 }
 
+SCREEN(openssl_one)
 int tls1_enc()
 {
     int tmpret;
