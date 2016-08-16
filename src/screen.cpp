@@ -468,7 +468,6 @@ struct ScreenPass : public ModulePass {
 
     void cfgReworkDemo(const Module &M)
     {
-        std::vector<BranchCond> BranchCondVec;
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
             errs() << "[E] no start symbol " << kSymbolName << "\n";
@@ -515,13 +514,13 @@ struct ScreenPass : public ModulePass {
 
             // Just a plain old instruction, add it to current counters.
             for (auto &info : inProgress) {
-                surveyInstruction(I, info.second, BranchCondVec);
+                surveyInstruction(I, info.second, info.second.BranchCondVec);
             }
         });
         T.traverse(entry);
 
         for (auto &stats : completed) {
-          dumpRegionStats(stats.first, stats.second, BranchCondVec);
+          dumpRegionStats(stats.first, stats.second, stats.second.BranchCondVec);
         }
 
     }
