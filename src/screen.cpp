@@ -80,6 +80,16 @@ struct ScreenPass : public ModulePass {
         const Instruction *end;
     };
 
+    // @brief A BranchCond is a set of the compare isntruction and its' predicate and operands
+    // CmpInst::FCMP_FALSE == 0
+    struct BranchCond {
+        BranchCond() :inst(nullptr) ,pred(CmpInst::FCMP_FALSE), ops() { }
+
+        const Instruction *inst;
+	CmpInst::Predicate pred;
+	std::vector<Value*> ops;
+    };
+
     // @brief A Region that also includes data that we're tracking about it
     // 
     // A Region is supposed to mark code we're interested in for later analysis,
@@ -91,6 +101,7 @@ struct ScreenPass : public ModulePass {
         int branches;
         int instructions;
 
+	std::vector<BranchCond> BranchCondVec;
         std::vector<TraverseCfg::VisitedPath> callPaths;
 
     };
@@ -102,17 +113,6 @@ struct ScreenPass : public ModulePass {
     using RegionMap = std::map<std::string, Region>;
 
     using RegionStatsMap = std::map<std::string, RegionStats>;
-
-    // @brief A BranchCond is a set of the compare isntruction and its' predicate and operands
-    // CmpInst::FCMP_FALSE == 0
-    struct BranchCond {
-        BranchCond() :inst(nullptr) ,pred(CmpInst::FCMP_FALSE), ops() { }
-
-        const Instruction *inst;
-	CmpInst::Predicate pred;
-	std::vector<Value*> ops;
-    };
-    std::vector<BranchCond> BranchCondVec;
 
     virtual const char *getPassName() const 
     {
@@ -162,7 +162,7 @@ struct ScreenPass : public ModulePass {
     
     } 
 
-    void handle_cmp(CmpInst *cmpInst) {
+    void handle_cmp(CmpInst *cmpInst, std::vector<BranchCond> &BranchCondVec) {
 
 	// a valid cmp must have 2 operands
 	if (cmpInst->getNumOperands() >= 2) {
@@ -179,18 +179,11 @@ struct ScreenPass : public ModulePass {
 	    cmp_set.ops.push_back(firstOperand);
 	    cmp_set.ops.push_back(secondOperand);
 	    BranchCondVec.push_back(cmp_set);
-	    // add storage or reasoning of true/false branch destination
-
-
-	    // reason about operands bounds
-	    //int lower = 0;
-	    //int upper = 0;
-	    //get_bounds_variable();	
 	}
     }
     // @brief Helper method that actually handles the accounting of instructions
     // This is called from function analysis and arbitrary span analysis.
-    void surveyInstruction(const Instruction &I, RegionStats &stats)
+    void surveyInstruction(const Instruction &I, RegionStats &stats, std::vector<BranchCond> &BranchCondVec)
     {
         if (isa<BranchInst>(I)) {
             stats.branches += 1;
@@ -202,7 +195,7 @@ struct ScreenPass : public ModulePass {
 		      return;
 
 		if(llvm::CmpInst *CondInst = llvm::dyn_cast<llvm::CmpInst>(condition)){
-			handle_cmp(CondInst);
+			handle_cmp(CondInst, BranchCondVec);
 		}
 
 	    }
@@ -239,7 +232,7 @@ struct ScreenPass : public ModulePass {
 
             TraverseLinearly T;
             T.setCallback([&info, this](const Instruction &I) {
-                surveyInstruction(I, info);
+                surveyInstruction(I, info, info.BranchCondVec);
             });
             T.traverse(F);
 
@@ -247,9 +240,20 @@ struct ScreenPass : public ModulePass {
             return map;
         };
 
-        auto stats = std::accumulate(Fs.begin(), Fs.end(), map, accFunc);
+        auto funcStats = std::accumulate(Fs.begin(), Fs.end(), map, accFunc);
 
-        return stats;
+        for (auto r : funcStats) {
+            auto f = r.first;
+            auto span = r.second;
+
+            O << " - func name: " << f->getName() << ", branches: "
+              << span.branches << ", instructions " << span.instructions
+              << "\n";
+
+            dumpRegionStats(f->getName(), span, span.BranchCondVec);
+        }
+
+        return funcStats;
     }
 
     // @brief Possible annotation types. This might grow once we add support for
@@ -391,16 +395,6 @@ struct ScreenPass : public ModulePass {
 
         auto funcStats = getAnnotatedFunctionStats(M);
 
-        /*O << "Span results: " << spanStats.size() << "\n";
-        for (auto entry : spanStats) {
-            auto name = entry.first;
-            auto r = entry.second;
-
-            O << " - name: " << name << ", branches: " << r.branches
-              << ", instructions " << r.instructions << "\n";
-
-        }*/
-
         O << "Func results: " << funcStats.size() << "\n";
         for (auto r : funcStats) {
             auto f = r.first;
@@ -409,88 +403,9 @@ struct ScreenPass : public ModulePass {
             O << " - func name: " << f->getName() << ", branches: "
               << span.branches << ", instructions " << span.instructions
               << "\n";
-
-            dumpRegionStats(f->getName(), span, BranchCondVec);
         }
     }
     
-    // Take a function, add it to |paths_func|, then iterate through all calls
-    // that go from here
-    void follow_call(Function *f, std::vector<Function *>  &paths_funcs){
-
-        paths_funcs.push_back(f);
-       
-        Function::iterator bb = f->begin();
-
-        // gather called functions for that first BB
-        // TODO: reason about subsequent BB's of the called function (after entry BB) 
-        for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
-            if(CallInst *call = dyn_cast<CallInst>(inst)){
-                // depth first recursion to collect function calls
-                follow_call(call->getCalledFunction(), paths_funcs);    
-            }
-        
-        }
-
-        return;
-    }
-
-    void recurse_to_gather_paths(BasicBlock* bb, std::vector<std::vector<Function *>> &cfg_paths_funcs){
-        for(BasicBlock::iterator inst = bb->begin(); inst != bb->end(); ++inst){
-            if(CallInst *call = dyn_cast<CallInst>(inst)){
-                // depth first recursion to collect function calls inside 1 bb
-                follow_call(call->getCalledFunction(), cfg_paths_funcs[cfg_paths_funcs.size()-1]);    
-            }
-        
-        }
-        
-        const TerminatorInst *TInst = bb->getTerminator();
-        int succ_count = 0;
-        std::vector<Function *> fork_save(cfg_paths_funcs[cfg_paths_funcs.size()-1]);
-        for (unsigned I = 0, NSucc = TInst->getNumSuccessors(); I < NSucc; ++I) {
-            BasicBlock *bb_succ = TInst->getSuccessor(I);
-            // entry bb and returning bb are continuations of other paths, so dont fork at themt
-            // fork cfg path, assume current path is last one added to the vector
-            if(succ_count > 0){
-                std::vector<Function *> forked(fork_save);
-                cfg_paths_funcs.push_back(forked);
-            }
-            succ_count += 1;
-            // now recurse through all the bb's successors
-            recurse_to_gather_paths(bb_succ, cfg_paths_funcs);    
-        }
-        return;    
-    
-    }
-
-    void dump_cfg(){
-        O <<"[ CallInst CFG ]\nPulling out CallInst paths for each possible program execution path\n";
-        // dump paths and their function calls
-        for(size_t i = 0;i<cfg_paths_funcs.size();i++){
-            O <<"\nPATH ["<<i<<"]\n";
-            for(size_t j = 0;j<cfg_paths_funcs[i].size()-1;++j){
-                O <<(cfg_paths_funcs[i][j])->getName()<<"() -> ";
-            
-            }
-            O <<(cfg_paths_funcs[i][ cfg_paths_funcs[i].size()-1])->getName()<<"()";
-        
-        }
-    
-    }
-
-    void descendFromFunction(Function *F) {
-        std::vector<Function *> first_path;
-        first_path.push_back(F);
-
-        cfg_paths_funcs.push_back(first_path);
-    
-        Function::iterator bb = F->begin();
-
-        recurse_to_gather_paths(&*bb, cfg_paths_funcs);
-
-        dump_cfg();
-    }
-
     void dumpRegionStats(const std::string &name, const RegionStats &R, std::vector<BranchCond> cmps)
     {
         if (started)
@@ -524,7 +439,7 @@ struct ScreenPass : public ModulePass {
             out_fd << "       ]";
         }
         int count = 0;	
-        for (auto &BranchCond : BranchCondVec) {
+        for (auto &BranchCond : cmps) {
 	    std::string predicate = "";
 	    if (BranchCond.pred == 40){
 	    	predicate = "signed_less_than";
@@ -553,6 +468,7 @@ struct ScreenPass : public ModulePass {
 
     void cfgReworkDemo(const Module &M)
     {
+        std::vector<BranchCond> BranchCondVec;
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
             errs() << "[E] no start symbol " << kSymbolName << "\n";
@@ -599,7 +515,7 @@ struct ScreenPass : public ModulePass {
 
             // Just a plain old instruction, add it to current counters.
             for (auto &info : inProgress) {
-                surveyInstruction(I, info.second);
+                surveyInstruction(I, info.second, BranchCondVec);
             }
         });
         T.traverse(entry);

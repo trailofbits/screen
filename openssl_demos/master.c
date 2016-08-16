@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+SCREEN(openssl_one_remove_padding)
 int tls1_cbc_remove_padding(){
 
     srand(time(NULL));
@@ -16,7 +17,7 @@ int tls1_cbc_remove_padding(){
     	return -1;	
 }
 
-SCREEN(openssl_one)
+SCREEN(openssl_one_enc)
 int tls1_enc()
 {
     int tmpret;
