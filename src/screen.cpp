@@ -340,62 +340,6 @@ struct ScreenPass : public ModulePass {
         
     }
 
-    // @brief Given a module, find all relevant regions we are interested in and
-    // do the actual analysis.
-    //
-    // @return map of RegionStats results.
-    RegionStatsMap getAnnotatedInstructionStats(const Module &M)
-    {
-
-        RegionStatsMap inProgress, completed;
-
-        auto spans = collectAnnotatedSpans(M);
-
-        for (const Function &F: M)
-        {
-            TraverseLinearly T;
-            T.setCallback( [&] (const Instruction &I) {
-                // First, check if we need to update our currently tracked-
-                // regions (i.e. if we just entered or left a region.
-                for (auto namedSpan : spans) {
-
-                    auto name = namedSpan.first;
-                    auto span = namedSpan.second;
-
-                    // If we see a starting instruction, just tag it as started
-                    if (I.isIdenticalTo(span.start)) {
-                        inProgress[name].start = span.start;
-
-                    // But once we see an ending instruction, we can now 
-                    // consider this span finished and move the region being
-                    // tracked to the completed map.
-                    } else if (I.isIdenticalTo(span.end)) {
-                        auto trackedSpan = inProgress[name];
-
-                        trackedSpan.end = span.end;
-
-                        completed[name] = trackedSpan;
-                        inProgress.erase(name);
-
-                    }
-                }
-
-                // Just a plain old instruction, add it to current counters.
-                for (auto &info : inProgress) {
-                    surveyInstruction(I, info.second);
-                }
-            });
-            T.traverse(&F);
-        }
-
-        // Anything still in progress at this point is an unfinished block.
-        // TODO: This will not be true once we use this code for CFG traversals
-        for (auto &info : inProgress) {
-            errs() << "[W] Unfinished block: " << info.first << "\n";
-        }
-        return completed;
-    }
-
     // @brief Collect relevant annotations in a Module and return them as a 
     // map of named Region objects.
     //
@@ -445,7 +389,6 @@ struct ScreenPass : public ModulePass {
     // @brief Entry point for the basic passes
     void function_annotation_stats(Module &M){
 
-        //auto spanStats = getAnnotatedInstructionStats(M);
         auto funcStats = getAnnotatedFunctionStats(M);
 
         /*O << "Span results: " << spanStats.size() << "\n";
