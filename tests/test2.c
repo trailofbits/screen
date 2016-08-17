@@ -1,21 +1,25 @@
-#include <screen.h>
+#include <stdio.h>
 
-SCREEN(pow)
-float pow_int(float base, int exponent)
-{
-    float result = 1.0f;
+/*int func_1(int arg);
+int func_2(int arg);
 
-    for (int i = 0; i < exponent; i++) {
-        result *= base;
-    }
+int func_1(int arg)
+{   if (arg < 1) return arg;
+    else { printf("func_1\n"); return func_2(arg >> 1); } }
+int func_2(int arg)
+{   if (arg < 1) return arg;
+    else { printf("func_2\n"); return func_1(arg >> 1); } }
+*/
+int
+main(int argc, char *argv[])
+{   
+	
+int a = 10;
+int b = 4;
+if (argc > 1)
+	a = 8;
 
-    for (int i = 0; i < 4; i++) {
-        result *= base;
-    }
-
-    return result;
-}
-int main(int argc, char *argv[]){
-
-	return pow_int(2, argc);
-}
+b = a >> 1;
+printf("%d\n", b);
+//func_1(10);
+    return 0 ; }
