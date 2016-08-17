@@ -38,6 +38,7 @@ int step_four_a(void)
 
 int step_four_b(int argument)
 {
+    SCREEN_END(forked_0);
     pid_t self_again = getpid();
 
     for (int i = 0; i < self_again % 20; i++) {
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
 {
     int value;
 
+    SCREEN_START(forked_0);
     value = step_one();
     return value;
 
