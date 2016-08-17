@@ -832,9 +832,9 @@ int tls1_enc(SSL *s, SSL3_RECORD *recs, unsigned int numpipes, int send)
             /* TODO: We only support writing for pipelining at the moment */
             ret = tls1_cbc_remove_padding(s, recs, bs, mac_size);
         }
+        SCREEN_END(tls1_enc)
         if (pad && !send)
             recs[0].length -= pad;
-        SCREEN_END(tls1_enc)
     }
     return ret;
 }

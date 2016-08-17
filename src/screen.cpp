@@ -68,7 +68,7 @@ struct ScreenPass : public ModulePass {
     static char ID; 
     std::vector<std::vector<Function *>> cfg_paths_funcs;
 
-    //TODO: intelligently pair annotations, check if same parent function, then
+    //TODO: intelligently pair annotations, check if same parent function  then
     //proxmity in code? (inst count of func to determine this)
 
     // @brief A generally unprocessed LLVM instruction span. Used to mark code
@@ -123,7 +123,6 @@ struct ScreenPass : public ModulePass {
     // TODO reason about bounds and call this when we need constraint information
     std::string reason_cmp_ops(Value *op){ 
 	    std::string ret = "";
-
 	    // reason about operand values, if there is a store it takes care of it
 	    if (ConstantInt *CI = dyn_cast<ConstantInt>(op)){
 		std::ostringstream os;
@@ -132,7 +131,13 @@ struct ScreenPass : public ModulePass {
 	    }else if(dyn_cast<ConstantPointerNull>(op)){
 	        ret = "NULL"; 
 	    }else if(CallInst *call = dyn_cast<CallInst>(op)){
-	        ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
+	        if(DebugLoc Loc = call->getDebugLoc()){
+		    unsigned Line = Loc.getLine();
+		    outs()<<"Got debug info, line numer at: "<< Line << "\n";
+		}else{
+		    outs()<<"Compile with -g -O0 for debug info @ critical vulnerabilities\n";
+		}
+		ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
 	    }else{
 		// value is a variable, trace uses
 		int use_counter = 0;
@@ -156,12 +161,6 @@ struct ScreenPass : public ModulePass {
 	    // this case for 100% user controlled variables
 	    return ret;
     }
-
-    void get_bounds_operand(Value *op, int &lower, int &higher){
-    	// call into llvm-sra project
-    
-    
-    } 
 
     void handle_cmp(CmpInst *cmpInst, std::vector<BranchCond> &BranchCondVec) {
 
