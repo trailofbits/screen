@@ -171,7 +171,6 @@ struct ScreenPass : public ModulePass {
 	    Value *secondOperand = cmpInst->getOperand(1);
 	    // get predicate
 	    CmpInst::Predicate p = cmpInst->getPredicate();
-	    //cmpInst->dump();
 	    // store <inst> <pred> <op1> <op2>
 	    BranchCond cmp_set;
 	    cmp_set.inst = cmpInst;
@@ -185,7 +184,7 @@ struct ScreenPass : public ModulePass {
     // This is called from function analysis and arbitrary span analysis.
     void surveyInstruction(const Instruction &I, RegionStats &stats, std::vector<BranchCond> &BranchCondVec)
     {
-        if (isa<BranchInst>(I)) {
+	if (isa<BranchInst>(I)) {
             stats.branches += 1;
         
 	    // get Condition of the branch instruction
@@ -466,12 +465,15 @@ struct ScreenPass : public ModulePass {
 	    }else{
 	    	predicate = std::to_string(BranchCond.pred);
 	    } 
-            if(!R.callPaths.empty()){
+            if(count == 0 && !R.callPaths.empty()){
+	    	out_fd << ",\n";
+	    }
+	    if(count != 0){
 	    	out_fd << ",\n";
 	    }
 	    std::string reason1 = reason_cmp_ops((BranchCond.ops)[0]);
 	    std::string reason2 = reason_cmp_ops((BranchCond.ops)[1]);
-	    out_fd << "     \"cmp_inst_"<<count<<"\": [\"" << predicate << "\", \"" << reason1 << "\", \"" << reason2 << "\"]\n";
+	    out_fd << "     \"cmp_inst_"<<count<<"\": [\"" << predicate << "\", \"" << reason1 << "\", \"" << reason2 << "\"]";
 	    
 	    count += 1;
 	}
@@ -509,7 +511,6 @@ struct ScreenPass : public ModulePass {
                 if (I.isIdenticalTo(span.start)) {
                     inProgress[name].start = span.start;
                     T.startPath(name);
-
                 // But once we see an ending instruction, we can now 
                 // consider this span finished and move the region being
                 // tracked to the completed map.

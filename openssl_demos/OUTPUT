@@ -1,65 +1,21 @@
 [{ "tls1_enc": {
-     "branches": 116,
-     "instructions": 665,
-     "cmp_inst_0": ["equals", "local_var", "NULL"]
-     "cmp_inst_1": ["signed_greater_than", "local_var", "-1"]
-     "cmp_inst_2": ["equals", "local_var", "NULL"]
-     "cmp_inst_3": ["equals", "local_var", "0"]
-     "cmp_inst_4": ["equals", "local_var", "2"]
-     "cmp_inst_5": ["less_than", "local_var", "external_var"]
-     "cmp_inst_6": ["equals", "local_var", "local_var"]
-     "cmp_inst_7": ["signed_less_than", "local_var", "1"]
-     "cmp_inst_8": ["equals", "local_var", "NULL"]
-     "cmp_inst_9": ["signed_greater_than", "local_var", "-1"]
-     "cmp_inst_10": ["equals", "local_var", "NULL"]
-     "cmp_inst_11": ["equals", "external_var", "0"]
-     "cmp_inst_12": ["equals", "local_var", "external_var"]
-     "cmp_inst_13": ["equals", "external_var", "0"]
-     "cmp_inst_14": ["equals", "local_var", "0"]
-     "cmp_inst_15": ["equals", "local_var", "0"]
-     "cmp_inst_16": ["equals", "local_var", "0"]
-     "cmp_inst_17": ["equals", "local_var", "0"]
-     "cmp_inst_18": ["equals", "local_var", "0"]
-     "cmp_inst_19": ["signed_less_than", "local_var", "1"]
-     "cmp_inst_20": ["signed_less_than", "local_var", "local_var"]
-     "cmp_inst_21": ["signed_less_than", "local_var", "local_var"]
-     "cmp_inst_22": ["equals", "local_var", "0"]
-     "cmp_inst_23": ["equals", "local_var", "0"]
-     "cmp_inst_24": ["less_than", "local_var", "local_var"]
-     "cmp_inst_25": ["equals", "local_var", "0"]
-     "cmp_inst_26": ["equals", "local_var", "0"]
-     "cmp_inst_27": ["less_than", "local_var", "3"]
-     "cmp_inst_28": ["equals", "local_var", "external_var"]
-     "cmp_inst_29": ["signed_less_than", "local_var", "1"]
-     "cmp_inst_30": ["equals", "local_var", "0"]
-     "cmp_inst_31": ["equals", "local_var", "0"]
-     "cmp_inst_32": ["less_than", "local_var", "3"]
-     "cmp_inst_33": ["equals", "local_var", "external_var"]
-     "cmp_inst_34": ["signed_less_than", "local_var", "1"]
-     "cmp_inst_35": ["signed_less_than", "local_var", "1"]
-     "cmp_inst_36": ["equals", "local_var", "0"]
-     "cmp_inst_37": ["signed_less_than", "local_var", "0"]
-     "cmp_inst_38": ["equals", "local_var", "0"]
-     "cmp_inst_39": ["equals", "external_var", "0"]
-     "cmp_inst_40": ["equals", "local_var", "6"]
-     "cmp_inst_41": ["equals", "local_var", "0"]
-     "cmp_inst_42": ["equals", "external_var", "1"]
-     "cmp_inst_43": ["equals", "local_var", "external_var"]
-     "cmp_inst_44": ["equals", "local_var", "0"]
-     "cmp_inst_45": ["equals", "external_var", "1"]
-     "cmp_inst_46": ["equals", "local_var", "external_var"]
-     "cmp_inst_47": ["equals", "local_var", "0"]
-     "cmp_inst_48": ["equals", "local_var", "NULL"]
-     "cmp_inst_49": ["equals", "local_var", "0"]
-     "cmp_inst_50": ["less_than", "local_var", "local_var"]
-     "cmp_inst_51": ["equals", "local_var", "0"]
-     "cmp_inst_52": ["equals", "local_var", "0"]
-     "cmp_inst_53": ["less_than", "local_var", "3"]
-     "cmp_inst_54": ["equals", "local_var", "external_var"]
-     "cmp_inst_55": ["equals", "local_var", "0"]
-     "cmp_inst_56": ["equals", "local_var", "0"]
-     "cmp_inst_57": ["equals", "local_var", "0"]
-     "cmp_inst_58": ["equals", "local_var", "0"]
-     "cmp_inst_59": ["equals", "local_var", "0"]
-}}
+     "branches": 25,
+     "instructions": 193,
+     "cfg": [
+              ["tls1_enc"]
+       ],
+     "cmp_inst_0": ["equals", "local_var", "0"],
+     "cmp_inst_1": ["equals", "local_var", "NULL"],
+     "cmp_inst_2": ["equals", "local_var", "0"],
+     "cmp_inst_3": ["greater_than", "local_var", "local_var"],
+     "cmp_inst_4": ["equals", "local_var", "0"],
+     "cmp_inst_5": ["equals", "local_var", "0"],
+     "cmp_inst_6": ["less_than", "local_var", "4"],
+     "cmp_inst_7": ["less_than", "local_var", "local_var"],
+     "cmp_inst_8": ["equals", "local_var", "0"],
+     "cmp_inst_9": ["equals", "local_var", "local_var"],
+     "cmp_inst_10": ["equals", "local_var", "local_var"],
+     "cmp_inst_11": ["greater_than", "local_var", "local_var"],
+     "cmp_inst_12": ["equals", "local_var", "-1"],
+     "cmp_inst_13": ["less_than", "local_var", "external_var"]}}
 ]

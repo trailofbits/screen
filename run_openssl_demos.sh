@@ -28,9 +28,15 @@ echo "[+] Running screen pass..."
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol main 
 
 echo
+#cat openssl_demos/OUTPUT
+echo
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record_0.bc -o openssl_demos/ssl3_record_0_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
+
+echo
 cat openssl_demos/OUTPUT
 echo
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record.bc -o openssl_demos/ssl3_record_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
+echo
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record_1.bc -o openssl_demos/ssl3_record_1_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
 
 echo
 cat openssl_demos/OUTPUT
