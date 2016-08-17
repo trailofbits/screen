@@ -131,6 +131,8 @@ struct ScreenPass : public ModulePass {
 		ret = os.str();
 	    }else if(dyn_cast<ConstantPointerNull>(op)){
 	        ret = "NULL"; 
+	    }else if(CallInst *call = dyn_cast<CallInst>(op)){
+	        ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
 	    }else{
 		// value is a variable, trace uses
 		int use_counter = 0;
@@ -146,7 +148,6 @@ struct ScreenPass : public ModulePass {
 		}
 		if(phi_counter > 0 || use_counter > 0){
 		    ret = "local_var";
-			// this case for locally declared variables
 		}else{
 		    ret = "external_var";
 		
@@ -471,6 +472,7 @@ struct ScreenPass : public ModulePass {
 	    if(count != 0){
 	    	out_fd << ",\n";
 	    }
+	    
 	    std::string reason1 = reason_cmp_ops((BranchCond.ops)[0]);
 	    std::string reason2 = reason_cmp_ops((BranchCond.ops)[1]);
 	    out_fd << "     \"cmp_inst_"<<count<<"\": [\"" << predicate << "\", \"" << reason1 << "\", \"" << reason2 << "\"]";

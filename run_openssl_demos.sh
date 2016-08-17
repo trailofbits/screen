@@ -25,18 +25,18 @@ echo "[+] Compiling openssl demos..."
 ${LLVM_BIN}/clang -I./include/ -o openssl_demos/master.bc openssl_demos/master.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter 
 
 echo "[+] Running screen pass..."
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol main 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol main 
 
 echo
 #cat openssl_demos/OUTPUT
 echo
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record_0.bc -o openssl_demos/ssl3_record_0_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/ssl3_record_0.bc -o openssl_demos/ssl3_record_0_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
 
 echo
 cat openssl_demos/OUTPUT
 echo
 echo
-${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record_1.bc -o openssl_demos/ssl3_record_1_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/ssl3_record_1.bc -o openssl_demos/ssl3_record_1_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
 
 echo
 cat openssl_demos/OUTPUT
@@ -51,6 +51,7 @@ echo
 #  -screen-output tests/OUTPUT_S2N \
 #  -screen-debug \
 #  -screen-start-symbol s2n_client_key_recv tests/libs2n.bc -o tests/libs2n_transformed.bc 
+echo "[!] changes in function return value comparisons are of high risk"
 echo
 echo
 
