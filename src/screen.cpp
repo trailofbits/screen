@@ -447,6 +447,24 @@ struct ScreenPass : public ModulePass {
 	    	predicate = "equals";
 	    }else if(BranchCond.pred == 33){
 	    	predicate = "not_equals";
+	    }else if(BranchCond.pred == 34){
+	    	predicate = "greater_than";
+	    }else if(BranchCond.pred == 35){
+	    	predicate = "greater_or_equal_than";
+	    }else if(BranchCond.pred == 36){
+	    	predicate = "less_than";
+	    }else if(BranchCond.pred == 37){
+	    	predicate = "less_or_equal_than";
+	    }else if(BranchCond.pred == 38){
+	    	predicate = "signed_greater_than";
+	    }else if(BranchCond.pred == 39){
+	    	predicate = "signed_greater_or_equal_than";
+	    }else if(BranchCond.pred == 40){
+	    	predicate = "signed_less_than";
+	    }else if(BranchCond.pred == 41){
+	    	predicate = "signed_less_or_equal_than";
+	    }else{
+	    	predicate = std::to_string(BranchCond.pred);
 	    } 
             if(!R.callPaths.empty()){
 	    	out_fd << ",\n";

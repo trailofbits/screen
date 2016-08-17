@@ -30,12 +30,11 @@ ${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl
 echo
 cat openssl_demos/OUTPUT
 echo
-echo "[+] Verifying paths:"
-echo "B1: "
-echo "B2: "
+${LLVM_BIN}/opt -load build/lib/screen.${EXT} openssl_demos/ssl3_record.bc -o openssl_demos/ssl3_record_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol tls1_enc 
+
 echo
+cat openssl_demos/OUTPUT
 echo
-echo "[+] Running range analysis pass..."
 #./build/llvm/bin/opt -load ./build/lib/range.dylib tests/test2.bc -o tests/test2.bc -mem2reg -instnamer
 #./build/llvm/bin/opt -load ./build/lib/range.dylib -range_analysis  -range-debug tests/test2.bc -o tests/test2.bc
 #${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/libs2n.bc -o tests/libs2n_transformed.bc -screen -screen-output tests/OUTPUT_S2N -screen-start-symbol s2n_client_key_recv #  s2n_client_hello_send 
