@@ -1,0 +1,21 @@
+[{ "tls1_enc": {
+     "branches": 25,
+     "instructions": 193,
+     "cfg": [
+              ["tls1_enc"]
+       ],
+     "cmp_inst_0": ["equals", "local_var", "0"],
+     "cmp_inst_1": ["equals", "function_return_value:EVP_MD_CTX_md", "NULL"],
+     "cmp_inst_2": ["equals", "local_var", "0"],
+     "cmp_inst_3": ["greater_than", "local_var", "local_var"],
+     "cmp_inst_4": ["equals", "local_var", "0"],
+     "cmp_inst_5": ["equals", "local_var", "0"],
+     "cmp_inst_6": ["less_than", "local_var", "4"],
+     "cmp_inst_7": ["less_than", "local_var", "local_var"],
+     "cmp_inst_8": ["equals", "local_var", "0"],
+     "cmp_inst_9": ["equals", "local_var", "local_var"],
+     "cmp_inst_10": ["equals", "local_var", "local_var"],
+     "cmp_inst_11": ["greater_than", "local_var", "local_var"],
+     "cmp_inst_12": ["equals", "function_return_value:tls1_cbc_remove_padding", "-1"],
+     "cmp_inst_13": ["less_than", "local_var", "external_var"]}}
+]

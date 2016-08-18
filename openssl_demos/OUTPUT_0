@@ -1,0 +1,9 @@
+[{ "tls1_enc": {
+     "branches": 3,
+     "instructions": 20,
+     "cfg": [
+              ["tls1_enc"]
+       ],
+     "cmp_inst_0": ["equals", "local_var", "0"],
+     "cmp_inst_1": ["equals", "function_return_value:EVP_MD_CTX_md", "NULL"]}}
+]
