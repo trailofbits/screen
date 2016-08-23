@@ -35,12 +35,13 @@ namespace {
 			RangeAnalyses.push_back(new RangeAnalysis(F));
 		}
 	}
-	O <<"Printing results...\n";
+	/*
+	 * O <<"Printing results...\n";
     	for (unsigned int i = 0 ; i < RangeAnalyses.size() ; i++){
         	RangeAnalyses[i]->runWorklist();
         	O << "\nPrint CFG (with flow) : " << RangeAnalyses[i]->functionName<< "\n";
         	RangeAnalyses[i]->JSONCFG(O);
-    	}
+    	}*/
     	return false;
     }
 

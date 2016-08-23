@@ -25,35 +25,35 @@ echo "[+] Compiling openssl demos..."
 ${LLVM_BIN}/clang -I./include/ -o openssl_demos/master.bc openssl_demos/master.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter 
 
 echo "[+] Running screen pass..."
-${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/OUTPUT -screen-start-symbol main 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/lucky13/OUTPUT -screen-start-symbol main 
 
 echo
-#cat openssl_demos/OUTPUT
+#cat openssl_demos/lucky13/OUTPUT
 echo
-${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/ssl3_record_0.bc -o openssl_demos/ssl3_record_0_transformed.bc -screen -screen-output openssl_demos/OUTPUT_0 -screen-start-symbol tls1_enc 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/lucky13/ssl3_record_0.bc -o openssl_demos/lucky13/ssl3_record_0_transformed.bc -screen -screen-output openssl_demos/lucky13/OUTPUT_0 -screen-start-symbol tls1_enc 
 
 echo
-cat openssl_demos/OUTPUT_0
+cat openssl_demos/lucky13/OUTPUT_0
 echo
 echo
-${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/ssl3_record_1.bc -o openssl_demos/ssl3_record_1_transformed.bc -screen -screen-output openssl_demos/OUTPUT_1 -screen-start-symbol tls1_enc 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/lucky13/ssl3_record_1.bc -o openssl_demos/lucky13/ssl3_record_1_transformed.bc -screen -screen-output openssl_demos/lucky13/OUTPUT_1 -screen-start-symbol tls1_enc 
 
 echo
-cat openssl_demos/OUTPUT_1
+cat openssl_demos/lucky13/OUTPUT_1
 echo
 echo
 echo
-${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/ssl3_record_2.bc -o openssl_demos/ssl3_record_2_transformed.bc -screen -screen-output openssl_demos/OUTPUT_2 -screen-start-symbol tls1_enc 
+${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/lucky13/ssl3_record_2.bc -o openssl_demos/lucky13/ssl3_record_2_transformed.bc -screen -screen-output openssl_demos/lucky13/OUTPUT_2 -screen-start-symbol tls1_enc 
 
 echo
-cat openssl_demos/OUTPUT_2
+cat openssl_demos/lucky13/OUTPUT_2
 echo
 echo "[!] changes in function return value comparisons are of high risk"
 echo
 echo
-arr=`cat openssl_demos/OUTPUT_0 | grep function | cut -f1 -d"]"`
-arr1=`cat openssl_demos/OUTPUT_1 | grep function | cut -f1 -d"]"`
-arr2=`cat openssl_demos/OUTPUT_2 | grep function | cut -f1 -d"]"`
+arr=`cat openssl_demos/lucky13/OUTPUT_0 | grep function | cut -f1 -d"]"`
+arr1=`cat openssl_demos/lucky13/OUTPUT_1 | grep function | cut -f1 -d"]"`
+arr2=`cat openssl_demos/lucky13/OUTPUT_2 | grep function | cut -f1 -d"]"`
 if [ "$arr1" != "$arr2" ]; then
 	echo "[!] Warning additional cmp on function return value"
 	echo "Lucky 13 Bug: function should not branch on -1 but on 0"

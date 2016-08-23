@@ -77,7 +77,6 @@ void StaticAnalysis::runWorklist() {
 }
 
 void StaticAnalysis::buildCFG(Function &F){
-	outs()<<"here\n";
 	Function::iterator BB = F.begin();
 	BasicBlock::iterator BI = BB->begin();
 	map<Instruction*,StaticAnalysis::ListNode*> helper;
