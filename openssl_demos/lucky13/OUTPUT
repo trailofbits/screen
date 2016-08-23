@@ -1,0 +1,10 @@
+[{ "tls1_cbc_remove_padding": {
+     "branches": 5,
+     "instructions": 14,
+     "cmp_inst_0": ["equals", "local_var", "0"],
+     "cmp_inst_1": ["equals", "local_var", "1"]}}
+,{ "tls1_enc": {
+     "branches": 3,
+     "instructions": 8,
+     "cmp_inst_0": ["equals", "function_return_value:tls1_cbc_remove_padding", "-1"]}}
+]

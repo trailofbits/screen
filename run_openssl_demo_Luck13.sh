@@ -21,10 +21,10 @@ if [ ! -d ${LLVM_BIN} ]; then
   exit 1
 fi
 
-echo "[+] Compiling openssl demos..."
+echo "[+] Compiling & Running Passes on Openssl Demos..."
 ${LLVM_BIN}/clang -I./include/ -o openssl_demos/master.bc openssl_demos/master.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter 
 
-echo "[+] Running screen pass..."
+echo "[+] Running Screen Pass..."
 ${LLVM_BIN}/opt -mem2reg -load build/lib/screen.${EXT} openssl_demos/master.bc -o openssl_demos/master_transformed.bc -screen -screen-output openssl_demos/lucky13/OUTPUT -screen-start-symbol main 
 
 echo
