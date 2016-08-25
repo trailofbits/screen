@@ -1,41 +1,5 @@
 #include "RangeAnalysis.h"
 
-#define ADD 8 //This is the opcode for the add instruction
-#define FADD 9 //This is the opcode for the add instruction
-#define SUB 10 //This is the opcode for the sub instruction
-#define FSUB 11 //This is the opcode for the floating point sub instruction
-#define MUL 12 //This is the opcode for the mul instruction
-#define FMUL 13 //This is the opcode for the floating point mul instruction
-#define SDIV 15 //This is the opcode for the signed div instruction
-#define FDIV 16 //This is the opcode for the float div instruction
-#define UREM 17 //This is the opcode for the unsigned mod instruction
-#define SREM 18 //This is the opcode for the signed mod instruction
-#define FREM 19 //This is the opcode for the floating point mod instruction
-#define SHL 20 //This is the opcode for the Shift left (logical) instruction
-#define LSHR 21 //This is the opcode for the Shift right (logical) instruction
-#define ASHR 25 //This is the opcode for the Shift right (arithmetic) instruction
-// Logical operators (integer operands)
-/*122	HANDLE_BINARY_INST(20, Shl  , BinaryOperator) // Shift left  (logical)
- 123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
- 124	HANDLE_BINARY_INST(22, AShr , BinaryOperator) // Shift right (arithmetic)
- 125	HANDLE_BINARY_INST(23, And  , BinaryOperator)
- 126	HANDLE_BINARY_INST(24, Or   , BinaryOperator)
- 127	HANDLE_BINARY_INST(25, Xor  , BinaryOperator)
- 128	  LAST_BINARY_INST(25)
- */
-
-#define TRUNC 33 // Truncate integers
-#define ZEXT 34 // Zero extend integers
-#define SEXT 35 // Sign extend integers
-#define FPTOUI 36 //This is the opcode for the int to float cast instruction
-#define FPTOSI 37 //This is the opcode for the float to integer cast instruction
-#define UITOFP 38 //UInt -> floating point
-#define SITOFP 39 // SInt -> floating point
-#define FPTRUNC 40 //Truncate floating point
-#define FPEXT 41 // Extend floating point
-#define PHI 53 // Extend floating point
-
-
 Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		int NodeId) {
 
@@ -81,46 +45,45 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 
 	}
 
-	switch (inst->getOpcode()) {
-	case ADD:
+        if (inst->getOpcode() == Instruction::Add) {
+		goto Exit;
 		//output = executeAddInst(inFlow, inst);
-	case SUB:
-	case MUL:
-	case SDIV:
-	case SREM:
-	case SHL:
-	case LSHR:
-	case ASHR:
-		output = executeOpInst(inFlow, inst);
-		break;
-	case FADD:
-	case FSUB:
-	case FMUL:
-	case FDIV:
-		//output = executeFDivInst(inFlow, inst);
-	case FREM:
+	} else if (inst->getOpcode() == Instruction::FAdd) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::Sub) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::FSub) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::FDiv) {
 		output = executeFOpInst(inFlow, inst);
-		break;
-	case TRUNC:
-	case ZEXT:
-	case SEXT:
-	case FPTOSI:
-	case FPTOUI:
-	case UITOFP:
-	case SITOFP:
-	case FPTRUNC:
-	case FPEXT:
-		output = executeCastInst(inFlow, inst);
-		break;
-	case PHI:
+	} else if (inst->getOpcode() == Instruction::SDiv) {
+		output = executeOpInst(inFlow, inst);
+	} else if (inst->getOpcode() == Instruction::FMul) {
+		output = executeFOpInst(inFlow, inst);
+	} else if (inst->getOpcode() == Instruction::Mul) {
+		output = executeOpInst(inFlow, inst);
+	} else if (inst->getOpcode() == Instruction::FRem) {
+		output = executeFOpInst(inFlow, inst);
+	} else if (inst->getOpcode() == Instruction::SRem) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::Shl) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::LShr) {
+		goto Exit;
+	} else if (inst->getOpcode() == Instruction::AShr) {
+		output = executeOpInst(inFlow, inst); // why do we duplicate??
+	} else if (inst->getOpcode() == Instruction::PHI) {
 		output = executePhiInst(inFlow, inst);
-		break;
-
-	default:
+	} else if (inst->getOpcode() == Instruction::FPExt) {
+		output = executeCastInst(inFlow, inst);
+	}else{
+Exit:
+		outs()<<"error! no instruction operation function found for inst!\n";
+		inst->dump();
 		outs()<<"instruction "<< inst->getOpcode() <<" not found, please implement\n";
 		output = new RangeAnalysisFlow(inFlow);
-		break;
 	}
+
 	outs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
 	return output;
 }
@@ -148,8 +111,6 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 						<< " was not found \n";
 #endif
 			} else {
-				// Hmm, I guess we're good...
-				//SHOULD BE AN INTEGER TYPE....
 				//Get the Range that we have for this variable
 				RangeDomainElement forwardRange = f->value.find(
 						casting->getName())->second;
@@ -266,6 +227,11 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		mulDivCombos[1] = leftRange.lower / rightRange.upper;
 		mulDivCombos[2] = leftRange.upper / rightRange.lower;
 		mulDivCombos[3] = leftRange.upper / rightRange.upper;
+		outs()<<"In sdiv operation: "<< 
+			mulDivCombos[0] << " , " << 
+			mulDivCombos[1] << " , " << 
+			mulDivCombos[2] << " , " << 
+			mulDivCombos[3] << "\n\n"; 
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
 		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
@@ -431,6 +397,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		outs()<<"error! no instruction operation function found for inst!\n";
 		inst->dump();
 	}
+	outs()<<"verify correct returned range: "<< resRange.lower<< ", "<<resRange.upper<<"\n";
 	return resRange;
 }
 
