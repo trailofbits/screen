@@ -39,11 +39,9 @@
 Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		int NodeId) {
 
-	outs()<<"in range analysis flow\n";
 	RangeAnalysisFlow* inFlow = static_cast<RangeAnalysisFlow*>(in);
 	RangeAnalysisFlow * output;
 	int loopCount;
-	outs()<< inst->getOpcode()<<"\n";
 	//Just need to check if we have seen this basic block a few times.
 	//If we have seen this a few times, change ALL VARIABLES that are changing to TOP
 	if (nodeCount.find(NodeId) != nodeCount.end())
@@ -84,8 +82,11 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 	}
 
 	switch (inst->getOpcode()) {
-	case ADD:
-	case SUB:
+        if(dyn_cast<AddInst>(inst)){
+	
+	}else if(dyn_cast<FAddInst>(inst)){
+	}
+		case SUB:
 	case MUL:
 	case SDIV:
 	case SREM:
@@ -93,15 +94,14 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 	case LSHR:
 	case ASHR:
 		//output = executeAddInst(inFlow, inst);
-		output = executeOpInst(inFlow, inst, inst->getOpcode());
+		output = executeOpInst(inFlow, inst, inst);
 		break;
-	case FADD:
 	case FSUB:
 	case FMUL:
 	case FDIV:
 	case FREM:
 		//output = executeFDivInst(inFlow, inst);
-		output = executeFOpInst(inFlow, inst, inst->getOpcode());
+		output = executeFOpInst(inFlow, inst, inst);
 		break;
 
 	case TRUNC:
@@ -120,19 +120,17 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 		break;
 
 	default:
+		outs()<<"instruction "<< inst->getOpcode() <<" not found, please implement\n";
 		output = new RangeAnalysisFlow(inFlow);
 		break;
 	}
-#ifdef DEBUGRANGE
 	outs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
-#endif
 	return output;
 }
 
 RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 		Instruction* instruction) {
 
-	//outs()<<"HERE Cast\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	map<string, RangeDomainElement> value;
 	Value *retVal = instruction;
@@ -149,7 +147,6 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 			if (f->value.find(casting->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
 #ifdef RANGEDEBUG
-				outs() << "Undefined variable!\n";
 				outs() << "Variable: " << casting->getName()
 						<< " was not found \n";
 #endif
@@ -212,8 +209,7 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
 
 //For the tricky case of range arithmetic ops
 RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
-		RangeDomainElement rightRange, unsigned opcode) {
-	//outs()<<"HERE compute range\n";
+		RangeDomainElement rightRange, Instruction *inst) {
 	RangeDomainElement resRange;
 	float mulDivCombos[4];
 	int shiftCombos[4];
@@ -229,25 +225,21 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		resRange.lower = 0;
 		return resRange;
 	}
-
-	switch (opcode) {
-
-	case ADD:
-	case FADD:
+        if(dyn_cast<AddInst>(inst)){
+	
+	}else if(dyn_cast<FAddInst>(inst)){
 		//Get the lowest of the low and the highest of the high resVal = leftVal + rightVal;
 		resRange.lower = leftRange.lower + rightRange.lower;
 		resRange.upper = leftRange.upper + rightRange.upper;
 		resRange.bottom = false;
-		break;
-	case SUB:
-	case FSUB:
+	} else if(dyn_cast<SubInst>(inst)){
+	}else if(dyn_cast<FSubInst>(inst)){
 		//Get the highest of the low and the lowest of the high. Hu-hya! resVal = leftVal - rightVal;
 		resRange.lower = leftRange.lower - rightRange.lower;
 		resRange.upper = leftRange.upper - rightRange.upper;
 		resRange.bottom = false;
-		break;
-	case FDIV:
-	case SDIV:
+	}else if(dyn_cast<FDivInst>(inst)){
+	}else if(dyn_cast<SDivInst>(inst)){
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = leftRange.lower / rightRange.lower;
 		mulDivCombos[1] = leftRange.lower / rightRange.upper;
@@ -265,9 +257,8 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
-	case FMUL:
-	case MUL:
+	}else if(dyn_cast<FMulInst>(inst)){
+	}else if(dyn_cast<MulInst>(inst)){
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = leftRange.lower * rightRange.lower;
 		mulDivCombos[1] = leftRange.lower * rightRange.upper;
@@ -285,9 +276,8 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
-	case FREM:
-	case SREM:
+	}else if(dyn_cast<FRemInst>(inst)){
+	}else if(dyn_cast<SRemInst>(inst)){
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = (int) leftRange.lower % (int) rightRange.lower;
 		mulDivCombos[1] = (int) leftRange.lower % (int) rightRange.upper;
@@ -305,16 +295,14 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
-	case SHL:
-		//Combo fiend!
+	}else if(dyn_cast<ShlInst>(inst)){
 		mulDivCombos[0] = (int) leftRange.lower << (int) rightRange.lower;
 		mulDivCombos[1] = (int) leftRange.lower << (int) rightRange.upper;
 		mulDivCombos[2] = (int) leftRange.upper << (int) rightRange.lower;
 		mulDivCombos[3] = (int) leftRange.upper << (int) rightRange.upper;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = mulDivCombos[0];//Initialize, since we start with max in resRange.
 		resRange.upper = mulDivCombos[0];
 		resRange.bottom = false;
 		while (comboCheckCtr < 4) {
@@ -324,8 +312,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
-	case LSHR:
+	}else if(dyn_cast<LShrInst>(inst)){
 		AshiftLower = (int) leftRange.lower;
 		AshiftHigher = (int) leftRange.upper;
 		BshiftLower = (int) rightRange.lower;
@@ -347,11 +334,8 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = (float) shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
-	case ASHR:	//Haaaanh? TO DO: Debug.
-//		resVal = (int) leftVal >> (int) rightVal;
-	//another combo fiender.
-	//BUBAGAWG!!!!
+	}else if(dyn_cast<AShrInst>(inst)){
+		//resVal = (int) leftVal >> (int) rightVal;
 		AshiftLower = (int) leftRange.lower;
 		AshiftHigher = (int) leftRange.upper;
 		BshiftLower = (int) rightRange.lower;
@@ -388,17 +372,16 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = (float) shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-		break;
+	}else{
+		outs()<<"error! no instruction operation function found for inst!\n";
+		inst->dump();
 	}
-
-	outs()<<"VARIABLE RANGE "<< resRange.lower <<" "<<resRange.upper<<"\n";
 	return resRange;
 }
 
 RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 		Instruction* instruction) {
 
-	//outs()<<"HERE Pjhi\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 
 	RangeDomainElement leftVal;
@@ -409,78 +392,68 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 	map<string, RangeDomainElement> value;
 	Value *K = instruction;
 	string regName = K->getName();
+
+	//GET THE MAXIMUM RANGE FROM THE PHI NODE THAT YOU ARE ABLE
+	//Get the leftVal from the phi node if possible
+
+	if((f->value.find(leftOperand->getName()) == f->value.end()))
+		{leftVal = getOperandValue(leftOperand);}
+	else
+		{leftVal = f->value.find(leftOperand->getName())->second;}
+
+	if((f->value.find(rightOperand->getName()) == f->value.end()))
+		{rightVal = getOperandValue(rightOperand);}
+	else
+		{rightVal = f->value.find(rightOperand->getName())->second;}
+	//GETTING THE MAX RANGE!!!
+	maxRange = JoinRangeDomainElements(
+			(const RangeDomainElement*) &leftVal,
+			(const RangeDomainElement*) &rightVal);
+
+	RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 #ifdef RANGEDEBUG
-	outs() << "Instruction : " << regName << " left " << leftOperand->getName()
-			<< " right " << rightOperand->getName() << "\n";
+	outs()<<"Max Range\n";
+	outs() << "input" << leftVal.upper << " , " << leftVal.lower
+			<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
+			<< "\n";
+	outs() << "outcome: " << maxRange.upper << " , " << maxRange.lower
+			<< "\n";
 #endif
+	value[regName] = maxRange;
 
-//GET THE MAXIMUM RANGE FROM THE PHI NODE THAT YOU ARE ABLE
-	// Ok, cool! Both the right and the left operand is a variable...
 
-		//Get the leftVal from the phi node if possible
-
-		if((f->value.find(leftOperand->getName()) == f->value.end()))
-			{leftVal = getOperandValue(leftOperand);}
-		else
-			{leftVal = f->value.find(leftOperand->getName())->second;}
-
-		if((f->value.find(rightOperand->getName()) == f->value.end()))
-			{rightVal = getOperandValue(rightOperand);}
-		else
-			{rightVal = f->value.find(rightOperand->getName())->second;}
-#ifdef RANGEDEBUG
-		outs() << "leftVal: " << leftVal.upper << " , " << leftVal.lower
-				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
-				<< "\n";
-#endif
-		//GETTING THE MAX RANGE!!!
+	//IF regName is NOT IN f (in) ADD regName TO f
+	if((f->value.find(regName) == f->value.end()))
+	{
+		//f->value[regName] = maxRange;
+		//Random mad shit
+		ff->value = value;
+		RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));
+		delete ff;
+		delete f;
+		f = tmp;
+	}
+	else
+	{
+		leftVal = maxRange;
+		rightVal = f->value[regName];
 		maxRange = JoinRangeDomainElements(
 				(const RangeDomainElement*) &leftVal,
 				(const RangeDomainElement*) &rightVal);
-
-		RangeAnalysisFlow* ff = new RangeAnalysisFlow();
-#ifdef RANGEDEBUG
-		outs() << "input" << leftVal.upper << " , " << leftVal.lower
-				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
-				<< "\n";
-		outs() << "outcome: " << maxRange.upper << " , " << maxRange.lower
-				<< "\n";
-#endif
 		value[regName] = maxRange;
-
-
-//IF regName is NOT IN f (in) ADD regName TO f
-		if((f->value.find(regName) == f->value.end()))
-		{
-			//f->value[regName] = maxRange;
-			//Random mad shit
-			ff->value = value;
-			RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));
-			delete ff;
-			delete f;
-			f = tmp;
-		}
-		else
-		{
-			leftVal = maxRange;
-			rightVal = f->value[regName];
-			maxRange = JoinRangeDomainElements(
-					(const RangeDomainElement*) &leftVal,
-					(const RangeDomainElement*) &rightVal);
-			value[regName] = maxRange;
-			//Random mad shit
-			ff->value = value;
-			RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));
-			delete ff;
-			delete f;
-			f = tmp;
-		}
+		//Random mad shit
+		ff->value = value;
+		RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));
+		delete ff;
+		delete f;
+		f = tmp;
+	}
 
 	return f;
 }
 
 RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
-		Instruction* instruction, unsigned opcode) {
+		Instruction* instruction, Instruction *inst) {
 
 	//outs()<<"HERE FLOATING\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
@@ -490,8 +463,6 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 	map<string, RangeDomainElement> value;
 	Value *K = instruction;
 	string regName = K->getName();
-	rightOperand->dump();
-	leftOperand->dump();
 
 // Checking if left operand is a constant
 	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
@@ -512,7 +483,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 			rightRange.lower = rightVal;
 			rightRange.bottom = false;
 
-			resRange = computeOpRange(leftRange, rightRange, opcode);
+			resRange = computeOpRange(leftRange, rightRange, inst);
 
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 			value[K->getName()] = resRange;
@@ -528,10 +499,6 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 #ifdef RANGEDEBUG
 				// Oh no! Read the error message!
 				outs() << "Oh no! Something went wrong!\n";
-				outs() << "Undefined variable!\n";
-				outs() << "Apparently the right operand of the op is";
-				outs() << " a variable but this is the first time we ";
-				outs() << "come across this variable!!\n";
 #endif
 			}
 
@@ -542,7 +509,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 				leftRange = getOperandValue(CILeft);
 				rightRange = f->value.find(rightOperand->getName())->second;
 
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 				value[K->getName()] = resRange;
@@ -560,15 +527,10 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
 			// Ok, cool! the right part is a constant...
 			//leftOperand->getName()
-			outs()<<"Right is a constant\n";
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
 #ifdef DEBUGRANGE
 				// Oh no! Read the error message!
 				outs() << "Oh no! Something went terribly wrong!\n";
-				outs() << "Undefined variable!\n";
-				outs() << "Apparently the left operand of the op is";
-				outs() << " a variable but this is the first time we ";
-				outs() << "come across this variable!!\n";
 #endif
 			} else {
 				// Hmm, I guess we're good...
@@ -578,7 +540,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 						f->value.find(leftOperand->getName())->second;
 
 				rightRange = getOperandValue(CIRight);
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -606,7 +568,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 
 				rightRange = f->value.find(rightOperand->getName())->second;
 
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -627,8 +589,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 }
 
 RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
-		Instruction* instruction, unsigned opcode) {
-	//outs()<<"HERE execute ASHR\n";
+		Instruction* instruction, Instruction *inst) {
 	RangeDomainElement leftRange, rightRange, resRange;
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -636,8 +597,6 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 	map<string, RangeDomainElement> value;
 	Value *K = instruction;
 	string regName = K->getName();
-	rightOperand->dump();
-	leftOperand->dump();
 
 // Checking if left operand is a constant
 	if (ConstantInt *CILeft = dyn_cast<ConstantInt>(leftOperand)) {
@@ -648,7 +607,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			leftRange = getOperandValue(CILeft);
 			rightRange = getOperandValue(CIRight);
 
-			resRange = computeOpRange(leftRange, rightRange, opcode);//Get precise information
+			resRange = computeOpRange(leftRange, rightRange, inst);//Get precise information
 			outs()<<resRange.upper<<" "<<resRange.lower<<"\n";
 			//float resVal = leftVal + rightVal;
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
@@ -662,16 +621,10 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			f = tmp;
 		} else {
 			// ok so the right operand is a variable
-			rightOperand->dump();
-			CILeft->dump();
 			if (f->value.find(rightOperand->getName()) == f->value.end()) {
 #ifdef DEBUGRANGE
 				// Oh no! Read the error message!
 				outs() << "Oh no! Something went wrong!\n";
-				outs() << "Undefined variable!\n";
-				outs() << "Apparently the right operand of the op is";
-				outs() << " a variable but this is the first time we ";
-				outs() << "come across this variable!!\n";
 #endif
 			}
 
@@ -680,7 +633,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 
 				leftRange = getOperandValue(CILeft);
 				rightRange = f->value.find(rightOperand->getName())->second;
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -698,18 +651,17 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		// this variable has at the moment.
 		if (ConstantInt *CIRight = dyn_cast<ConstantInt>(rightOperand)) {
 			// Ok, cool! the right part is a constant...
-		//	outs()<<"RIGHT SIDE IS A CONSTANT\n";
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
+#ifdef RANGEDEBUG
 				// Oh no! Read the error message!
-				outs()<< f->value.size() << "\n";
 				outs() << "Oh no! Something went terribly wrong!\n";
-
+#endif
 			} else {
 				// Hmm, I guess we're good...
 				leftRange = f->value.find(leftOperand->getName())->second;
 
 				rightRange = getOperandValue(CIRight);
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -735,7 +687,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 				leftRange = f->value.find(leftOperand->getName())->second;
 
 				rightRange = f->value.find(rightOperand->getName())->second;
-				resRange = computeOpRange(leftRange, rightRange, opcode);
+				resRange = computeOpRange(leftRange, rightRange, inst);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -753,12 +705,10 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 		}
 
 	}
-	//outs()<<"HERE \n";
 	return f;
 }
 
 Flow * RangeAnalysis::initialize() {
-	//outs()<<"HERE initialize\n";
 	return new RangeAnalysisFlow(RangeAnalysisFlow::BOTTOM);
 }
 
@@ -777,7 +727,6 @@ RangeAnalysis::RangeAnalysis(Function & F) :
 //Delete (set to top) all variables with different ranges. This is a utility function for merging, specifically for looping
 //control structures in the range analysis
 void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B) {
-	//outs()<<"HERE 3\n";
 	for (map<string, RangeDomainElement>::iterator it = B->value.begin();
 			it != B->value.end(); it++) {
 
@@ -847,7 +796,6 @@ RangeDomainElement getOperandValue(Value* Operand)
 		}
 	}
 
-	//outs()<<"HERE 4\n";
 return OpValue;
 }
 

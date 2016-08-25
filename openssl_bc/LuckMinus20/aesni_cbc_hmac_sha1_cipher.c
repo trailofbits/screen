@@ -13,7 +13,7 @@
 
 void sha1_block_data_order(void *c, const void *p, size_t len);
 
-
+SCREEN(aesni_cbc_hmac_sha1_cipher);
 static int aesni_cbc_hmac_sha1_cipher(unsigned char *out, size_t len)
 {
     SHA_CTX md;
