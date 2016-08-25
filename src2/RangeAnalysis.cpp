@@ -82,28 +82,25 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
 	}
 
 	switch (inst->getOpcode()) {
-        if(dyn_cast<AddInst>(inst)){
-	
-	}else if(dyn_cast<FAddInst>(inst)){
-	}
-		case SUB:
+	case ADD:
+		//output = executeAddInst(inFlow, inst);
+	case SUB:
 	case MUL:
 	case SDIV:
 	case SREM:
 	case SHL:
 	case LSHR:
 	case ASHR:
-		//output = executeAddInst(inFlow, inst);
-		output = executeOpInst(inFlow, inst, inst);
+		output = executeOpInst(inFlow, inst);
 		break;
+	case FADD:
 	case FSUB:
 	case FMUL:
 	case FDIV:
-	case FREM:
 		//output = executeFDivInst(inFlow, inst);
-		output = executeFOpInst(inFlow, inst, inst);
+	case FREM:
+		output = executeFOpInst(inFlow, inst);
 		break;
-
 	case TRUNC:
 	case ZEXT:
 	case SEXT:
@@ -225,21 +222,45 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 		resRange.lower = 0;
 		return resRange;
 	}
-        if(dyn_cast<AddInst>(inst)){
-	
-	}else if(dyn_cast<FAddInst>(inst)){
+        if (inst->getOpcode() == Instruction::Add) {
+		// treet Add's like FAdd's	
+		resRange.lower = leftRange.lower + rightRange.lower;
+		resRange.upper = leftRange.upper + rightRange.upper;
+		resRange.bottom = false;
+	} else if (inst->getOpcode() == Instruction::FAdd) {
 		//Get the lowest of the low and the highest of the high resVal = leftVal + rightVal;
 		resRange.lower = leftRange.lower + rightRange.lower;
 		resRange.upper = leftRange.upper + rightRange.upper;
 		resRange.bottom = false;
-	} else if(dyn_cast<SubInst>(inst)){
-	}else if(dyn_cast<FSubInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::Sub) {
+		// treat Sub's like FSub's
+		resRange.lower = leftRange.lower - rightRange.lower;
+		resRange.upper = leftRange.upper - rightRange.upper;
+		resRange.bottom = false;
+	} else if (inst->getOpcode() == Instruction::FSub) {
 		//Get the highest of the low and the lowest of the high. Hu-hya! resVal = leftVal - rightVal;
 		resRange.lower = leftRange.lower - rightRange.lower;
 		resRange.upper = leftRange.upper - rightRange.upper;
 		resRange.bottom = false;
-	}else if(dyn_cast<FDivInst>(inst)){
-	}else if(dyn_cast<SDivInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::FDiv) {
+		// treat this like NON floating point for now
+		mulDivCombos[0] = leftRange.lower / rightRange.lower;
+		mulDivCombos[1] = leftRange.lower / rightRange.upper;
+		mulDivCombos[2] = leftRange.upper / rightRange.lower;
+		mulDivCombos[3] = leftRange.upper / rightRange.upper;
+		//get the lowest of all combos for the return lower bound
+		//get the highest of all combos for the return upper bound
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
+		resRange.upper = mulDivCombos[0];
+		resRange.bottom = false;
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = mulDivCombos[comboCheckCtr];
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = mulDivCombos[comboCheckCtr];
+			comboCheckCtr++;
+		}
+	} else if (inst->getOpcode() == Instruction::SDiv) {
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = leftRange.lower / rightRange.lower;
 		mulDivCombos[1] = leftRange.lower / rightRange.upper;
@@ -257,8 +278,25 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-	}else if(dyn_cast<FMulInst>(inst)){
-	}else if(dyn_cast<MulInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::FMul) {
+		// treat FMul like Mul for now
+		mulDivCombos[0] = leftRange.lower * rightRange.lower;
+		mulDivCombos[1] = leftRange.lower * rightRange.upper;
+		mulDivCombos[2] = leftRange.upper * rightRange.lower;
+		mulDivCombos[3] = leftRange.upper * rightRange.upper;
+		//get the lowest of all combos for the return lower bound
+		//get the highest of all combos for the return upper bound
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
+		resRange.upper = mulDivCombos[0];
+		resRange.bottom = false;
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = mulDivCombos[comboCheckCtr];
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = mulDivCombos[comboCheckCtr];
+			comboCheckCtr++;
+		}
+	} else if (inst->getOpcode() == Instruction::Mul) {
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = leftRange.lower * rightRange.lower;
 		mulDivCombos[1] = leftRange.lower * rightRange.upper;
@@ -276,8 +314,25 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-	}else if(dyn_cast<FRemInst>(inst)){
-	}else if(dyn_cast<SRemInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::FRem) {
+		// treat this like NON floating point for now
+		mulDivCombos[0] = (int) leftRange.lower % (int) rightRange.lower;
+		mulDivCombos[1] = (int) leftRange.lower % (int) rightRange.upper;
+		mulDivCombos[2] = (int) leftRange.upper % (int) rightRange.lower;
+		mulDivCombos[3] = (int) leftRange.upper % (int) rightRange.upper;
+		//get the lowest of all combos for the return lower bound
+		//get the highest of all combos for the return upper bound
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
+		resRange.upper = mulDivCombos[0];
+		resRange.bottom = false;
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = mulDivCombos[comboCheckCtr];
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = mulDivCombos[comboCheckCtr];
+			comboCheckCtr++;
+		}
+	} else if (inst->getOpcode() == Instruction::SRem) {
 		//Combo fiend! resVal = leftVal / rightVal;
 		mulDivCombos[0] = (int) leftRange.lower % (int) rightRange.lower;
 		mulDivCombos[1] = (int) leftRange.lower % (int) rightRange.upper;
@@ -295,7 +350,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-	}else if(dyn_cast<ShlInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::Shl) {
 		mulDivCombos[0] = (int) leftRange.lower << (int) rightRange.lower;
 		mulDivCombos[1] = (int) leftRange.lower << (int) rightRange.upper;
 		mulDivCombos[2] = (int) leftRange.upper << (int) rightRange.lower;
@@ -312,7 +367,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-	}else if(dyn_cast<LShrInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::LShr) {
 		AshiftLower = (int) leftRange.lower;
 		AshiftHigher = (int) leftRange.upper;
 		BshiftLower = (int) rightRange.lower;
@@ -334,7 +389,7 @@ RangeDomainElement RangeAnalysis::computeOpRange(RangeDomainElement leftRange,
 				resRange.upper = (float) shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
-	}else if(dyn_cast<AShrInst>(inst)){
+	} else if (inst->getOpcode() == Instruction::AShr) {
 		//resVal = (int) leftVal >> (int) rightVal;
 		AshiftLower = (int) leftRange.lower;
 		AshiftHigher = (int) leftRange.upper;
@@ -453,7 +508,7 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
 }
 
 RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
-		Instruction* instruction, Instruction *inst) {
+		Instruction* instruction) {
 
 	//outs()<<"HERE FLOATING\n";
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
@@ -464,7 +519,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 	Value *K = instruction;
 	string regName = K->getName();
 
-// Checking if left operand is a constant
+	// Checking if left operand is a constant
 	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
 
 		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
@@ -483,7 +538,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 			rightRange.lower = rightVal;
 			rightRange.bottom = false;
 
-			resRange = computeOpRange(leftRange, rightRange, inst);
+			resRange = computeOpRange(leftRange, rightRange, instruction);
 
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 			value[K->getName()] = resRange;
@@ -509,7 +564,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 				leftRange = getOperandValue(CILeft);
 				rightRange = f->value.find(rightOperand->getName())->second;
 
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 				value[K->getName()] = resRange;
@@ -540,7 +595,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 						f->value.find(leftOperand->getName())->second;
 
 				rightRange = getOperandValue(CIRight);
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -568,7 +623,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 
 				rightRange = f->value.find(rightOperand->getName())->second;
 
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -589,7 +644,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
 }
 
 RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
-		Instruction* instruction, Instruction *inst) {
+		Instruction* instruction) {
 	RangeDomainElement leftRange, rightRange, resRange;
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -607,7 +662,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 			leftRange = getOperandValue(CILeft);
 			rightRange = getOperandValue(CIRight);
 
-			resRange = computeOpRange(leftRange, rightRange, inst);//Get precise information
+			resRange = computeOpRange(leftRange, rightRange, instruction);//Get precise information
 			outs()<<resRange.upper<<" "<<resRange.lower<<"\n";
 			//float resVal = leftVal + rightVal;
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
@@ -633,7 +688,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 
 				leftRange = getOperandValue(CILeft);
 				rightRange = f->value.find(rightOperand->getName())->second;
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -661,7 +716,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 				leftRange = f->value.find(leftOperand->getName())->second;
 
 				rightRange = getOperandValue(CIRight);
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 
@@ -687,7 +742,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 				leftRange = f->value.find(leftOperand->getName())->second;
 
 				rightRange = f->value.find(rightOperand->getName())->second;
-				resRange = computeOpRange(leftRange, rightRange, inst);
+				resRange = computeOpRange(leftRange, rightRange, instruction);
 
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 

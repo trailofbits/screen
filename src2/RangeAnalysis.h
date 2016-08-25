@@ -63,18 +63,13 @@ protected:
 	RangeAnalysisFlow *executeCastInst(RangeAnalysisFlow* in, Instruction* inst);
 
 
-	RangeAnalysisFlow *executeFOpInst(RangeAnalysisFlow* in, Instruction* inst, unsigned opcode);
-	RangeAnalysisFlow *executeOpInst(RangeAnalysisFlow* in, Instruction* inst, unsigned opcode);
+	RangeAnalysisFlow *executeFOpInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeOpInst(RangeAnalysisFlow* in, Instruction* inst);
 	RangeAnalysisFlow *executePhiInst(RangeAnalysisFlow* in, Instruction* inst);
 
-	map<int,nodeState> nodeCount;	//Use this as a ceiling on how many times you loop. If you see any node more than 2 times assume a loop
-							//Give a chance for some complex control to not be considered as a loop.
-
+	map<int,nodeState> nodeCount;	//Any node seen >2 times and some flags is considered a loop
 public:
-//	float computeOp(float leftVal, float rightVal, unsigned opcode);
-	RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainElement rightRange, unsigned opcode);
-
-
+	RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainElement rightRange, Instruction *inst);
 
 
 };
