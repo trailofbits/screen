@@ -1,4 +1,4 @@
-//#include <iostream>
+#include <iostream>
  
 int main()
 {
@@ -10,13 +10,13 @@ int main()
 	 b = 10;
  }
  int c = b*50;
- int d = b/25;
- int d2 = b%25;
- int e = b+100;
- int f = b-100;
- int g = b >> 2;
- int h = b << 2;
- int i = b & a;
- int j = b | a;
- return 0;
+ int d = c/25;
+ int d2 = d%25;
+ int e = d2+100;
+ int f = e-100;
+ int g = f >> 2;
+ int h = g << 2;
+ int i = h & a;
+ int j = i | a;
+ return j;
 }

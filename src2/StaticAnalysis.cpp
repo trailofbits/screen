@@ -11,9 +11,14 @@
  * took hours to install :).
  */
 #include "StaticAnalysis.h"
-
+#include "RangeAnalysis.h"
 StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
 	return this->contextFlowGraph;
+}
+void dumpRangeAnalysisFlow2(RangeAnalysisFlow* in){
+	for(std::map<string, RangeDomainElement>::iterator it = in->value.begin(); it != in->value.end(); ++it){
+		outs()<<"Map value: "<<it->first<<"\n";
+	}
 }
 
 /**
@@ -53,11 +58,13 @@ void StaticAnalysis::runWorklist() {
 			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
 			in = f;
 		}
-
+	
+		outs()<<"the in map here may be the issue\n";
+		dumpRangeAnalysisFlow2(static_cast<RangeAnalysisFlow*>(in));
 		//EXECUTE THE FLOW FUNCTION
-		Flow* out = executeFlowFunction(	in,					//Contains all known variable mappings for the flow function
-											current->inst, 		//Instruction to perform flow function on
-											current->index	);	//Basic block index
+		Flow* out = executeFlowFunction(in,					//Contains all known variable mappings for the flow function
+									current->inst, 		//Instruction to perform flow function on
+									current->index	);	//Basic block index
 
 
 		//This will executed the flow function
@@ -194,7 +201,7 @@ Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst, int NodeI
 //	case:
 //
 //	}
-	outs()<<"in flaw static execute flow\n";
+	outs()<<"in flow static execute flow\n";
 	return new Flow(Flow::TOP);
 }
 
