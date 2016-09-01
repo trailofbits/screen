@@ -1,0 +1,790 @@
+Terminals unused in grammar
+
+   UNSUPPORTED
+
+
+Grammar
+
+    0 $accept: Smt END
+
+    1 Smt: successes Smt0
+
+    2 successes: %empty
+    3          | SUCCESS successes
+
+    4 Smt0: SAT
+    5     | UNSAT
+    6     | UNKNOWN
+    7     | Model
+    8     | Model_MathSAT
+    9     | Error
+
+   10 Error: LEFTPAR ERROR STRING RIGHTPAR
+
+   11 Assoc_list: Assoc Assoc_list
+   12           | %empty
+
+   13 Assoc: LEFTPAR VARNAME FunValue RIGHTPAR
+
+   14 Model: LEFTPAR MODEL Model_list RIGHTPAR
+
+   15 Model_MathSAT: LEFTPAR Assoc_list RIGHTPAR
+
+   16 Model_list: DefineFun Model_list
+   17           | %empty
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName FunArgs FunType FunValue RIGHTPAR
+
+   19 FunName: VARNAME
+
+   20 FunArgs: LEFTPAR Argslist RIGHTPAR
+
+   21 FunValue_List: FunValue FunValue_List
+   22              | %empty
+
+   23 FunValue: INTVALUE
+   24         | REALVALUE
+   25         | LEFTPAR DIVIDE FunValue FunValue RIGHTPAR
+   26         | LEFTPAR MULTIPLY FunValue_List RIGHTPAR
+   27         | LEFTPAR ADD FunValue_List RIGHTPAR
+   28         | LEFTPAR MINUS FunValue_List RIGHTPAR
+   29         | LEFTPAR MODULO FunValue FunValue RIGHTPAR
+   30         | BoolValue
+   31         | LEFTPAR FunValue RIGHTPAR
+
+   32 BoolValue: TRUE
+   33          | FALSE
+
+   34 Argslist: %empty
+   35         | VARNAME Argslist
+
+   36 FunType: BOOLTYPE
+   37        | TYPE
+
+
+Terminals, with rules where they appear
+
+END (0) 0
+error (256)
+MODEL (258) 14
+UNSUPPORTED (259)
+ERROR (260) 10
+SUCCESS (261) 3
+DEFINEFUN (262) 18
+DIVIDE (263) 25
+MINUS (264) 28
+MODULO (265) 29
+MULTIPLY (266) 26
+ADD (267) 27
+TRUE (268) 32
+FALSE (269) 33
+SAT (270) 4
+UNSAT (271) 5
+UNKNOWN (272) 6
+LEFTPAR (273) 10 13 14 15 18 20 25 26 27 28 29 31
+RIGHTPAR (274) 10 13 14 15 18 20 25 26 27 28 29 31
+INTVALUE (275) 23
+REALVALUE (276) 24
+TYPE (277) 37
+BOOLTYPE (278) 36
+VARNAME (279) 13 19 35
+STRING (280) 10
+
+
+Nonterminals, with rules where they appear
+
+$accept (26)
+    on left: 0
+Smt (27)
+    on left: 1, on right: 0
+successes (28)
+    on left: 2 3, on right: 1 3
+Smt0 (29)
+    on left: 4 5 6 7 8 9, on right: 1
+Error (30)
+    on left: 10, on right: 9
+Assoc_list (31)
+    on left: 11 12, on right: 11 15
+Assoc (32)
+    on left: 13, on right: 11
+Model (33)
+    on left: 14, on right: 7
+Model_MathSAT (34)
+    on left: 15, on right: 8
+Model_list (35)
+    on left: 16 17, on right: 14 16
+DefineFun (36)
+    on left: 18, on right: 16
+FunName (37)
+    on left: 19, on right: 18
+FunArgs (38)
+    on left: 20, on right: 18
+FunValue_List (39)
+    on left: 21 22, on right: 21 26 27 28
+FunValue (40)
+    on left: 23 24 25 26 27 28 29 30 31, on right: 13 18 21 25 29 31
+BoolValue (41)
+    on left: 32 33, on right: 30
+Argslist (42)
+    on left: 34 35, on right: 20 35
+FunType (43)
+    on left: 36 37, on right: 18
+
+
+State 0
+
+    0 $accept: . Smt END
+
+    SUCCESS  shift, and go to state 1
+
+    $default  reduce using rule 2 (successes)
+
+    Smt        go to state 2
+    successes  go to state 3
+
+
+State 1
+
+    3 successes: SUCCESS . successes
+
+    SUCCESS  shift, and go to state 1
+
+    $default  reduce using rule 2 (successes)
+
+    successes  go to state 4
+
+
+State 2
+
+    0 $accept: Smt . END
+
+    END  shift, and go to state 5
+
+
+State 3
+
+    1 Smt: successes . Smt0
+
+    SAT      shift, and go to state 6
+    UNSAT    shift, and go to state 7
+    UNKNOWN  shift, and go to state 8
+    LEFTPAR  shift, and go to state 9
+
+    Smt0           go to state 10
+    Error          go to state 11
+    Model          go to state 12
+    Model_MathSAT  go to state 13
+
+
+State 4
+
+    3 successes: SUCCESS successes .
+
+    $default  reduce using rule 3 (successes)
+
+
+State 5
+
+    0 $accept: Smt END .
+
+    $default  accept
+
+
+State 6
+
+    4 Smt0: SAT .
+
+    $default  reduce using rule 4 (Smt0)
+
+
+State 7
+
+    5 Smt0: UNSAT .
+
+    $default  reduce using rule 5 (Smt0)
+
+
+State 8
+
+    6 Smt0: UNKNOWN .
+
+    $default  reduce using rule 6 (Smt0)
+
+
+State 9
+
+   10 Error: LEFTPAR . ERROR STRING RIGHTPAR
+   14 Model: LEFTPAR . MODEL Model_list RIGHTPAR
+   15 Model_MathSAT: LEFTPAR . Assoc_list RIGHTPAR
+
+    MODEL    shift, and go to state 14
+    ERROR    shift, and go to state 15
+    LEFTPAR  shift, and go to state 16
+
+    $default  reduce using rule 12 (Assoc_list)
+
+    Assoc_list  go to state 17
+    Assoc       go to state 18
+
+
+State 10
+
+    1 Smt: successes Smt0 .
+
+    $default  reduce using rule 1 (Smt)
+
+
+State 11
+
+    9 Smt0: Error .
+
+    $default  reduce using rule 9 (Smt0)
+
+
+State 12
+
+    7 Smt0: Model .
+
+    $default  reduce using rule 7 (Smt0)
+
+
+State 13
+
+    8 Smt0: Model_MathSAT .
+
+    $default  reduce using rule 8 (Smt0)
+
+
+State 14
+
+   14 Model: LEFTPAR MODEL . Model_list RIGHTPAR
+
+    LEFTPAR  shift, and go to state 19
+
+    $default  reduce using rule 17 (Model_list)
+
+    Model_list  go to state 20
+    DefineFun   go to state 21
+
+
+State 15
+
+   10 Error: LEFTPAR ERROR . STRING RIGHTPAR
+
+    STRING  shift, and go to state 22
+
+
+State 16
+
+   13 Assoc: LEFTPAR . VARNAME FunValue RIGHTPAR
+
+    VARNAME  shift, and go to state 23
+
+
+State 17
+
+   15 Model_MathSAT: LEFTPAR Assoc_list . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 24
+
+
+State 18
+
+   11 Assoc_list: Assoc . Assoc_list
+
+    LEFTPAR  shift, and go to state 16
+
+    $default  reduce using rule 12 (Assoc_list)
+
+    Assoc_list  go to state 25
+    Assoc       go to state 18
+
+
+State 19
+
+   18 DefineFun: LEFTPAR . DEFINEFUN FunName FunArgs FunType FunValue RIGHTPAR
+
+    DEFINEFUN  shift, and go to state 26
+
+
+State 20
+
+   14 Model: LEFTPAR MODEL Model_list . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 27
+
+
+State 21
+
+   16 Model_list: DefineFun . Model_list
+
+    LEFTPAR  shift, and go to state 19
+
+    $default  reduce using rule 17 (Model_list)
+
+    Model_list  go to state 28
+    DefineFun   go to state 21
+
+
+State 22
+
+   10 Error: LEFTPAR ERROR STRING . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 29
+
+
+State 23
+
+   13 Assoc: LEFTPAR VARNAME . FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 35
+    BoolValue  go to state 36
+
+
+State 24
+
+   15 Model_MathSAT: LEFTPAR Assoc_list RIGHTPAR .
+
+    $default  reduce using rule 15 (Model_MathSAT)
+
+
+State 25
+
+   11 Assoc_list: Assoc Assoc_list .
+
+    $default  reduce using rule 11 (Assoc_list)
+
+
+State 26
+
+   18 DefineFun: LEFTPAR DEFINEFUN . FunName FunArgs FunType FunValue RIGHTPAR
+
+    VARNAME  shift, and go to state 37
+
+    FunName  go to state 38
+
+
+State 27
+
+   14 Model: LEFTPAR MODEL Model_list RIGHTPAR .
+
+    $default  reduce using rule 14 (Model)
+
+
+State 28
+
+   16 Model_list: DefineFun Model_list .
+
+    $default  reduce using rule 16 (Model_list)
+
+
+State 29
+
+   10 Error: LEFTPAR ERROR STRING RIGHTPAR .
+
+    $default  reduce using rule 10 (Error)
+
+
+State 30
+
+   32 BoolValue: TRUE .
+
+    $default  reduce using rule 32 (BoolValue)
+
+
+State 31
+
+   33 BoolValue: FALSE .
+
+    $default  reduce using rule 33 (BoolValue)
+
+
+State 32
+
+   25 FunValue: LEFTPAR . DIVIDE FunValue FunValue RIGHTPAR
+   26         | LEFTPAR . MULTIPLY FunValue_List RIGHTPAR
+   27         | LEFTPAR . ADD FunValue_List RIGHTPAR
+   28         | LEFTPAR . MINUS FunValue_List RIGHTPAR
+   29         | LEFTPAR . MODULO FunValue FunValue RIGHTPAR
+   31         | LEFTPAR . FunValue RIGHTPAR
+
+    DIVIDE     shift, and go to state 39
+    MINUS      shift, and go to state 40
+    MODULO     shift, and go to state 41
+    MULTIPLY   shift, and go to state 42
+    ADD        shift, and go to state 43
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 44
+    BoolValue  go to state 36
+
+
+State 33
+
+   23 FunValue: INTVALUE .
+
+    $default  reduce using rule 23 (FunValue)
+
+
+State 34
+
+   24 FunValue: REALVALUE .
+
+    $default  reduce using rule 24 (FunValue)
+
+
+State 35
+
+   13 Assoc: LEFTPAR VARNAME FunValue . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 45
+
+
+State 36
+
+   30 FunValue: BoolValue .
+
+    $default  reduce using rule 30 (FunValue)
+
+
+State 37
+
+   19 FunName: VARNAME .
+
+    $default  reduce using rule 19 (FunName)
+
+
+State 38
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName . FunArgs FunType FunValue RIGHTPAR
+
+    LEFTPAR  shift, and go to state 46
+
+    FunArgs  go to state 47
+
+
+State 39
+
+   25 FunValue: LEFTPAR DIVIDE . FunValue FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 48
+    BoolValue  go to state 36
+
+
+State 40
+
+   28 FunValue: LEFTPAR MINUS . FunValue_List RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    $default  reduce using rule 22 (FunValue_List)
+
+    FunValue_List  go to state 49
+    FunValue       go to state 50
+    BoolValue      go to state 36
+
+
+State 41
+
+   29 FunValue: LEFTPAR MODULO . FunValue FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 51
+    BoolValue  go to state 36
+
+
+State 42
+
+   26 FunValue: LEFTPAR MULTIPLY . FunValue_List RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    $default  reduce using rule 22 (FunValue_List)
+
+    FunValue_List  go to state 52
+    FunValue       go to state 50
+    BoolValue      go to state 36
+
+
+State 43
+
+   27 FunValue: LEFTPAR ADD . FunValue_List RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    $default  reduce using rule 22 (FunValue_List)
+
+    FunValue_List  go to state 53
+    FunValue       go to state 50
+    BoolValue      go to state 36
+
+
+State 44
+
+   31 FunValue: LEFTPAR FunValue . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 54
+
+
+State 45
+
+   13 Assoc: LEFTPAR VARNAME FunValue RIGHTPAR .
+
+    $default  reduce using rule 13 (Assoc)
+
+
+State 46
+
+   20 FunArgs: LEFTPAR . Argslist RIGHTPAR
+
+    VARNAME  shift, and go to state 55
+
+    $default  reduce using rule 34 (Argslist)
+
+    Argslist  go to state 56
+
+
+State 47
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName FunArgs . FunType FunValue RIGHTPAR
+
+    TYPE      shift, and go to state 57
+    BOOLTYPE  shift, and go to state 58
+
+    FunType  go to state 59
+
+
+State 48
+
+   25 FunValue: LEFTPAR DIVIDE FunValue . FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 60
+    BoolValue  go to state 36
+
+
+State 49
+
+   28 FunValue: LEFTPAR MINUS FunValue_List . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 61
+
+
+State 50
+
+   21 FunValue_List: FunValue . FunValue_List
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    $default  reduce using rule 22 (FunValue_List)
+
+    FunValue_List  go to state 62
+    FunValue       go to state 50
+    BoolValue      go to state 36
+
+
+State 51
+
+   29 FunValue: LEFTPAR MODULO FunValue . FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 63
+    BoolValue  go to state 36
+
+
+State 52
+
+   26 FunValue: LEFTPAR MULTIPLY FunValue_List . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 64
+
+
+State 53
+
+   27 FunValue: LEFTPAR ADD FunValue_List . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 65
+
+
+State 54
+
+   31 FunValue: LEFTPAR FunValue RIGHTPAR .
+
+    $default  reduce using rule 31 (FunValue)
+
+
+State 55
+
+   35 Argslist: VARNAME . Argslist
+
+    VARNAME  shift, and go to state 55
+
+    $default  reduce using rule 34 (Argslist)
+
+    Argslist  go to state 66
+
+
+State 56
+
+   20 FunArgs: LEFTPAR Argslist . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 67
+
+
+State 57
+
+   37 FunType: TYPE .
+
+    $default  reduce using rule 37 (FunType)
+
+
+State 58
+
+   36 FunType: BOOLTYPE .
+
+    $default  reduce using rule 36 (FunType)
+
+
+State 59
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName FunArgs FunType . FunValue RIGHTPAR
+
+    TRUE       shift, and go to state 30
+    FALSE      shift, and go to state 31
+    LEFTPAR    shift, and go to state 32
+    INTVALUE   shift, and go to state 33
+    REALVALUE  shift, and go to state 34
+
+    FunValue   go to state 68
+    BoolValue  go to state 36
+
+
+State 60
+
+   25 FunValue: LEFTPAR DIVIDE FunValue FunValue . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 69
+
+
+State 61
+
+   28 FunValue: LEFTPAR MINUS FunValue_List RIGHTPAR .
+
+    $default  reduce using rule 28 (FunValue)
+
+
+State 62
+
+   21 FunValue_List: FunValue FunValue_List .
+
+    $default  reduce using rule 21 (FunValue_List)
+
+
+State 63
+
+   29 FunValue: LEFTPAR MODULO FunValue FunValue . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 70
+
+
+State 64
+
+   26 FunValue: LEFTPAR MULTIPLY FunValue_List RIGHTPAR .
+
+    $default  reduce using rule 26 (FunValue)
+
+
+State 65
+
+   27 FunValue: LEFTPAR ADD FunValue_List RIGHTPAR .
+
+    $default  reduce using rule 27 (FunValue)
+
+
+State 66
+
+   35 Argslist: VARNAME Argslist .
+
+    $default  reduce using rule 35 (Argslist)
+
+
+State 67
+
+   20 FunArgs: LEFTPAR Argslist RIGHTPAR .
+
+    $default  reduce using rule 20 (FunArgs)
+
+
+State 68
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName FunArgs FunType FunValue . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 71
+
+
+State 69
+
+   25 FunValue: LEFTPAR DIVIDE FunValue FunValue RIGHTPAR .
+
+    $default  reduce using rule 25 (FunValue)
+
+
+State 70
+
+   29 FunValue: LEFTPAR MODULO FunValue FunValue RIGHTPAR .
+
+    $default  reduce using rule 29 (FunValue)
+
+
+State 71
+
+   18 DefineFun: LEFTPAR DEFINEFUN FunName FunArgs FunType FunValue RIGHTPAR .
+
+    $default  reduce using rule 18 (DefineFun)
