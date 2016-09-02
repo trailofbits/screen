@@ -18,14 +18,16 @@ Purpose of this tool, using annotations:
 Targeting: arm, x86
 
 ## Running the pass
+Include the screen.h header file in all builds of LLVM bitcode.
+
 Annotations are as follows:
 For full function anaylsis use:
 
-__attribute__((annotate("screen_function_paths"))) 
+SCREEN(screen_function_paths) 
 
 For analysis in between two instructions use:
-__attribute__((annotate("screen_paths_start"))) char a = 'a';
-__attribute__((annotate("screen_paths_end"))) char b = 'b';
+SCREEN_START(screen_paths_start) char a = 'a';
+SCREEN_END(screen_paths_end) char b = 'b';
 
 ## Opt Command Line Flags (Manditory)
 ```
