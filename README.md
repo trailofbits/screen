@@ -87,3 +87,6 @@ B2: main-> printf-> foo-> printf-> printf
 1. Edit source/screen.cpp
 1. To build it after changes, run build.sh
 1. To test it, edit test.sh and run test.sh
+
+# Copyright Attribution
+Screen utilizes code from the Pagai project (http://pagai.forge.imag.fr/) Copyright or © or Copr. Julien Henry, David Monniaux, Matthieu Moy, Rahul Nanda (2011 - 2016)
