@@ -153,6 +153,7 @@ void Abstract::assign_texpr_array(
 
 
 llvm::raw_ostream& operator<<( llvm::raw_ostream &stream, Abstract const& A) {
-	A.display(stream);
-    return stream;
+	std::string save_string;
+	A.display(stream, save_string);
+	return stream;
 }

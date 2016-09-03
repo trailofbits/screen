@@ -149,7 +149,9 @@ void AnalysisPass::printResult_oldoutput(Function * F) {
 			*Out << "\n\nRESULT FOR BASICBLOCK: -------------------" << *b << "-----\n";
 			resetColor();
 			//n->X_i[passID]->print(true);
-			n->X_s[passID]->print(true);
+			std::string meta_string;
+			n->X_s[passID]->print(meta_string, true);
+			//*Out << meta_string <<"\n";
 			if (FPr->inAssert(b)) {
 				if (n->X_s[passID]->is_bottom()) {
 					changeColor(raw_ostream::GREEN);

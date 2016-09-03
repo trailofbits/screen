@@ -208,11 +208,15 @@ ap_lincons1_array_t AbstractClassic::to_lincons_array() {
 	return ap_abstract1_to_lincons_array(man,main);
 }
 
-void AbstractClassic::print(bool only_main) {
+void AbstractClassic::print(std::string &outString, bool only_main) {
+	std::string s;
+	llvm::raw_string_ostream buffer(s);
+	// buffer << *this;
+	outString = buffer.str();
 	*Out << *this;
 }
 
-void AbstractClassic::display(llvm::raw_ostream &stream, std::string * left) const {
+void AbstractClassic::display(llvm::raw_ostream &stream, std::string &ret_invariant, std::string * left) const {
 
 #if 0
 	std::string vertices = "[";
@@ -293,7 +297,9 @@ void AbstractClassic::display(llvm::raw_ostream &stream, std::string * left) con
 	*Out << "sage: Polyhedron(vertices=" + vertices + ", rays=" + rays + ", lines=" + lines + ")\n";
 	*Out << "sage: legend=" + legend + "\n";
 #endif
-	
+	std::string return_invariant = "";	
+	std::string s;
+	llvm::raw_string_ostream buffer(s);
 
 #if 1
 	PDEBUG(
@@ -313,9 +319,15 @@ void AbstractClassic::display(llvm::raw_ostream &stream, std::string * left) con
 	} else {
 		for (size_t k = 0; k < size; k++) {
 			ap_tcons1_t cons = ap_tcons1_array_get(&tcons_array,k);
-			if (left != NULL) stream << *left;
+			if (left != NULL)
+			{	
+				stream << *left;
+				buffer << *left;
+			}
 			stream << cons << "\n";
+			buffer << cons << "\n";
 		}
+		return_invariant = buffer.str();
 	}
 	ap_tcons1_array_clear(&tcons_array);
 
@@ -334,6 +346,7 @@ void AbstractClassic::display(llvm::raw_ostream &stream, std::string * left) con
 		stream << c;
 	fclose(tmp);
 #endif
+	ret_invariant = return_invariant;
 }
 		
 void AbstractClassic::to_MDNode(llvm::Instruction * Inst, std::vector<llvm::Metadata*> * met) {

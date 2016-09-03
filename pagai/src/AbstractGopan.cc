@@ -229,11 +229,11 @@ void AbstractGopan::meet(Abstract* A) {
 	//TODO
 }
 
-void AbstractGopan::print(bool only_main) {
+void AbstractGopan::print(std::string &outString, bool only_main) {
 	*Out << *this;
 }
 
-void AbstractGopan::display(llvm::raw_ostream &stream,  std::string * left) const {
+void AbstractGopan::display(llvm::raw_ostream &stream, std::string &ret_invariant, std::string * left) const {
 	FILE* tmp = tmpfile();
 	if (tmp == NULL) return;
 

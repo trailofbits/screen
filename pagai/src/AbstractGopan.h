@@ -154,13 +154,13 @@ class AbstractGopan : public Abstract {
 		/**
 		 * \brief print the abstract domain on standard output
 		 */
-		void print(bool only_main = false);
+		void print(std::string &outString, bool only_main = false);
 
 		/**
 		 * \brief print the abstract domain in the stream
 		 * \param left print the string given as argument at the beginning of
 		 * each new line
 		 */
-		void display(llvm::raw_ostream &stream, std::string * left = NULL) const;
+		void display(llvm::raw_ostream &stream, std::string &ret_invariant, std::string * left = NULL) const;
 };
 #endif

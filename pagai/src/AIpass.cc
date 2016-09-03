@@ -222,10 +222,12 @@ void AIPass::printInvariant(BasicBlock * b, std::string left, llvm::raw_ostream 
 				*oss << "/* reachable */\n"; 
 				resetColor(oss);
 			} else {
+				std::string test_ret;
 				changeColor(raw_ostream::MAGENTA,oss);
-				*oss << "/* invariant:\n"; 
-				Nodes[b]->X_s[passID]->display(*oss,&left);
+				*oss << "/* invariant in AIPass: \n"; 
+				Nodes[b]->X_s[passID]->display(*oss, test_ret, &left);
 				*oss << left << "*/\n";
+				*oss << "yes we captured the string: " << test_ret << "\n";
 				resetColor(oss);
 			}
 			*oss << left;
