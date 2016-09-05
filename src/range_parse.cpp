@@ -56,49 +56,6 @@ RangeParse::parse(std::string filename)
             return;
         }
         _locations.push_back(loc);
-#if 0
-
-
-        size_t loc = line.find('-');
-        // Just a function definition
-        if (loc == std::string::npos) {
-            loc = line.find(':');
-            if (loc == std::string::npos) {
-                _valid = false;
-                return;
-            }
-            auto file = line.substr(0, loc);
-            auto func = line.substr(loc+1);
-
-            _functions.push_back(std::tuple<std::string, std::string>(file, func));
-        // range definition
-        } else {
-            auto from = line.substr(0, loc);
-            auto to = line.substr(loc+1);
-
-            auto parse = [this](std::string line) -> SourceLocation {
-                SourceLocation sl;
-                size_t loc = line.find(':');
-
-                if (loc == std::string::npos) {
-                    _valid = false;
-                } else {
-                    sl.file = line.substr(0, loc);
-                    sl.lineno = std::stoi(line.substr(loc+1));
-                }
-                return sl;
-            };
-
-            auto slfrom = parse(from);
-            if (!_valid)
-                return;
-            auto slto = parse(to);
-            if (!_valid)
-                return;
-
-            _locations.push_back(std::tuple<SourceLocation, SourceLocation>(slfrom, slto));
-        }
-#endif
 
     } while (true);
 }
