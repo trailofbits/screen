@@ -39,6 +39,9 @@ SCREEN_END(screen_paths_end) char b = 'b';
 
 -screen-start-symbol=<string>                                  
 	Provide a symbol in the program to treat as the _start, , usually main for most cases
+
+-screen-annotations=<file>
+        Provide an external definition file for code segments under analysis. Lines in the format of: `{func/start/end} {name} {file} [lineno]`
 ```
 
 ## Example output
