@@ -1,0 +1,3 @@
+func main 01_annotated_function.c
+start name 01_annotated_function.c 8
+end name 01_annotated_function.c 14

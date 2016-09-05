@@ -10,6 +10,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/ADT/Statistic.h"
+#include <llvm/IR/DebugInfo.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IRReader/IRReader.h>
 #include <llvm/IR/LLVMContext.h>
@@ -23,6 +24,7 @@
 #include <algorithm>
 #include <set>
 
+#include "range_parse.h"
 #include "traverse.h"
 #include <sstream>
 
@@ -43,12 +45,19 @@ static cl::opt<std::string> kPrefix("screen-prefix", cl::Optional,
 static cl::opt<bool> kDebugFlag("screen-debug", cl::Optional,
     cl::desc("Print extra debug information"), cl::init(false));
 
+static cl::opt<std::string> kAnnotationFile("screen-annotations",
+    cl::desc("Provide an external file that contains relevant code sections"),
+    cl::init(""));
+
+
 namespace {
 
 struct ScreenPass : public ModulePass {
     std::ofstream out_fd;
     bool started;
     raw_ostream &O;
+    std::vector<const Function*> externallyAnnotatedFunctions;
+    std::vector<std::tuple<std::string, const Instruction *, const Instruction *>> externallyAnnotatedRanges;
 
     ScreenPass()
     : ModulePass(ID)
@@ -339,6 +348,12 @@ struct ScreenPass : public ModulePass {
                 annotatedFunctions.push_back(function); 
             }
         }
+
+        // Now, copy all the functions we requested out of line
+        std::copy(std::begin(externallyAnnotatedFunctions),
+                  std::end(externallyAnnotatedFunctions),
+                  std::end(annotatedFunctions));
+
         return annotatedFunctions;
         
     }
@@ -351,27 +366,36 @@ struct ScreenPass : public ModulePass {
     {
         RegionMap spanMap;
 
-        Function *F = M.getFunction("llvm.var.annotation");
-        if(!F)
-            return spanMap;
+        // Import external annotations
+        for (const auto &range : externallyAnnotatedRanges) {
+            std::string name;
+            const Instruction *start, *end;
 
-        for (User* U : F->users()) {
-            if (IntrinsicInst* annotateCall = dyn_cast<IntrinsicInst>(U)) {
-                auto str = annotationToString(*annotateCall);
+            std::tie(name, start, end) = range;
 
-                AnnotationType type;
-                std::string name;
-                std::tie(type, name) = parseAnnotation(str);
+            spanMap[name].start = start;
+            spanMap[name].end = end;
+        }
 
-                switch(type) {
-                case kAnnotationStart:
-                    spanMap[name].start = annotateCall;
-                    break;
-                case kAnnotationEnd:
-                    spanMap[name].end = annotateCall;
-                    break;
-                default:
-                    errs() << "[W] Unknown annotation (" << str << ")\n";
+        if(Function *F = M.getFunction("llvm.var.annotation")) {
+            for (User* U : F->users()) {
+                if (IntrinsicInst* annotateCall = dyn_cast<IntrinsicInst>(U)) {
+                    auto str = annotationToString(*annotateCall);
+
+                    AnnotationType type;
+                    std::string name;
+                    std::tie(type, name) = parseAnnotation(str);
+
+                    switch(type) {
+                    case kAnnotationStart:
+                        spanMap[name].start = annotateCall;
+                        break;
+                    case kAnnotationEnd:
+                        spanMap[name].end = annotateCall;
+                        break;
+                    default:
+                        errs() << "[W] Unknown annotation (" << str << ")\n";
+                    }
                 }
             }
         }
@@ -545,6 +569,100 @@ struct ScreenPass : public ModulePass {
 
     }
 
+    bool endsWith(std::string const &str, std::string const &end) {
+        if (str.length() >= end.length()) {
+            return (0 == str.compare(str.length() - end.length(), end.length(), end));
+        } else {
+            return false;
+        }
+    }
+
+    bool addAnnotations(Module &M, std::string file) {
+        RangeParse parser(file);
+        if (!parser.valid()) {
+            return false;
+        }
+        DebugInfoFinder finder;
+        finder.processModule(M);
+
+        // Add annotations to functions
+        for (auto &entry : parser.locations()) {
+            if (entry.kind != RangeParse::kFunction)
+                continue;
+
+            for (auto sub : finder.subprograms()) {
+                auto fileName = sub->getFile()->getFilename().str();
+                auto funcName = sub->getName().str();
+
+                if (endsWith(fileName, entry.file)) {
+                    if (funcName == entry.name) {
+                        Function *F = M.getFunction(sub->getName());
+                        externallyAnnotatedFunctions.push_back(F);
+                        entry.added = true;
+                    }
+                }
+            }
+        }
+
+        using InstructionPair = std::tuple<const Instruction *, const Instruction *>;
+        std::map<std::string, InstructionPair> toAdd;
+
+        // Collect instruction annotations
+        for (auto &F : M.functions()) {
+            for (auto &BB : F) {
+                for (auto &I : BB) {
+                    if (DILocation *L = I.getDebugLoc()) {
+                        unsigned line = L->getLine();
+                        for (auto &entry : parser.locations()) {
+                            if (entry.added == true)
+                                continue;
+
+                            if (entry.kind == RangeParse::kFunction)
+                                continue;
+
+                            auto file = entry.file;
+                            auto lineno = entry.lineno;
+
+                            if (!endsWith(L->getFilename(), file))
+                                continue;
+
+                            if (lineno != line)
+                                continue;
+
+                            if (entry.kind == RangeParse::kStart) {
+                                std::get<0>(toAdd[entry.name]) = &I;
+                            } else if (entry.kind == RangeParse::kEnd) {
+                                std::get<1>(toAdd[entry.name]) = &I;
+                            }
+
+                            entry.added = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (auto &tup : toAdd) {
+            const Instruction *start, *end;
+            std::tie(start, end) = std::get<1>(tup);
+            auto name = std::get<0>(tup);
+            if (start == nullptr || end == nullptr) {
+                errs() << "Unmatched range definition for '" << name << "\n";
+            };
+
+            std::remove_reference<decltype(externallyAnnotatedRanges[0])>::type namedRange;
+            std::get<0>(namedRange) = name;
+            std::get<1>(namedRange) = start;
+            std::get<2>(namedRange) = end;
+            outs() << "Adding " << name << "\n";
+            externallyAnnotatedRanges.push_back(namedRange);
+        }
+
+
+
+        return true;
+    }
+
     virtual bool runOnModule(Module &M) 
     {
         // runOnFunction is run on every function in each compilation unit
@@ -555,6 +673,13 @@ struct ScreenPass : public ModulePass {
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
         //
+        if (kAnnotationFile.getNumOccurrences() > 0) {
+            if (addAnnotations(M, kAnnotationFile) == false) {
+                errs() << "Bad annotations file format\n";
+                return false;
+            }
+        }
+
         cfgReworkDemo(M);
 
         function_annotation_stats(M);
