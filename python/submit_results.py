@@ -27,7 +27,7 @@ def parse_results(filename):
             d.update(obj)
     return d
 
-def owner_repo(val):
+def project(val):
     """ Validate value to make sure it has a slash """
     owner, _, repo = val.partition('/')
     if not owner or not repo:
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--commit', type=str, required=True,
                         help='Commit that these results are associated with.',
                         dest='commit')
-    parser.add_argument('-r', '--owner-repo', type=owner_repo, required=True,
+    parser.add_argument('-p', '--project', type=project, required=True,
                         help='Repository identifier (in format OWNER/REPO) '
                         'for which the analysis was performed')
     parser.add_argument('-k', '--api-key', type=str, required=True,
@@ -53,8 +53,8 @@ if __name__ == '__main__':
     report = parse_results(args.results)
 
     res = requests.put(
-        BASE_URL + '/{owner_repo}/publish/{commit}'.format(
-            owner_repo=args.owner_repo,
+        BASE_URL + '/{project}/publish/{commit}'.format(
+            project=args.project,
             commit=args.commit,
         ),
         params={'key': args.api_key},
