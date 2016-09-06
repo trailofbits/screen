@@ -13,12 +13,13 @@ except ImportError:
 
 BASE_URL = 'https://screen-web.herokuapp.com'
 
-def publish_results(owner_repo, commit, report):
+def publish_results(owner_repo, commit, api_key, report):
     res = requests.put(
         BASE_URL + '/{owner_repo}/publish/{commit}'.format(
             owner_repo=owner_repo,
             commit=commit,
         ),
+        params={'key': api_key},
         json=report,
     )
     # response is always json, unless network is dead
@@ -55,6 +56,8 @@ if __name__ == '__main__':
     parser.add_argument('-r', '--owner-repo', type=owner_repo, required=True,
                         help='Repository identifier (in format OWNER/REPO) '
                         'for which the analysis was performed')
+    parser.add_argument('-k', '--api-key', type=str, required=True,
+                        help='API key for the project')
     args = parser.parse_args()
 
     results = parse_results(args.results)
@@ -62,6 +65,7 @@ if __name__ == '__main__':
     res = publish_results(
         owner_repo=args.owner_repo,
         commit=args.commit,
+        api_key=args.api_key,
         report=results,
     )
     print(res)
