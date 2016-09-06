@@ -13,18 +13,6 @@ except ImportError:
 
 BASE_URL = 'https://screen-web.herokuapp.com'
 
-def publish_results(owner_repo, commit, api_key, report):
-    res = requests.put(
-        BASE_URL + '/{owner_repo}/publish/{commit}'.format(
-            owner_repo=owner_repo,
-            commit=commit,
-        ),
-        params={'key': api_key},
-        json=report,
-    )
-    # response is always json, unless network is dead
-    return res.json()
-
 def parse_results(filename):
     '''
     Consume a screen results file and return a dictionary describing it.
@@ -60,12 +48,15 @@ if __name__ == '__main__':
                         help='API key for the project')
     args = parser.parse_args()
 
-    results = parse_results(args.results)
+    report = parse_results(args.results)
 
-    res = publish_results(
-        owner_repo=args.owner_repo,
-        commit=args.commit,
-        api_key=args.api_key,
-        report=results,
+    res = requests.put(
+        BASE_URL + '/{owner_repo}/publish/{commit}'.format(
+            owner_repo=args.owner_repo,
+            commit=args.commit,
+        ),
+        params={'key': args.api_key},
+        json=report,
     )
-    print(res)
+    # response should always be json, unless network is dead
+    print(res.json())
