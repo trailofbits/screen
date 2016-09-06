@@ -144,6 +144,7 @@ void AnalysisPass::printResult_oldoutput(Function * F) {
 				LLVMContext& C = Inst->getContext();
 				MDNode* N = MDNode::get(C,arr);
 				Inst->setMetadata("pagai.invariant", N);
+				*Out << " Setting in AnalysisPass... " << N << "\n";
 			}
 
 			*Out << "\n\nRESULT FOR BASICBLOCK: -------------------" << *b << "-----\n";

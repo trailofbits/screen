@@ -3,6 +3,8 @@
  * \brief Implementation of the AIpass pass
  * \author Julien Henry
  */
+#include <algorithm>
+#include <string>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -185,6 +187,7 @@ void AIPass::computeResultsPositions(
 
 void AIPass::printInvariant(BasicBlock * b, std::string left, llvm::raw_ostream * oss) {
 	Pr * FPr = Pr::getInstance(b->getParent());
+	std::string test_ret;
 	if (Nodes[b]->X_s[passID] != NULL && FPr->inPr(b)) {
 		// format string in order to remove undesired characters
 		format_string(left);
@@ -222,7 +225,6 @@ void AIPass::printInvariant(BasicBlock * b, std::string left, llvm::raw_ostream 
 				*oss << "/* reachable */\n"; 
 				resetColor(oss);
 			} else {
-				std::string test_ret;
 				changeColor(raw_ostream::MAGENTA,oss);
 				*oss << "/* invariant in AIPass: \n"; 
 				Nodes[b]->X_s[passID]->display(*oss, test_ret, &left);
@@ -240,6 +242,7 @@ void AIPass::InstrumentLLVMBitcode(Function * F) {
 	BasicBlock * b;
 	Node * n;
 	Pr * FPr = Pr::getInstance(F);
+	std::string screen_meta;
 	for (Function::iterator i = F->begin(), e = F->end(); i != e; ++i) {
 		b = &*i;
 		n = Nodes[b];
@@ -248,10 +251,20 @@ void AIPass::InstrumentLLVMBitcode(Function * F) {
 			Instruction * Inst = b->getFirstNonPHI();
 			if (InvariantAsMetadata()) {
 				std::vector<Metadata*> arr;
+				std::string left;	
+				llvm::raw_ostream *oss;
 				n->X_s[passID]->to_MDNode(Inst,&arr);
 				LLVMContext& C = Inst->getContext();
 				MDNode* N = MDNode::get(C,arr);
 				Inst->setMetadata("pagai.invariant", N);
+				//outs() << "Setting in AIPass .... " << N << "\n";
+				//N->dump();
+				n->X_s[passID]->display(*oss, screen_meta, &left);
+				std::replace( screen_meta.begin(), screen_meta.end(), '\n', ';'); 
+				MDNode* MDScreen = MDNode::get(C, MDString::get(C, screen_meta));
+				Inst->setMetadata("screen.annotation", MDScreen);
+				Inst->dump();
+				outs() << "yes we captured the string: " << screen_meta.c_str() << "\n";
 			} else {
 				n->X_s[passID]->insert_as_LLVM_invariant(Inst);
 			}

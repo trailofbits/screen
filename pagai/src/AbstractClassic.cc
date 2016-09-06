@@ -311,20 +311,24 @@ void AbstractClassic::display(llvm::raw_ostream &stream, std::string &ret_invari
 	ap_tcons1_array_t tcons_array = ap_abstract1_to_tcons_array(man,main);
 	size_t size = ap_tcons1_array_size(&tcons_array);
 	if (ap_abstract1_is_bottom(man,main)) {
-		if (left != NULL) stream << *left;
-		stream << "UNREACHABLE\n";
+		if (left != NULL) 
+			buffer << *left; //stream << *left;
+		//stream << "UNREACHABLE\n";
+		buffer << "UNREACHABLE\n";
 	} else if (size == 0) {
-		if (left != NULL) stream << *left;
-		stream << "TOP\n";
+		if (left != NULL) 
+			buffer << *left; //stream << *left;
+		//stream << "TOP\n";
+		buffer << "TOP\n";
 	} else {
 		for (size_t k = 0; k < size; k++) {
 			ap_tcons1_t cons = ap_tcons1_array_get(&tcons_array,k);
 			if (left != NULL)
 			{	
-				stream << *left;
+				//stream << *left;
 				buffer << *left;
 			}
-			stream << cons << "\n";
+			//stream << cons << "\n";
 			buffer << cons << "\n";
 		}
 		return_invariant = buffer.str();
