@@ -6,37 +6,25 @@ import datetime
 import json
 
 try:
-    import boto3 
+    import requests
 except ImportError:
     import pip
-    pip.main(['install', 'boto3'])
+    pip.main(['install', 'requests'])
 
-    import boto3
+    import requests
 
-region = 'us-east-1'
-client = boto3.client('dynamodb', region_name=region)
-res = boto3.resource('dynamodb', region_name=region)
+BASE_URL = 'https://screen-web.herokuapp.com'
 
-def get_table(table_name, key_name='commit'):
-    try:
-        desc = client.describe_table(TableName=table_name)
-    except: # Table does not exist
-        table = res.create_table(
-          TableName = table_name,
-          KeySchema            =[{'AttributeName': 'timestamp','KeyType': 'RANGE'},
-                                 {'AttributeName': 'commit'   ,'KeyType': 'HASH' } 
-                                ],
-          AttributeDefinitions =[{'AttributeName': 'timestamp','AttributeType': 'S' },
-                                 {'AttributeName': 'commit'   ,'AttributeType': 'S' },
-                                ],
-          ProvisionedThroughput={'ReadCapacityUnits': 5,'WriteCapacityUnits': 5}
-        )
-        table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
-
-    table = res.Table(table_name)
-    print(table.scan())
-    return table
-
+def publish_results(owner_repo, commit, report):
+    res = requests.put(
+        BASE_URL + '/{owner_repo}/publish/{commit}'.format(
+            owner_repo=owner_repo,
+            commit=commit,
+        ),
+        json=report,
+    )
+    # response is always json, unless network is dead
+    return res.json()
 
 def parse_results(filename):
     '''
@@ -58,17 +46,18 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--commit', type=str, required=True,
             help='Commit that these results are associated with.',
             dest='commit')
+    parser.add_argument('-o', '-r', '--owner-repo', type=str, required=True,
+                        help='Repository identifier (in format OWNER/REPO) '
+                        'for which the analysis was performed')
     args = parser.parse_args()
 
     results = parse_results(args.results)
 
-    entry = {}
-    entry['commit'] = args.commit
-    entry['timestamp'] = datetime.datetime.now().isoformat()
-    entry['results'] = results
-
-    table = get_table('screen')
-    res = table.put_item(Item=entry)
+    res = publish_results(
+        owner_repo=args.owner_repo,
+        commit=args.commit,
+        report=results,
+    )
     print(res)
 
 
