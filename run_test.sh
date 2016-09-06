@@ -24,8 +24,12 @@ fi
 echo "[+] Compiling tests..."
 ${LLVM_BIN}/clang -o tests/test1.bc tests/test1.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter 
 ${LLVM_BIN}/clang -o tests/test1 tests/test1.c -Wall -Wshadow -Wextra
+
 ${LLVM_BIN}/clang  -I./include/ -o tests/test2.bc tests/test2.c -c -emit-llvm -Wall -Wshadow -Wextra 
 ${LLVM_BIN}/clang -I./include/ -o tests/test2 tests/test2.c -Wall -Wshadow -Wextra
+
+${LLVM_BIN}/clang  -I./include/ -o tests/test.bc tests/test.c -c -emit-llvm -Wall -Wshadow -Wextra 
+${LLVM_BIN}/clang -I./include/ -o tests/test tests/test.c -Wall -Wshadow -Wextra
 
 echo "[+] Running screen pass..."
 ${LLVM_BIN}/opt -load build/lib/screen.${EXT} tests/test1.bc -o tests/test1_transformed.bc -screen -screen-output tests/OUTPUT -screen-start-symbol main 

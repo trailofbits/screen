@@ -28,26 +28,26 @@ namespace {
     , O(kDebugFlag ? outs() : nulls())
     {}
 
-    DenseMap<MDNode*, unsigned> _mdnMap; //Map for MDNodes.
+    DenseMap<MDNode*, std::vector<MDNode*>> _mdnMap; //Map for MDNodes.
     unsigned _mdnNext; 
     
-    void createMetadataSlot(MDNode *N)
+    void createMetadataSlot(MDNode *N, std::vector<MDNode*> &mdnVec)
     {
-	auto I = _mdnMap.find(N);
-	if(I!=_mdnMap.end())
-	{
-	    return;
-	}
-	N->dump();
-	//the map also stores the number of each metadata node. It is the same order as in the dumped bc file.
-	unsigned DestSlot = _mdnNext++;
-	_mdnMap[N] = DestSlot;
      
 	for (unsigned i = 0, e = N->getNumOperands(); i!=e; ++i)
 	{
 	    if(MDNode *Op = dyn_cast_or_null<MDNode>(N->getOperand(i)))
 	    {
-		createMetadataSlot(Op);
+	        //O << "MDNode Operands\n";
+	    	if (std::find(mdnVec.begin(), mdnVec.end(), N) == mdnVec.end()) 
+			    mdnVec.push_back(N);
+		createMetadataSlot(Op, mdnVec);
+	    }
+	    else
+	    {
+		//N->dump();
+	    	if (std::find(mdnVec.begin(), mdnVec.end(), N) == mdnVec.end()) 
+			    mdnVec.push_back(N);
 	    }
 	}
     }
@@ -63,10 +63,39 @@ namespace {
 	    {
 		for (Instruction &I: B)
 		{
-		    I.getAllMetadata(MDForInst);
+		    MDNode *node = I.getMetadata("screen.annotation");
+		    std::string invariant = "";
+		    if(node){
+			    outs()<<"Found screen.annotation: ";
+			    outs()<< node->getNumOperands() << "\n";
+			    
+			    MDString *str = dyn_cast<MDString>((node->getOperand(0)).get());
+		    	    if(str){
+				    invariant = str->getString().str();
+			    }
+		    	    outs()<< invariant << "\n";
+		    }
+		    continue;
 		    for(unsigned i = 0, e = MDForInst.size(); i!=e; ++i)
 		    {
-			createMetadataSlot(MDForInst[i].second);
+			MDNode *meta = MDForInst[i].second;
+			outs()<<MDForInst[i].first<<"\n";
+			meta->dump();
+			continue;
+			auto I = _mdnMap.find(meta);
+			if(I!=_mdnMap.end())
+			{
+				continue;
+			}
+			std::vector<MDNode*> mdnVec;
+			createMetadataSlot(meta, mdnVec);
+			_mdnMap[meta] = mdnVec;
+			if (mdnVec.size() > 1)
+			{
+				meta->dump();
+				for (MDNode* i : mdnVec) 
+					i->dump();
+			}
 		    }
 	    	    MDForInst.clear();	    
 		}
