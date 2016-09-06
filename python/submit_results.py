@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import sys
 
 try:
     import requests
@@ -60,3 +61,6 @@ if __name__ == '__main__':
     )
     # response should always be json, unless network is dead
     print(res.json())
+    if not res.ok:  # .ok is False for 4xx and 5xx codes
+        # notify failure status
+        sys.exit(1)
