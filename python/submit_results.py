@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
 import argparse
-import datetime
 import json
 
 try:
@@ -44,8 +42,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Submit results to DynamoDB')
     parser.add_argument('results', type=str)
     parser.add_argument('-c', '--commit', type=str, required=True,
-            help='Commit that these results are associated with.',
-            dest='commit')
+                        help='Commit that these results are associated with.',
+                        dest='commit')
     parser.add_argument('-o', '-r', '--owner-repo', type=str, required=True,
                         help='Repository identifier (in format OWNER/REPO) '
                         'for which the analysis was performed')
@@ -59,5 +57,3 @@ if __name__ == '__main__':
         report=results,
     )
     print(res)
-
-
