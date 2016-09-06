@@ -38,13 +38,22 @@ def parse_results(filename):
             d.update(obj)
     return d
 
+def owner_repo(val):
+    """ Validate value to make sure it has a slash """
+    owner, _, repo = val.partition('/')
+    if not owner or not repo:
+        raise argparse.ArgumentTypeError(
+            'please supply value in format OWNER/REPO',
+        )
+    return val
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Submit results to DynamoDB')
     parser.add_argument('results', type=str)
     parser.add_argument('-c', '--commit', type=str, required=True,
                         help='Commit that these results are associated with.',
                         dest='commit')
-    parser.add_argument('-o', '-r', '--owner-repo', type=str, required=True,
+    parser.add_argument('-r', '--owner-repo', type=owner_repo, required=True,
                         help='Repository identifier (in format OWNER/REPO) '
                         'for which the analysis was performed')
     args = parser.parse_args()
