@@ -31,9 +31,8 @@ def parse_results(filename):
     d = {}
     with open(filename, 'r') as f:
         contents = f.read()
-        print("Loading: ", contents)
-        f.seek(0)
-        results = json.load(f)
+        print("Parsing JSON: ", contents)
+        results = json.loads(contents)
         for obj in results:
             d.update(obj)
     return d
