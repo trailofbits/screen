@@ -1,0 +1,220 @@
+
+* INSTALLATION:
+
+** Prerequisites
+	PAGAI needs:
+	
+	- GMP and MPFR. On Debian systems, install packages:
+	
+	  libmpfr-dev libgmp3-dev
+	
+	- Bison 3.0 or later
+	- Flex 2.5.35 or later
+	- Boost
+
+	- CMake, for the compilation. On Debian systems, install packages:
+	
+	  cmake
+	  
+	  (you may want to install cmake-gui too for a graphical configuration
+	  tool)
+	
+	- Yices, Z3, CUDD, LLVM, Apron and the PPL (can be automatically
+	  installed for you). See the top of external/Makefile for required
+	  versions of these tools. In particular, Pagai won't work if you
+	  don't have the exact version of LLVM.
+	
+	- curl or wget, if you want automatic dependencies installation.
+
+** Platform-specific remarks
+*** Linux
+Many of the prerequisites ship with recent Linux distributions, e.g. Ubuntu 14.04, though they may not be in the default installation.
+
+*** MacOS X
+On MacOS 10.8 we needed to install manually:
+
+Python-2.7.9
+bison-3.0.2
+cmake-3.0.0-Darwin64-universal
+gmp-6.0.0a (--enable-cxx)
+mpc-1.0.3
+mpfr-3.1.2
+gcc-5.1.0
+boost-1.58.0
+tar-1.27
+xz-5.2.1
+
+and to specify CC=gcc CXX=g++ as extra environment variables when running
+make in the external/ directory
+
+You need to run ccmake or other cmake interface and to set all required paths;
+furthermore on that platform Yices is not available.
+
+Thus one needs something along the lines of:
+cmake -DENABLE_YICES=OFF -DBOOST_ROOT=/path/to/Boost -DGMP_PREFIX=/path/to/gmp/root -DMPFR_PREFIX=/path/to/mpfr/root -DCMAKE_CXX_COMPILER=/path/to/your/g++ .
+
+Furthermore you may need to set
+DYLD_LIBRARY_PATH
+to the directory where libz3.dylib is installed.
+
+** How to compile and install	
+	The simplest way to compile PAGAI is to run:
+	
+	  ./autoinstall.sh
+	
+	from the toplevel. This will download and compile most dependencies
+	for you (it takes time, and ~550Mb of disk space).
+
+	PARALLEL_MAKE_OPTS=-j4 ./autoinstall.sh will compile dependencies
+	trying to use 4 cores (adjust as needed).
+
+	You may also compile only the dependencies, or some of them,
+	by running make in the external/ directory 
+	
+	If you don't want the dependencies to be installed for you, run:
+	
+	  cmake .
+	  make
+	  
+	from the toplevel.
+	
+	Alternatively, one can use an out-of-tree build with:
+	
+	  mkdir build
+	  ../autoinstall-out-of-tree.sh
+	
+	or, without the external dependency installation:
+	
+	  mkdir build
+	  cd build
+	  cmake ..
+	  make
+	
+	Variables (path to libraries, build options, ...) can be set for each
+	build with e.g.
+	
+	  cmake -DSTATIC_LINK=ON .
+	  cmake -i .
+	  cmake-gui .
+	
+	
+	For running Pagai, you should make sure your PATH variable contains the
+	directory of the SMT solver you want to use (e.g. Z3, CVC4, etc.)
+	
+	On MacOS, please compile with clang and not g++: there are strange
+	template instantiations errors with g++, leading to duplicate symbols
+	when linking.
+
+
+* Optional APRON extensions
+PAGAI can use APRON linked with
+- the Parma Polyhedra Library http://bugseng.com/products/ppl/ (-DENABLE_PPL)
+- OptOptagons, from ETHZ https://github.com/eth-srl/OptOctagon (-DENABLE_OPT_OCT)
+
+* USAGE: 
+
+	- With a C input
+	If you want to use Pagai with a C input, you first need to setup a pagai.conf file in the same directory as the Pagai executable. This conf file contains only one variable so far, named ResourceDir. This variable should be set to the path of your LLVM/Clang installation. In particular, make sure you set ResourceDir so that the path $(ResourceDir)/lib/clang/3.4/include/ exists and contains e.g. float.h.
+	
+	The pagai.conf file should have the form:
+	"ResourceDir <dir>"
+	
+	example:
+	--> cat pagai.conf
+	ResourceDir /Users/julien/work/pagai/external/llvm
+	
+	
+	- With a LLVM .bc input
+		The pagai.conf file is only used for compiling C/C++ code into LLVM bitcode. If you directly give to Pagai a bitcode file, it will process it. Note that you will need to compile into bitcode with clang and the -g and -emit-llvm arguments.
+	
+	pagai -h should give you the list of arguments:
+	
+	Options:
+	  -i [ --input ] arg              input
+	  -h [ --help ]                   Print help messages
+	  -I [ --include-path ] arg       include path (same as -I for clang)
+	  -s [ --solver ] arg (=z3_api)   * z3 
+	                                  * z3_qfnra
+	                                  * mathsat
+	                                  * smtinterpol
+	                                  * cvc3
+	                                  * cvc4
+	                                  * z3_api
+	                                  
+	  -d [ --domain ] arg (=pk)       abstract domain
+	                                  * box (Apron boxes)
+	                                  * oct (Octagons)
+	                                  * pk (NewPolka strict polyhedra)
+	                                  * pkeq (NewPolka linear equalities)
+	  -t [ --technique ] arg (=lw+pf) technique
+	                                  * lw (Lookahead Widening, SAS'06)
+	                                  * g (Guided Static Analysis, SAS'07)
+	                                  * pf (Path Focusing, SAS'11)
+	                                  * lw+pf (SAS'12)
+	                                  * s (simple abstract interpretation)
+	                                  * dis (lw+pf, using disjunctive invariants)
+	                                  * pf_incr
+	                                  * incr
+	  --new-narrowing                 When the decreasing sequence fails (SAS12)
+	  --main arg                      label name of the entry point
+	  --no-undefined-check            no undefined check
+	  --pointers                      pointers
+	  --optimize                      optimize
+	  --instcombining                 instcombining
+	  --loop-unroll                   unroll loops
+	  --skipnonlinear                 ignore non linear arithmetic
+	  --noinline                      do not inline functions
+	  -o [ --output ] arg             C output
+	  --output-bc arg                 LLVM IR output
+	  --output-bc-v2 arg              LLVM IR output (v2)
+	  --svcomp                        SV-Comp mode
+	  --wcet                          wcet mode
+	  --debug                         debug
+	  -c [ --compare ] arg            compare list of techniques
+	  --comparedomains                compare abstract domains
+	  --printformula                  print SMT formula
+	  --printall                      print all
+	  --quiet                         quiet mode
+	  --dump-ll                       dump analyzed ll file
+	  --force-old-output              use old output
+	  --timeout arg                   timeout
+	  --log-smt                       write all the SMT requests into a log file
+	  --annotated arg                 name of the annotated C file
+	  --domain2 arg                   not for use
+	  --new-narrowing2                not for use
+	
+	
+	
+* EXAMPLE 
+	
+	--> ./pagai ../ex/wcet_bicycle2.c
+	// ResourceDir is /Users/julien/work/pagai/external/llvm/lib/clang/3.4
+	// analysis: AIopt
+	/* processing Function bicycle */
+	#include "../pagai_assert.h"
+	
+	void bicycle() {
+	  int /* reachable */
+	      count=0, phase=0;
+	  for(int i=0; i<10000; // safe
+	                        i++) {
+	    /* invariant:
+	    -2*count+phase+3*i = 0
+	    14998-count+phase >= 0
+	    1-phase >= 0
+	    phase >= 0
+	    count-2*phase >= 0
+	    */
+	    if (phase == 0) {
+			// safe
+			count += 2; phase = 1;
+		} else if (phase == 1) {
+			// safe
+			count += 1; phase = 0;
+		}
+	  }
+	  /* assert OK */
+	  assert(count <= 15000);
+	/* reachable */
+	}
+	
