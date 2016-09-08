@@ -19,6 +19,7 @@ import sys
 import json
 import argparse
 
+VALID_COMPILERS = ('gcc', 'clang', 'cc')
 
 class BitcodeCompilation(object):
     '''
@@ -182,7 +183,7 @@ if __name__ == '__main__':
     cmd_list = json.load(db)
 
     for bear_cmd in cmd_list: 
-        if bear_cmd['command'][0] != 'cc':
+        if bear_cmd['command'][0] not in VALID_COMPILERS:
             continue
         c.add_bitcode_cmd(bear_cmd)
 
