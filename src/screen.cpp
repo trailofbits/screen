@@ -146,7 +146,9 @@ struct ScreenPass : public ModulePass {
 		}else{
 		    outs()<<"Compile with -g -O0 for debug info @ critical vulnerabilities\n";
 		}
-		ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
+		ret = "function_return_value: UNKNOWN";
+		if(call->getCalledFunction())
+			ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
 	    }else{
 		// value is a variable, trace uses
 		int use_counter = 0;

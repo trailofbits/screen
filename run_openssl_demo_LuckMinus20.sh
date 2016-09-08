@@ -23,14 +23,15 @@ fi
 
 echo "[+] Compiling & Running Passes on Openssl Demos..."
 echo
-${LLVM_BIN}/opt -mem2reg -load build/lib/range.${EXT} openssl_demos/aesni_cbc_hmac_sha1_cipher.bc -o openssl_demos/aesni_cbc_hmac_sha1_cipher_transformed.bc -range_analysis -range-debug 
-
+./pagai/src/pagai -i ./openssl_demos/aesni_cbc_hmac_sha1_cipher.bc --output-bc-v2 ./openssl_demos/aesni_cbc_hmac_sha1_cipher.bc
 echo
-cat openssl_demos/OUTPUT_0
+${LLVM_BIN}/opt -mem2reg -load build/lib/range.${EXT} openssl_demos/aesni_cbc_hmac_sha1_cipher.bc -o openssl_demos/aesni_cbc_hmac_sha1_cipher_transformed.bc -range_analysis -range-debug -invariant_analysis -invariant-debug 
 echo
-echo "[!] changes in function return value comparisons are of high risk"
+cat openssl_demos/OUTPUT
 echo
 exit
+echo "[!] changes in function return value comparisons are of high risk"
+echo
 echo
 arr=`cat openssl_demos/OUTPUT_0 | grep function | cut -f1 -d"]"`
 arr1=`cat openssl_demos/OUTPUT_1 | grep function | cut -f1 -d"]"`
