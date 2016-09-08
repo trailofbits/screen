@@ -26,7 +26,7 @@ include (LLVMUtils)
 # set (CMAKE_C_COMPILER "${LLVM_ROOT}/bin/clang")
 
 set (CMAKE_CXX_STANDARD 14)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 
 # set (LIBCPP "-stdlib=libc++ -lc++abi")
 # set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LIBCPP}")
