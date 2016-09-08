@@ -160,7 +160,7 @@ namespace {
 		for(auto const& value: store_metadata) {
 			if(count != 0)
 				inv_out_fd <<",";
-			inv_out_fd << "{ \"" <<value[0]<<"-"<<value[1]<<": {\n  \""<<value[2]<<"\"}}\n";
+			inv_out_fd << "{ \"" <<value[0]<<"-"<<value[1]<<"\" : {\n  \""<<value[2]<<"\"}}\n";
 		        count ++;	
 		}	
 		inv_out_fd << "]";	
