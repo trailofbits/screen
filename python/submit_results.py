@@ -14,7 +14,7 @@ except ImportError:
 
 BASE_URL = 'https://screen-web.herokuapp.com'
 
-def parse_results(filename):
+def merge_dicts_from_file(filename):
     '''
     Consume a screen results file and return a dictionary describing it.
     '''
@@ -57,8 +57,8 @@ if __name__ == '__main__':
                         help='API key for the project')
     args = parser.parse_args()
 
-    report = parse_results(args.results)
-    range_report = parse_results(args.range_results)
+    report = merge_dicts_from_file(args.results)
+    range_report = merge_dicts_from_file(args.range_results)
     d = report.copy()
     d.update(range_report)
     complete_report = d  # {key: value for (key, value) in (d)}
