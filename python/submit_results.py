@@ -23,6 +23,10 @@ def parse_results(filename):
         contents = f.read()
         print("Parsing JSON: ", contents)
         results = json.loads(contents)
+        # It is an array of dicts,
+        # each dict describing some subset of functions.
+        # We want to merge all dicts into one.
+        # FIXME: sometimes there are several reports for the same function?..
         for obj in results:
             d.update(obj)
     return d
@@ -55,7 +59,7 @@ if __name__ == '__main__':
     report = parse_results(args.results)
     range_report = parse_results(args.range_results)
     d = report.copy()
-    d.update(range_report) 
+    d.update(range_report)
     complete_report = d #{key: value for (key, value) in (d)}
     print("Complete JSON: ", json.dumps(complete_report))
     res = requests.put(
