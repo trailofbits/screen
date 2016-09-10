@@ -59,20 +59,32 @@ if __name__ == '__main__':
 
     report = merge_dicts_from_file(args.results)
     range_report = merge_dicts_from_file(args.range_results)
-    d = report.copy()
-    d.update(range_report)
-    complete_report = d  # {key: value for (key, value) in (d)}
-    print("Complete JSON: ", json.dumps(complete_report))
+
+    # range report is a dict consisting of items like this:
+    # "func-line": "invariant_string"
+    # We want to put all invariants for certain func
+    # into report for that func.
+    for key, val in range_report.items():
+        func, _, line = key.partition('-')
+        # it's possible (maybe) that there is no "main" report for the func;
+        # so let's make sure it exists, at least as empty dict
+        report.setdefault(func, {})
+        # also let's make sure that `invariants` field exists in the report
+        report[func].setdefault('invariants', {})
+        # now save this line
+        report[func]['invariants'][line] = val
+
+    print("Complete JSON:", json.dumps(report))
     res = requests.put(
         BASE_URL + '/{project}/publish/{commit}'.format(
             project=args.project,
             commit=args.commit,
         ),
         params={'key': args.api_key},
-        json=complete_report,
+        json=report,
     )
     # response should always be json, unless network is dead
-    print(res.json())
+    print("Result:", res.json())
     if not res.ok:  # .ok is False for 4xx and 5xx codes
         # notify failure status
         sys.exit(1)
