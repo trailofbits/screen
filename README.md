@@ -31,6 +31,8 @@ SCREEN_END(screen_paths_end) char b = 'b';
 
 ## Opt Command Line Flags (Manditory)
 ```
+For the SCreen stats pass:
+
 -screen
 	Runs main pass
 
@@ -42,14 +44,29 @@ SCREEN_END(screen_paths_end) char b = 'b';
 
 -screen-annotations=<file>
         Provide an external definition file for code segments under analysis. Lines in the format of: `{func/start/end} {name} {file} [lineno]`
+
+For the Invariant analysis pass:
+
+-invariant_analysis                                          
+	Variable Invariant Analysis Pass
+
+-invariant-output=<string>                                     
+	Provide an output file for screen output
+
+-invariant-debug (optional) 
+	Print extra debug information
+
 ```
 
-## Example output
+## Example walkthrough
 ```
-sophia@litterbox:~/SCR/screen/ $ ./run_test.sh 
+sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/clang -I./include/ -o test.bc test.c -c -emit-llvm -Wall -Wshadow -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wunused-parameter
+
+sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load build/lib/screen.dylib test.bc -o test_transformed.bc -screen -screen-output OUTPUT -screen-start-symbol main
+
 [+] Compiling tests...
 [+] Running screen pass...
-SCreening Paths of Program: tests/test1.bc
+SCreening Paths of Program: test.bc
 
 [-] Using start symbol: main
 [-] Found Ending Annotation
@@ -86,6 +103,14 @@ main() -> printf() -> foo() -> printf() -> printf()
 B1: main-> printf-> fun1-> anno-> printf-> anno-> printf-> printf
 B2: main-> printf-> foo-> printf-> printf
 
+sophia@litterbox:~/SCR/screen/ $ ./pagai/src/pagai -i test.bc --output-bc-v2 test_annotated.bc 
+
+sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load ./build/lib/range.dylib -invariant_analysis -invariant-output=OUTPUT_INVARIANTS test_annotated.bc -o test_fin.bc
+
+sophia@litterbox:~/SCR/screen/ $ cat OUTPUT_INVARIANTS
+[{ "main-19" : 
+  "3-i >= 0;i >= 0;" }]
+  
 ```
 # Setup
 1. For the initial setup, run quick_start.sh
