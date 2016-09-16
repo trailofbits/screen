@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(PAGAIProject)
+# project(PAGAIProject)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # configuration
