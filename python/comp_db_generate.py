@@ -82,6 +82,7 @@ class BitcodeCompilation(object):
 
         cmd += info['flags']
         cmd.append('-emit-llvm')
+        cmd.append('-g -O0')
         cmd += info['source']
         cmd += ['-o', bc_name]
 
