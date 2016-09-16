@@ -1,0 +1,11 @@
+results/*
+generated/*.c
+*.o
+*.ll
+*.out
+*.aux
+*.swp
+.nfs*
+*.bc
+*.dot
+*.dot.svg

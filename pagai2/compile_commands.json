@@ -1,0 +1,247 @@
+[
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Node.cc.o -c /home/sophia/s2n/screen/pagai2/src/Node.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Node.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMTlib2driver.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMTlib2driver.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMTlib2driver.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIpf.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIpf.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIpf.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AnalysisPass.cc.o -c /home/sophia/s2n/screen/pagai2/src/AnalysisPass.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AnalysisPass.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Debug.cc.o -c /home/sophia/s2n/screen/pagai2/src/Debug.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Debug.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/globaltolocal.cc.o -c /home/sophia/s2n/screen/pagai2/src/globaltolocal.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/globaltolocal.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/RemoveUndet.cc.o -c /home/sophia/s2n/screen/pagai2/src/RemoveUndet.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/RemoveUndet.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Live.cc.o -c /home/sophia/s2n/screen/pagai2/src/Live.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Live.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/expandassume.cc.o -c /home/sophia/s2n/screen/pagai2/src/expandassume.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/expandassume.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/yices.cc.o -c /home/sophia/s2n/screen/pagai2/src/yices.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/yices.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/taginline.cc.o -c /home/sophia/s2n/screen/pagai2/src/taginline.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/taginline.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AbstractDisj.cc.o -c /home/sophia/s2n/screen/pagai2/src/AbstractDisj.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AbstractDisj.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AISimple.cc.o -c /home/sophia/s2n/screen/pagai2/src/AISimple.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AISimple.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/IdentifyLoops.cc.o -c /home/sophia/s2n/screen/pagai2/src/IdentifyLoops.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/IdentifyLoops.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIGuided.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIGuided.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIGuided.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Sigma.cc.o -c /home/sophia/s2n/screen/pagai2/src/Sigma.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Sigma.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIpf_incr.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIpf_incr.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIpf_incr.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMTlib2parser.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMTlib2parser.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMTlib2parser.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/recoverName.cc.o -c /home/sophia/s2n/screen/pagai2/src/recoverName.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/recoverName.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIdis.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIdis.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIdis.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMT_manager.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMT_manager.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMT_manager.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AbstractGopan.cc.o -c /home/sophia/s2n/screen/pagai2/src/AbstractGopan.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AbstractGopan.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIopt.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIopt.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIopt.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Compare.cc.o -c /home/sophia/s2n/screen/pagai2/src/Compare.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Compare.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/apron_MD.cc.o -c /home/sophia/s2n/screen/pagai2/src/apron_MD.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/apron_MD.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AbstractMan.cc.o -c /home/sophia/s2n/screen/pagai2/src/AbstractMan.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AbstractMan.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/PathTree_bb.cc.o -c /home/sophia/s2n/screen/pagai2/src/PathTree_bb.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/PathTree_bb.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Execute.cc.o -c /home/sophia/s2n/screen/pagai2/src/Execute.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Execute.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIClassic.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIClassic.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIClassic.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Environment.cc.o -c /home/sophia/s2n/screen/pagai2/src/Environment.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Environment.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIpass.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIpass.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIpass.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Expr.cc.o -c /home/sophia/s2n/screen/pagai2/src/Expr.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Expr.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/expandequalities.cc.o -c /home/sophia/s2n/screen/pagai2/src/expandequalities.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/expandequalities.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Pr.cc.o -c /home/sophia/s2n/screen/pagai2/src/Pr.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Pr.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/GenerateSMT.cc.o -c /home/sophia/s2n/screen/pagai2/src/GenerateSMT.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/GenerateSMT.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/instrOverflow.cc.o -c /home/sophia/s2n/screen/pagai2/src/instrOverflow.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/instrOverflow.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/NameAllValues.cc.o -c /home/sophia/s2n/screen/pagai2/src/NameAllValues.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/NameAllValues.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMTlib.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMTlib.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMTlib.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Constraint.cc.o -c /home/sophia/s2n/screen/pagai2/src/Constraint.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Constraint.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMTpass.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMTpass.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMTpass.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIopt_incr.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIopt_incr.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIopt_incr.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AbstractClassic.cc.o -c /home/sophia/s2n/screen/pagai2/src/AbstractClassic.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AbstractClassic.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/apron.cc.o -c /home/sophia/s2n/screen/pagai2/src/apron.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/apron.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/SMTlib2lexer.cc.o -c /home/sophia/s2n/screen/pagai2/src/SMTlib2lexer.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/SMTlib2lexer.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/PathTree_br.cc.o -c /home/sophia/s2n/screen/pagai2/src/PathTree_br.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/PathTree_br.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/AIGopan.cc.o -c /home/sophia/s2n/screen/pagai2/src/AIGopan.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/AIGopan.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/z3_manager.cc.o -c /home/sophia/s2n/screen/pagai2/src/z3_manager.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/z3_manager.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Abstract.cc.o -c /home/sophia/s2n/screen/pagai2/src/Abstract.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Abstract.cc"
+},
+{
+  "directory": "/home/sophia/s2n/screen/pagai2/src",
+  "command": "/usr/local/bin/clang++   -DHAS_YICES -DHAS_Z3 -DLLVM_INSTALL_PATH=\\\"/home/sophia/s2n/screen/pagai2/external/llvm\\\"  -I/home/sophia/s2n/screen/pagai2/external/build/llvm-3.8.1/install/include  -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -std=c++11 -fvisibility-inlines-hidden   -fPIC -ffunction-sections -fdata-sections -Wcast-qual  -I/home/sophia/s2n/screen/pagai2/external/yices/include -I/home/sophia/s2n/screen/pagai2/external/z3/include -I/home/sophia/s2n/screen/pagai2/external/apron/include -I/home/sophia/s2n/screen/pagai2/external/cudd/include -I/usr/local/include -I/home/sophia/s2n/screen/pagai2/src    -o CMakeFiles/pagai.dir/Analyzer.cc.o -c /home/sophia/s2n/screen/pagai2/src/Analyzer.cc",
+  "file": "/home/sophia/s2n/screen/pagai2/src/Analyzer.cc"
+}
+]

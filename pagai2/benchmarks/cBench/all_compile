@@ -1,0 +1,44 @@
+#! /bin/sh
+
+#Optimization flags
+export CCC_OPTS=-O3
+
+COMPILER=llvm
+if [ ! -z $1 ] ; then
+ COMPILER=$1
+fi
+
+if [ -f bench_list ]
+then
+  benchmarks=`grep -v ^# bench_list`
+else
+  benchmarks=*  
+fi
+
+for i in $benchmarks
+do
+
+if [ -d "$i" ] 
+then
+ tmp=$PWD
+ cd $i
+ if [ -d "src" ] 
+ then
+  # *** process directory ***
+  echo "**********************************************************"
+  echo $i
+  cd src
+  cp -f Makefile.$COMPILER Makefile
+  sed -i 's#llvm-gcc#clang#g' Makefile
+  make
+
+  echo ""
+  ls -l a.out 
+  echo ""
+  # *************************
+ fi
+ cd $tmp
+fi
+
+done
+

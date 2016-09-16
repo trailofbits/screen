@@ -1,0 +1,45 @@
+var n : int, i : int, x : int, a : int,
+  xflag1: bool, xflag2: bool, xflag3: bool, xflag4: bool,
+  tmp: int, first: bool, stop: bool,
+  position : int, value : int;
+
+begin
+  x = random;
+  assume x>=0 and x<n;
+  assume position>=0 and position<n;
+
+  a = random;
+
+  xflag3= x<=position;
+  xflag4= x< position;
+  if xflag3 and not xflag4 then
+    a = value;
+  endif;
+
+  i=0;
+  first=true;
+  stop=false;
+  while not stop and i<n do
+    first = false;
+    xflag1 = x<=i;
+    xflag2 = x< i;
+    if xflag1 and not xflag2 then
+      tmp = a;
+    else
+      tmp = random;
+    endif;
+    if tmp<value then
+      i=i+1;
+    else
+      if tmp>value then
+        i=i+1;
+      else
+        stop = true;
+      endif;
+    endif;
+  done;
+  assume i>position;
+  a=random;
+  value=random;
+  tmp=random;
+end

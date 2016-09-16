@@ -1,0 +1,26 @@
+typedef dir = enum { Other, Left, Hit, Right };
+
+state
+  i,n,x : int;
+  a : int;
+  init,ok : bool;
+  a_wri : bool;
+  a_dir : dir;
+
+input
+  n0,x0 : int;
+  a0 : int;
+
+transition
+  init' = false;
+  n' = if init then n0 else n;
+  x' = if init then x0 else x;
+  i' = if init then 2 else (if i<n-3 then i+1 else i);
+  a_dir' = if init then Other else (if x<i then Left else (if x>i then Right else Hit));
+  a_wri' = if init then false else (if x<i then a_wri else (if x>i then a_wri else true));
+  a' = if init then a0 else (if x<i then a else (if x>i then a else 42));
+  ok' = if init then true else i<n-3;
+
+initial init;
+assertion n0>=10 and x0>=0 and x0<n0;
+invariant init or ok or a_wri;

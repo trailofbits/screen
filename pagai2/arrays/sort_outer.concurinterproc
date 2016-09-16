@@ -1,0 +1,18 @@
+var n: int, i: int, x: int, y: int, a: int, b: int, taken: bool;
+
+begin
+  assume 0<=x and x<=y and y<n;
+  i = 0;
+  taken = false;
+  while i<n do
+    a = random;
+    b = random;
+    if x <= i and x>=i then
+      taken = true;
+      assume a <= b;
+    endif;
+    i = i+1;
+  done;
+end
+
+/* a<=b, that is, forall x<y, a[x] <= b[x} */

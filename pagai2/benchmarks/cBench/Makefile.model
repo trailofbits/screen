@@ -1,0 +1,41 @@
+ifndef ROOT
+	ROOT = ../../
+endif
+
+include $(ROOT)/common.mk
+
+# Makefile
+BCFILES=${wildcard src/*.o}
+RESFILES=$(BCFILES:src/%.o=res/%.res)
+COMPAREFILES=$(BCFILES:src/%.o=res/%.res.compare)
+
+all: $(RESFILES)
+
+
+res/%.res: src/%.o
+	$(AT)echo "$*.o started..."
+	$(AT)$(PAGAI_SH) -i src/$*.o -s  > $@  2> /dev/null
+	$(AT)echo "$*.o finished"
+
+res/%.res.compare: src/%.o
+	$(AT)echo "$*.o started..."
+	$(AT)$(PAGAI_SH) -i src/$*.o -c -s > $@  2> /dev/null
+	$(AT)echo "$*.o finished"
+
+clean:
+	rm res/*
+
+.PHONY: test compare
+
+test: timestamp.txt
+
+compare: ctimestamp.txt
+	
+timestamp.txt: $(RESFILES)
+	touch $@	
+
+ctimestamp.txt: $(COMPAREFILES)
+	touch $@	
+
+	
+

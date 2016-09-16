@@ -1,0 +1,9 @@
+#include <llvm/Pass.h>
+#include <llvm/Function.h>
+#include <llvm/Instructions.h>
+
+using namespace llvm;
+
+class BoolSimpl : public BasicBlockPass {
+  Instruction *visitICmpInst(ICmpInst &I);
+};

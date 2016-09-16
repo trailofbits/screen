@@ -1,0 +1,19 @@
+#include "../../pagai_assert.h"
+
+int unknown1();
+int unknown2();
+int unknown3();
+int unknown4();
+
+void main()
+{
+  int n = unknown1();
+  int i=0, j=0;
+  if(!(n >= 0)) return;
+  while(i<n) {
+    i++;
+    j++;
+  }	
+  assert(j < n+1);
+}
+
