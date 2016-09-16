@@ -1,2 +1,0 @@
-/home/sophia/s2n/screen/pagai2/src/CMakeFiles/doc.dir
-/home/sophia/s2n/screen/pagai2/src/CMakeFiles/pagai.dir
