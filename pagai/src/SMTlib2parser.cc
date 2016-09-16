@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.0.4.
+// A Bison parser, made by GNU Bison 3.0.2.
 
 // Skeleton implementation for Bison LALR(1) parsers in C++
 
-// Copyright (C) 2002-2015 Free Software Foundation, Inc.
+// Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 
 
 // First part of user declarations.
-#line 23 "SMTlib2parser.yy" // lalr1.cc:404
+#line 23 "SMTlib2parser.yy" // lalr1.cc:399
 
 # include <cstdlib>
 # include <cerrno>
@@ -43,7 +43,7 @@
 #include "SMTlib2driver.h"
  
 
-#line 47 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:404
+#line 47 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:399
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -57,7 +57,7 @@
 
 // User implementation prologue.
 
-#line 61 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:412
+#line 61 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:407
 
 
 #ifndef YY_
@@ -134,7 +134,7 @@
 #endif // !YYDEBUG
 
 #define yyerrok         (yyerrstatus_ = 0)
-#define yyclearin       (yyla.clear ())
+#define yyclearin       (yyempty = true)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -143,7 +143,7 @@
 
 
 namespace yy {
-#line 147 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:479
+#line 147 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:474
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -247,23 +247,6 @@ namespace yy {
   inline
   SMTlib2parser::basic_symbol<Base>::~basic_symbol ()
   {
-    clear ();
-  }
-
-  template <typename Base>
-  inline
-  void
-  SMTlib2parser::basic_symbol<Base>::clear ()
-  {
-    Base::clear ();
-  }
-
-  template <typename Base>
-  inline
-  bool
-  SMTlib2parser::basic_symbol<Base>::empty () const
-  {
-    return Base::type_get () == empty_symbol;
   }
 
   template <typename Base>
@@ -279,7 +262,7 @@ namespace yy {
   // by_type.
   inline
   SMTlib2parser::by_type::by_type ()
-    : type (empty_symbol)
+     : type (empty)
   {}
 
   inline
@@ -294,17 +277,10 @@ namespace yy {
 
   inline
   void
-  SMTlib2parser::by_type::clear ()
-  {
-    type = empty_symbol;
-  }
-
-  inline
-  void
   SMTlib2parser::by_type::move (by_type& that)
   {
     type = that.type;
-    that.clear ();
+    that.type = empty;
   }
 
   inline
@@ -318,7 +294,7 @@ namespace yy {
   // by_state.
   inline
   SMTlib2parser::by_state::by_state ()
-    : state (empty_state)
+    : state (empty)
   {}
 
   inline
@@ -328,17 +304,10 @@ namespace yy {
 
   inline
   void
-  SMTlib2parser::by_state::clear ()
-  {
-    state = empty_state;
-  }
-
-  inline
-  void
   SMTlib2parser::by_state::move (by_state& that)
   {
     state = that.state;
-    that.clear ();
+    that.state = empty;
   }
 
   inline
@@ -350,10 +319,7 @@ namespace yy {
   SMTlib2parser::symbol_number_type
   SMTlib2parser::by_state::type_get () const
   {
-    if (state == empty_state)
-      return empty_symbol;
-    else
-      return yystos_[state];
+    return state == empty ? 0 : yystos_[state];
   }
 
   inline
@@ -367,7 +333,7 @@ namespace yy {
   {
     value = that.value;
     // that is emptied.
-    that.type = empty_symbol;
+    that.type = empty;
   }
 
   inline
@@ -402,10 +368,6 @@ namespace yy {
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
     symbol_number_type yytype = yysym.type_get ();
-    // Avoid a (spurious) G++ 4.8 warning about "array subscript is
-    // below array bounds".
-    if (yysym.empty ())
-      std::abort ();
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
@@ -490,6 +452,9 @@ namespace yy {
   int
   SMTlib2parser::parse ()
   {
+    /// Whether yyla contains a lookahead.
+    bool yyempty = true;
+
     // State.
     int yyn;
     /// Length of the RHS of the rule being reduced.
@@ -516,13 +481,13 @@ namespace yy {
 
 
     // User initialization code.
-    #line 15 "SMTlib2parser.yy" // lalr1.cc:741
+    #line 15 "SMTlib2parser.yy" // lalr1.cc:725
 {
   // Initialize the initial location.
   //@$.begin.filename = @$.end.filename = &driver.file;
 }
 
-#line 526 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:741
+#line 491 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:725
 
     /* Initialize the stack.  The initial state will be set in
        yynewstate, since the latter expects the semantical and the
@@ -550,7 +515,7 @@ namespace yy {
       goto yydefault;
 
     // Read a lookahead token.
-    if (yyla.empty ())
+    if (yyempty)
       {
         YYCDEBUG << "Reading a token: ";
         try
@@ -562,6 +527,7 @@ namespace yy {
             error (yyexc);
             goto yyerrlab1;
           }
+        yyempty = false;
       }
     YY_SYMBOL_PRINT ("Next token is", yyla);
 
@@ -580,6 +546,9 @@ namespace yy {
         yyn = -yyn;
         goto yyreduce;
       }
+
+    // Discard the token being shifted.
+    yyempty = true;
 
     // Count tokens shifted since error; after three, turn off error status.
     if (yyerrstatus_)
@@ -630,76 +599,76 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 68 "SMTlib2parser.yy" // lalr1.cc:859
+#line 68 "SMTlib2parser.yy" // lalr1.cc:847
     { YYACCEPT;}
-#line 636 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 605 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 3:
-#line 71 "SMTlib2parser.yy" // lalr1.cc:859
+#line 71 "SMTlib2parser.yy" // lalr1.cc:847
     { }
-#line 642 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 611 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 4:
-#line 72 "SMTlib2parser.yy" // lalr1.cc:859
+#line 72 "SMTlib2parser.yy" // lalr1.cc:847
     { }
-#line 648 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 617 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 5:
-#line 75 "SMTlib2parser.yy" // lalr1.cc:859
+#line 75 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = SAT;}
-#line 654 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 623 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 6:
-#line 76 "SMTlib2parser.yy" // lalr1.cc:859
+#line 76 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = UNSAT;}
-#line 660 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 629 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 7:
-#line 77 "SMTlib2parser.yy" // lalr1.cc:859
+#line 77 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = UNKNOWN;}
-#line 666 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 635 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 8:
-#line 78 "SMTlib2parser.yy" // lalr1.cc:859
+#line 78 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = SAT;}
-#line 672 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 641 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 9:
-#line 79 "SMTlib2parser.yy" // lalr1.cc:859
+#line 79 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = SAT;}
-#line 678 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 647 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 10:
-#line 80 "SMTlib2parser.yy" // lalr1.cc:859
+#line 80 "SMTlib2parser.yy" // lalr1.cc:847
     {driver.ans = ERROR;}
-#line 684 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 653 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 11:
-#line 84 "SMTlib2parser.yy" // lalr1.cc:859
+#line 84 "SMTlib2parser.yy" // lalr1.cc:847
     {*Out << *(yystack_[1].value.sval) << "\n"; delete (yystack_[1].value.sval);}
-#line 690 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 659 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 14:
-#line 93 "SMTlib2parser.yy" // lalr1.cc:859
+#line 93 "SMTlib2parser.yy" // lalr1.cc:847
     {
 											if ((yystack_[1].value.bval)) { driver.model.insert(*(yystack_[2].value.sval)); }
 											delete (yystack_[2].value.sval);
 										}
-#line 699 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 668 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 19:
-#line 111 "SMTlib2parser.yy" // lalr1.cc:859
+#line 111 "SMTlib2parser.yy" // lalr1.cc:847
     {
 								if ((yystack_[2].value.bval) && (yystack_[1].value.bval)) 
 									driver.model.insert(*(yystack_[4].value.sval));
@@ -707,117 +676,117 @@ namespace yy {
 								// have to delete it
 								delete (yystack_[4].value.sval);
 							}
-#line 711 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 680 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 20:
-#line 121 "SMTlib2parser.yy" // lalr1.cc:859
+#line 121 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.sval) = (yystack_[0].value.sval);}
-#line 717 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 686 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 22:
-#line 128 "SMTlib2parser.yy" // lalr1.cc:859
+#line 128 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 723 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 692 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 23:
-#line 129 "SMTlib2parser.yy" // lalr1.cc:859
+#line 129 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 729 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 698 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 24:
-#line 133 "SMTlib2parser.yy" // lalr1.cc:859
+#line 133 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 735 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 704 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 25:
-#line 134 "SMTlib2parser.yy" // lalr1.cc:859
+#line 134 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 741 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 710 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 26:
-#line 135 "SMTlib2parser.yy" // lalr1.cc:859
+#line 135 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 747 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 716 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 27:
-#line 136 "SMTlib2parser.yy" // lalr1.cc:859
+#line 136 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 753 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 722 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 28:
-#line 137 "SMTlib2parser.yy" // lalr1.cc:859
+#line 137 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 759 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 728 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 29:
-#line 138 "SMTlib2parser.yy" // lalr1.cc:859
+#line 138 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 765 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 734 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 30:
-#line 139 "SMTlib2parser.yy" // lalr1.cc:859
+#line 139 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 771 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 740 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 31:
-#line 140 "SMTlib2parser.yy" // lalr1.cc:859
+#line 140 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = (yystack_[0].value.bval);}
-#line 777 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 746 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 32:
-#line 141 "SMTlib2parser.yy" // lalr1.cc:859
+#line 141 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = (yystack_[1].value.bval);}
-#line 783 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 752 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 33:
-#line 145 "SMTlib2parser.yy" // lalr1.cc:859
+#line 145 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = true;}
-#line 789 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 758 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 34:
-#line 146 "SMTlib2parser.yy" // lalr1.cc:859
+#line 146 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 795 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 764 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 36:
-#line 151 "SMTlib2parser.yy" // lalr1.cc:859
+#line 151 "SMTlib2parser.yy" // lalr1.cc:847
     {
 											// we delete the unused string*
 											// associated to VARNAME
 											delete (yystack_[1].value.sval);
 										}
-#line 805 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 774 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 37:
-#line 159 "SMTlib2parser.yy" // lalr1.cc:859
+#line 159 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = true;}
-#line 811 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 780 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
   case 38:
-#line 160 "SMTlib2parser.yy" // lalr1.cc:859
+#line 160 "SMTlib2parser.yy" // lalr1.cc:847
     {(yylhs.value.bval) = false;}
-#line 817 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 786 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
     break;
 
 
-#line 821 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:859
+#line 790 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:847
             default:
               break;
             }
@@ -845,7 +814,8 @@ namespace yy {
     if (!yyerrstatus_)
       {
         ++yynerrs_;
-        error (yyla.location, yysyntax_error_ (yystack_[0].state, yyla));
+        error (yyla.location, yysyntax_error_ (yystack_[0].state,
+                                           yyempty ? yyempty_ : yyla.type_get ()));
       }
 
 
@@ -858,10 +828,10 @@ namespace yy {
         // Return failure if at end of input.
         if (yyla.type_get () == yyeof_)
           YYABORT;
-        else if (!yyla.empty ())
+        else if (!yyempty)
           {
             yy_destroy_ ("Error: discarding", yyla);
-            yyla.clear ();
+            yyempty = true;
           }
       }
 
@@ -937,7 +907,7 @@ namespace yy {
     goto yyreturn;
 
   yyreturn:
-    if (!yyla.empty ())
+    if (!yyempty)
       yy_destroy_ ("Cleanup: discarding lookahead", yyla);
 
     /* Do not reclaim the symbols of the rule whose action triggered
@@ -957,7 +927,7 @@ namespace yy {
                  << std::endl;
         // Do not try to display the values of the reclaimed symbols,
         // as their printer might throw an exception.
-        if (!yyla.empty ())
+        if (!yyempty)
           yy_destroy_ (YY_NULLPTR, yyla);
 
         while (1 < yystack_.size ())
@@ -977,8 +947,9 @@ namespace yy {
 
   // Generate an error message.
   std::string
-  SMTlib2parser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
+  SMTlib2parser::yysyntax_error_ (state_type yystate, symbol_number_type yytoken) const
   {
+    std::string yyres;
     // Number of reported tokens (one for the "unexpected", one per
     // "expected").
     size_t yycount = 0;
@@ -992,7 +963,7 @@ namespace yy {
          the only way this function was invoked is if the default action
          is an error action.  In that case, don't check for expected
          tokens because there are none.
-       - The only way there can be no lookahead present (in yyla) is
+       - The only way there can be no lookahead present (in yytoken) is
          if this state is a consistent state with a default action.
          Thus, detecting the absence of a lookahead is sufficient to
          determine that there is no unexpected or expected token to
@@ -1012,9 +983,8 @@ namespace yy {
          token that will not be accepted due to an error action in a
          later state.
     */
-    if (!yyla.empty ())
+    if (yytoken != yyempty_)
       {
-        int yytoken = yyla.type_get ();
         yyarg[yycount++] = yytname_[yytoken];
         int yyn = yypact_[yystate];
         if (!yy_pact_value_is_default_ (yyn))
@@ -1057,7 +1027,6 @@ namespace yy {
 #undef YYCASE_
       }
 
-    std::string yyres;
     // Argument number.
     size_t yyi = 0;
     for (char const* yyp = yyformat; *yyp; ++yyp)
@@ -1279,8 +1248,8 @@ namespace yy {
 
 
 } // yy
-#line 1283 "/Users/sophia/work/screen/screen/pagai/src/SMTlib2parser.cc" // lalr1.cc:1167
-#line 162 "SMTlib2parser.yy" // lalr1.cc:1168
+#line 1252 "/home/sophia/pagai_try_2/pagai/src/SMTlib2parser.cc" // lalr1.cc:1155
+#line 162 "SMTlib2parser.yy" // lalr1.cc:1156
 
 
 void yy::SMTlib2parser::error (const yy::SMTlib2parser::location_type& l,

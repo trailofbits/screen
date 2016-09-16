@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.0.4.
+// A Bison parser, made by GNU Bison 3.0.2.
 
 // Stack handling for Bison parsers in C++
 
-// Copyright (C) 2002-2015 Free Software Foundation, Inc.
+// Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,18 +31,18 @@
 // version 2.2 of Bison.
 
 /**
- ** \file /Users/sophia/work/screen/screen/pagai/src/stack.hh
+ ** \file /home/sophia/pagai_try_2/pagai/src/stack.hh
  ** Define the yy::stack class.
  */
 
-#ifndef YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_STACK_HH_INCLUDED
-# define YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_STACK_HH_INCLUDED
+#ifndef YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_STACK_HH_INCLUDED
+# define YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_STACK_HH_INCLUDED
 
 # include <vector>
 
 
 namespace yy {
-#line 46 "/Users/sophia/work/screen/screen/pagai/src/stack.hh" // stack.hh:132
+#line 46 "/home/sophia/pagai_try_2/pagai/src/stack.hh" // stack.hh:133
   template <class T, class S = std::vector<T> >
   class stack
   {
@@ -54,12 +54,12 @@ namespace yy {
     stack ()
       : seq_ ()
     {
-      seq_.reserve (200);
     }
 
     stack (unsigned int n)
       : seq_ (n)
-    {}
+    {
+    }
 
     inline
     T&
@@ -136,7 +136,8 @@ namespace yy {
     slice (const S& stack, unsigned int range)
       : stack_ (stack)
       , range_ (range)
-    {}
+    {
+    }
 
     inline
     const T&
@@ -152,6 +153,6 @@ namespace yy {
 
 
 } // yy
-#line 156 "/Users/sophia/work/screen/screen/pagai/src/stack.hh" // stack.hh:132
+#line 157 "/home/sophia/pagai_try_2/pagai/src/stack.hh" // stack.hh:133
 
-#endif // !YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_STACK_HH_INCLUDED
+#endif // !YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_STACK_HH_INCLUDED

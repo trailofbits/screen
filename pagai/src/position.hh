@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.0.4.
+// A Bison parser, made by GNU Bison 3.0.2.
 
 // Positions for Bison parsers in C++
 
-// Copyright (C) 2002-2015 Free Software Foundation, Inc.
+// Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@
 // version 2.2 of Bison.
 
 /**
- ** \file /Users/sophia/work/screen/screen/pagai/src/position.hh
+ ** \file /home/sophia/pagai_try_2/pagai/src/position.hh
  ** Define the yy::position class.
  */
 
-#ifndef YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_POSITION_HH_INCLUDED
-# define YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_POSITION_HH_INCLUDED
+#ifndef YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_POSITION_HH_INCLUDED
+# define YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_POSITION_HH_INCLUDED
 
 # include <algorithm> // std::max
 # include <iostream>
@@ -52,7 +52,7 @@
 
 
 namespace yy {
-#line 56 "/Users/sophia/work/screen/screen/pagai/src/position.hh" // location.cc:296
+#line 56 "/home/sophia/pagai_try_2/pagai/src/position.hh" // location.cc:291
   /// Abstract a position.
   class position
   {
@@ -114,7 +114,7 @@ namespace yy {
     }
   };
 
-  /// Add \a width columns, in place.
+  /// Add and assign a position.
   inline position&
   operator+= (position& res, int width)
   {
@@ -122,21 +122,21 @@ namespace yy {
     return res;
   }
 
-  /// Add \a width columns.
+  /// Add two position objects.
   inline position
   operator+ (position res, int width)
   {
     return res += width;
   }
 
-  /// Subtract \a width columns, in place.
+  /// Add and assign a position.
   inline position&
   operator-= (position& res, int width)
   {
     return res += -width;
   }
 
-  /// Subtract \a width columns.
+  /// Add two position objects.
   inline position
   operator- (position res, int width)
   {
@@ -176,5 +176,5 @@ namespace yy {
 
 
 } // yy
-#line 180 "/Users/sophia/work/screen/screen/pagai/src/position.hh" // location.cc:296
-#endif // !YY_YY_USERS_SOPHIA_WORK_SCREEN_SCREEN_PAGAI_SRC_POSITION_HH_INCLUDED
+#line 180 "/home/sophia/pagai_try_2/pagai/src/position.hh" // location.cc:291
+#endif // !YY_YY_HOME_SOPHIA_PAGAI_TRY_2_PAGAI_SRC_POSITION_HH_INCLUDED
