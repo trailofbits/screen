@@ -53,8 +53,14 @@ For the Invariant analysis pass:
 -invariant-output=<string>                                     
 	Provide an output file for screen output
 
--invariant-debug (optional) 
+-invariant-start-symbol=<string>                                     
+	Provide a symbol in the program to treat as the _start, , usually main for most cases
+
+-invariant-debug (optional)
 	Print extra debug information
+
+-incariant-annotations=<file> {optional}
+	Provide an external definition file for code segments under analysis. Lines in the format of: `{func/start/end} {name} {file} [lineno]`
 
 ```
 
@@ -105,7 +111,7 @@ B2: main-> printf-> foo-> printf-> printf
 
 sophia@litterbox:~/SCR/screen/ $ ./pagai/src/pagai -i test.bc --output-bc-v2 test_annotated.bc 
 
-sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load ./build/lib/range.dylib -invariant_analysis -invariant-output=OUTPUT_INVARIANTS test_annotated.bc -o test_fin.bc
+sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load ./build/lib/screen.dylib -invariant_analysis -invariant-start-symbol=SYMBOL -invariant-output=OUTPUT_INVARIANTS test_annotated.bc -o test_fin.bc
 
 sophia@litterbox:~/SCR/screen/ $ cat OUTPUT_INVARIANTS
 [{ "main-19" : 
