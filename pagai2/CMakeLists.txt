@@ -149,7 +149,7 @@ macro(add_z3_library PROG)
   # Preferably link against z3-gmp to avoid library version issues
   # with gmp, but fall-back to z3 if z3-gmp is not found (this is the
   # case on 64bits distributions of z3).
-  add_library_maybe_names("${PROG}" z3 "z3-gmp;z3" ""
+  add_library_maybe_names("${PROG}" z3 "z3" ""
     "Required Z3 library 'z3-gmp' (i.e libz3-gmp) not found
 (I've searched in ${Z3_PATH} and ${Z3_PATH}/lib).
 Please, install Z3 if needed and set \$Z3_PATH accordingly."
