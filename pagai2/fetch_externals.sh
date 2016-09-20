@@ -10,7 +10,7 @@ make install-yices
 
 mkdir -p build/mpfr
 wget http://www.mpfr.org/mpfr-current/mpfr-3.1.4.tar.gz
-tar xf ./mpfr-3.1.4.tgz -C build/mpfr --strip-components=1
+tar xf ./mpfr-3.1.4.tar.gz -C build/mpfr --strip-components=1
 pushd build/mpfr
 ./configure
 make
