@@ -8,15 +8,6 @@ pushd external
 
 make install-yices
 
-mkdir -p build/mpfr
-wget http://www.mpfr.org/mpfr-current/mpfr-3.1.4.tar.gz
-tar xf ./mpfr-3.1.4.tar.gz -C build/mpfr --strip-components=1
-pushd build/mpfr
-./configure
-make
-sudo make install
-popd
-
 mkdir -p build/apron
 wget https://s3.amazonaws.com/screen-s3/screen-builds/apron-install.tgz
 tar xf ./apron-install.tgz -C build/apron --strip-components=1
