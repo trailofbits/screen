@@ -35,11 +35,11 @@ using namespace screen;
 
 static cl::opt<std::string> kSymbolName("invariant-start-symbol",
     cl::desc("A function at which to start the analysis, main for most cases"),
-    cl::Required);
+    cl::init(""));
 
 static cl::opt<std::string> kOutputName("invariant-output",
     cl::desc("Provide an output file for screen output"),
-    cl::Required);
+    cl::init(""));
 
 static cl::opt<std::string> kPrefix("invariant-prefix", cl::Optional,
     cl::desc("The prefix for screen annotations"), cl::init("screen_"));
@@ -50,6 +50,7 @@ static cl::opt<bool> kDebugFlag("invariant-debug", cl::Optional,
 static cl::opt<std::string> kAnnotationFile("invariant-annotations",
     cl::desc("Provide an external file that contains relevant code sections"),
     cl::init(""));
+
 
 namespace {
 
@@ -136,7 +137,7 @@ namespace {
           auto name = postfix.substr(0, postfix.size() - 6);
           return { kAnnotationStart, name};
         } else if (std::equal(end.rbegin(), end.rend(), annotation.rbegin())) {
-          // 6 = strlen("_end")
+          // 4 = strlen("_end")
           auto name = postfix.substr(0, postfix.size() - 4);
           return { kAnnotationEnd, name};
         }
@@ -147,6 +148,10 @@ namespace {
     using RegionMap = std::map<std::string, Region>;
 
     virtual bool cfgReworkDemo(const Module &M) {
+      if(kSymbolName == "") {
+        errs() << "[E] must provide start symbol name\n";
+        return false;
+      }
       Function *entry = M.getFunction(kSymbolName);
       if(!entry){
         errs() << "[E] no start symbol " << kSymbolName << "\n";
@@ -167,17 +172,6 @@ namespace {
               }else{
               add = false;
               }
-            }
-            //outs()<< node->getNumOperands() << "\n";
-            // include line number
-            if(DebugLoc Loc = I.getDebugLoc()){
-            unsigned Line = Loc.getLine();
-            outs()<<"Got line number: " << Line <<"\n";
-            std::ostringstream convert;
-            convert << Line;
-            save.push_back(convert.str());
-            }else{
-              add = false;
             }
             MDString *str = dyn_cast<MDString>((node->getOperand(0)).get());
             if(str){
@@ -294,14 +288,10 @@ namespace {
 
     virtual bool runOnModule(Module &M)
     {
-      // runOnFunction is run on every function in each compilation unit
-      // errs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";
-      // errs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
-      // errs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
-
-
-      // next stage, recover CFG, starting at main do a depth first search for annotation_start
-      //
+      if (kOutputName == "") {
+        errs() << "Must provide output file name\n";
+        return false;
+      }
       if (kAnnotationFile.getNumOccurrences() > 0) {
         if (addAnnotations(M, kAnnotationFile) == false) {
           errs() << "Bad annotations file format\n";
@@ -316,8 +306,8 @@ namespace {
         int count = 0;
         for(auto const& value: store_metadata) {
           if(count != 0)
-            inv_out_fd <<",";
-          inv_out_fd << "{ \"" <<value[0]<<"-"<<value[1]<<"\" : \n  \""<<value[2]<<"\" }\n";
+            inv_out_fd <<",\n";
+          inv_out_fd << "{ \"" <<value[0]<<"-"<<value[1]<<" }";//<<value[2]<<"\" }\n";
           inv_out_fd.flush();
           count ++;
         }

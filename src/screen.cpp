@@ -33,11 +33,11 @@ using namespace screen;
 
 static cl::opt<std::string> kSymbolName("screen-start-symbol",
     cl::desc("A function at which to start the analysis, main for most cases"),
-    cl::Required);
+    cl::init(""));
 
 static cl::opt<std::string> kOutputName("screen-output",
     cl::desc("Provide an output file for screen output"),
-    cl::Required);
+    cl::init(""));
 
 static cl::opt<std::string> kPrefix("screen-prefix", cl::Optional,
     cl::desc("The prefix for screen annotations"), cl::init("screen_"));
@@ -74,11 +74,11 @@ struct ScreenPass : public ModulePass {
         out_fd.close();
     }
 
-    static char ID; 
+    static char ID;
     std::vector<std::vector<Function *>> cfg_paths_funcs;
 
     std::set<const llvm::Function *> visitedFuncs;
-  
+
     //TODO: intelligently pair annotations, check if same parent function  then
     //proxmity in code? (inst count of func to determine this)
 
@@ -102,7 +102,7 @@ struct ScreenPass : public ModulePass {
     };
 
     // @brief A Region that also includes data that we're tracking about it
-    // 
+    //
     // A Region is supposed to mark code we're interested in for later analysis,
     // where as RegionStats is the structure used to collect data about a region
     // as we're processing it.
@@ -132,15 +132,15 @@ struct ScreenPass : public ModulePass {
     };
 
     GlobalStats gStats;
-  
-    virtual const char *getPassName() const 
+
+    virtual const char *getPassName() const
     {
         return "screen";
     }
 
 
     // TODO reason about bounds and call this when we need constraint information
-    std::string reason_cmp_ops(Value *op){ 
+    std::string reason_cmp_ops(Value *op){
 	    std::string ret = "";
 	    // reason about operand values, if there is a store it takes care of it
 	    if (ConstantInt *CI = dyn_cast<ConstantInt>(op)){
@@ -148,7 +148,7 @@ struct ScreenPass : public ModulePass {
 		os << CI->getSExtValue();
 		ret = os.str();
 	    }else if(dyn_cast<ConstantPointerNull>(op)){
-	        ret = "NULL"; 
+	        ret = "NULL";
 	    }else if(CallInst *call = dyn_cast<CallInst>(op)){
 	        if(DebugLoc Loc = call->getDebugLoc()){
 		    unsigned Line = Loc.getLine();
@@ -158,7 +158,7 @@ struct ScreenPass : public ModulePass {
 		}
 		ret = "function_return_value: UNKNOWN";
 		if(call->getCalledFunction())
-			ret = "function_return_value:"+((call->getCalledFunction())->getName()).str(); 
+			ret = "function_return_value:"+((call->getCalledFunction())->getName()).str();
 	    }else{
 		// value is a variable, trace uses
 		int use_counter = 0;
@@ -176,7 +176,7 @@ struct ScreenPass : public ModulePass {
 		    ret = "local_var";
 		}else{
 		    ret = "external_var";
-		
+
 		}
 	    }
 	    // this case for 100% user controlled variables
@@ -205,11 +205,11 @@ struct ScreenPass : public ModulePass {
     // This is called from function analysis and arbitrary span analysis.
     void surveyInstruction(const Instruction &I, RegionStats &stats, std::vector<BranchCond> &BranchCondVec)
     {
- 
+
 
       if (isa<BranchInst>(I)) {
 	stats.branches += 1;
-        
+
 	    // get Condition of the branch instruction
 	    if(cast<BranchInst>(I).isConditional()){
 	    	Value *condition = cast<BranchInst>(I).getCondition();
@@ -365,7 +365,7 @@ struct ScreenPass : public ModulePass {
             if (annotationString.compare(0, kPrefix.length(), kPrefix) == 0) {
                 // errs() << "Detected sensitive code region, tracking code " <<
                 //           "paths for function: "<<function->getName()<<"\n";
-                annotatedFunctions.push_back(function); 
+                annotatedFunctions.push_back(function);
             }
         }
 
@@ -375,10 +375,10 @@ struct ScreenPass : public ModulePass {
                   std::end(annotatedFunctions));
 
         return annotatedFunctions;
-        
+
     }
 
-    // @brief Collect relevant annotations in a Module and return them as a 
+    // @brief Collect relevant annotations in a Module and return them as a
     // map of named Region objects.
     //
     // This is only relevant for arbitrary regions, not tagged functions.
@@ -447,22 +447,22 @@ struct ScreenPass : public ModulePass {
               << "\n";
         }
     }
-  
+
     void dumpGlobalStats()
     {
       std::set<const llvm::Function *>::iterator it;
       for (it = visitedFuncs.begin(); it!= visitedFuncs.end(); ++it){
 	gStats.LOC += getLOCinFunction(*it);
       }
-      
+
       if (started)
 	out_fd << ",";
-      
+
       out_fd << "{ \"global stats\": {\n"
 	     << "    \"analyzed LOCs\": " << gStats.LOC << "}\n"
 	     << "}";
     }
-  
+
     void dumpRegionStats(const std::string &name, const RegionStats &R, std::vector<BranchCond> cmps)
     {
         if (started)
@@ -495,7 +495,7 @@ struct ScreenPass : public ModulePass {
             }
             out_fd << "       ]";
         }
-        int count = 0;	
+        int count = 0;
         for (auto &BranchCond : cmps) {
 	    std::string predicate = "";
 	    if (BranchCond.pred == 40){
@@ -522,18 +522,18 @@ struct ScreenPass : public ModulePass {
 	    	predicate = "signed_less_or_equal_than";
 	    }else{
 	    	predicate = std::to_string(BranchCond.pred);
-	    } 
+	    }
             if(count == 0 && !R.callPaths.empty()){
 	    	out_fd << ",\n";
 	    }
 	    if(count != 0){
 	    	out_fd << ",\n";
 	    }
-	    
+
 	    std::string reason1 = reason_cmp_ops((BranchCond.ops)[0]);
 	    std::string reason2 = reason_cmp_ops((BranchCond.ops)[1]);
 	    out_fd << "     \"cmp_inst_"<<count<<"\": [\"" << predicate << "\", \"" << reason1 << "\", \"" << reason2 << "\"]";
-	    
+
 	    count += 1;
 	}
 	if(count == 0){
@@ -549,10 +549,10 @@ struct ScreenPass : public ModulePass {
       std::set<unsigned> lineNums;
       for (const BasicBlock &BB: *F) {
         for (const Instruction &I: BB) {
-	  if (DILocation *Loc = I.getDebugLoc()) { 
+	  if (DILocation *Loc = I.getDebugLoc()) {
 	    unsigned Line = Loc->getLine();
 	    lineNums.insert(Line);
-	  }      
+	  }
         }
       }
       return lineNums.size();
@@ -560,12 +560,16 @@ struct ScreenPass : public ModulePass {
 
     void cfgReworkDemo(const Module &M)
     {
+        if (kSymbolName == "") {
+          errs() << "[E] must provide start symbol name\n";
+          return;
+        }
         Function *entry = M.getFunction(kSymbolName);
         if(!entry){
             errs() << "[E] no start symbol " << kSymbolName << "\n";
             return;
         }
-	
+
         RegionStatsMap inProgress, completed;
 
         auto spans = collectAnnotatedSpans(M);
@@ -583,7 +587,7 @@ struct ScreenPass : public ModulePass {
                 if (I.isIdenticalTo(span.start)) {
                     inProgress[name].start = span.start;
                     T.startPath(name);
-                // But once we see an ending instruction, we can now 
+                // But once we see an ending instruction, we can now
                 // consider this span finished and move the region being
                 // tracked to the completed map.
                 } else if (I.isIdenticalTo(span.end)) {
@@ -594,7 +598,7 @@ struct ScreenPass : public ModulePass {
 
                     if (completed.find(name) != completed.end()) {
                         completed[name].callPaths.push_back(p);
-			for (vector_it i = p.begin(); i != p.end(); i++) 
+			for (vector_it i = p.begin(); i != p.end(); i++)
 			  visitedFuncs.insert(i->second);
                     } else {
                         RegionStats trackedSpan = inProgress[name];
@@ -602,7 +606,7 @@ struct ScreenPass : public ModulePass {
                         trackedSpan.end = span.end;
 
                         trackedSpan.callPaths.push_back(p);
-			for (vector_it i = p.begin(); i != p.end(); i++) 
+			for (vector_it i = p.begin(); i != p.end(); i++)
 			  visitedFuncs.insert(i->second);
 
                         completed[name] = trackedSpan;
@@ -719,16 +723,20 @@ struct ScreenPass : public ModulePass {
         return true;
     }
 
-    virtual bool runOnModule(Module &M) 
+    virtual bool runOnModule(Module &M)
     {
         // runOnFunction is run on every function in each compilation unit
-        // errs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";    
+        // errs()<<"SCreening Paths of Program: "<<M.getName()<<"\n";
         // errs()<<"\n[-] Using start symbol: "<<kSymbolName<<"\n";
         // errs()<<"\n\n[ STARTING MAIN ANALYSIS ]\n";
 
 
         // next stage, recover CFG, starting at main do a depth first search for annotation_start
         //
+        if (kOutputName == "") {
+          errs() << "Must provide output file name\n";
+          return false;
+        }
         if (kAnnotationFile.getNumOccurrences() > 0) {
             if (addAnnotations(M, kAnnotationFile) == false) {
                 errs() << "Bad annotations file format\n";
