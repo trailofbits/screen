@@ -1,0 +1,53 @@
+/* This version works! */
+
+var m: int, n: int, i: int, j: int, a: real,
+    x: int, y: int,
+    xflag1: bool, xflag2: bool, yflag1: bool, yflag2: bool;
+
+begin
+  x = random;
+  assume x>=0 and x<m;
+  y = random;
+  assume y>=0 and y<n;
+
+  a=random;
+
+  i=0;
+  j=0;
+ 
+  a = random;
+  xflag1= x<i;
+  xflag2= x<=i;
+  yflag1= y<j;
+  yflag2= y<=j;
+
+  while i<m do
+    j=0;
+    yflag1= y<j;
+    yflag2= y<=j;
+
+    while j<n do
+      /* i==x and j==y does not work, blame concurinterproc for bad != handling */
+      /* the following works also:
+       if xflag2 and not xflag1 and yflag2 and not yflag1 then
+        a = 42;
+      endif; */
+
+      if x<i then skip;
+      else if x>i then skip;
+      else if y<j then skip;
+      else if y>j then skip;
+      else a=42;
+      endif; endif; endif; endif;
+
+      j=j+1;
+
+      yflag1= y<j;
+      yflag2= y<=j;
+    done;
+    i=i+1;
+
+    xflag1= x<i;
+    xflag2= x<=i;
+  done;
+end

@@ -1,0 +1,53 @@
+typedef dir = enum { left, hit, right, other };
+
+var n: int, i: int, x: int, y: int,
+    a: real, b: real, tmp: real,
+    xflag : dir, yflag: dir; 
+
+begin
+  x = random;
+  assume x>=0 and x<n;
+
+  y = random;
+  assume y>=0 and y<n;
+
+  a = random;
+  b = random;
+
+  xflag = other;
+  yflag = other;
+
+  i = 0;
+  assume x==y;
+
+  while i<n
+  do
+    if y<i then
+      yflag = left;      
+      tmp = random;
+    else
+      if y>i then
+        yflag = right;
+	tmp = random;
+      else
+        yflag = hit;
+	tmp = b;
+      endif;
+    endif;
+    if x<i then
+      xflag = left;
+    else
+      if x>i then
+        xflag = right;
+      else
+        xflag = hit;
+	a = tmp;
+      endif;
+    endif;
+    i = i+1;
+    tmp = random;
+  done;
+
+  xflag = random;
+  yflag = random;
+end

@@ -17,7 +17,7 @@ case $(uname -s) in
     DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
     DIST_VERSION=$(lsb_release -sr)
     if [ $DIST_VERSION == "15.04" ]; then
-	    DIST_VERSION="15.10"
+	    DIST_VERSION="14.04"
     fi
     FILE=clang+llvm-${LLVM_VER}-${ARCH}-${OS}-${DISTRO}-${DIST_VERSION}.tar.xz
     ;;

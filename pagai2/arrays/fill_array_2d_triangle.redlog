@@ -1,0 +1,21 @@
+load_package redlog;
+rlset z;
+
+% full array fill
+%f:=
+%(-j+n=0 and -i+j+x>=0 and -j+y-1>=0 and j-2>=0 and i-j>=0 and i-x-1>=0) or
+%(-i+n=0 and -i+j=0 and -x+y-2>=0 and x>=0 and i-y-1>=0) or
+%(-j+y=0 and -j+n=0 and -2i+3j+2x-2>=0 and -i+j+x>=0 and i-j>=0 and i-x-1>=0 and i-2>=0);
+
+f:=
+  (-i+x-1>=0 and -i+j>=0 and x-y>=0 and j-y-1>=0 and i-n>=0) or
+  (-i+j>=0 and -j+y-1>=0 and x-y>=0 and j>=0 and i-n>=0) or
+  (-i+x=0 and -i+j>=0 and j-y-1>=0 and i-n>=0 and i-y>=0) or
+  (-i+n=0 and -i+j>=0 and x-y>=0 and i-x-1>=0) or
+  (-i+y=0 and -i+x=0 and -i+j=0 and i-n>=0 and i>=0) or
+  (-j+y=0 and -i+x-1>=0 and -i+j>=0 and -j+x>=0 and j>=0 and i-n>=0);
+
+g:=n>0 and all({x,y}, (x>=0 and x<n and y>=0 and y<n) impl f);
+
+rlqe g;
+COMMENT i-1=0 /\ j>0 /\ n=1

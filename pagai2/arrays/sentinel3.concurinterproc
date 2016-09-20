@@ -1,0 +1,42 @@
+typedef dir = enum { left, hit, right, other };
+
+var n: int, i: int, x: int, t: int, tmp: int, flag1: dir, flag2: dir, flag3: dir, stop: bool; 
+
+begin
+  assume n>2;
+  assume x>=0 and x<n;
+  if x<n-2 then
+    flag2 = left;
+  else
+    if x>n-2 then
+      flag2 = right;
+    else
+      flag2 = hit;
+      t=-1;
+    endif;
+  endif;
+  i=0;
+  stop=false;
+  flag3 = other;
+  while not stop do
+    if i>=n then
+      fail;
+    endif;
+    if x<i then
+      tmp = random;
+      flag3 = left;
+    else
+      if x>i then
+        tmp = random;
+        flag3 = right;
+      else
+        tmp = t;
+        flag3 = hit;
+      endif;
+    endif;
+    stop = tmp<=-1 and tmp>=-1;
+    if not stop then i=i+1; endif; 
+  done;
+  t = random;
+  tmp = random;
+end

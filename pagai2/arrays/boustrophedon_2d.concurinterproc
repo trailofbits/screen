@@ -1,0 +1,113 @@
+/* It works!
+If computing the flags at write access location, need to unroll the loops once
+*/
+
+var m: int, n: int, i: int, j: int, a: real, jdir: bool,
+    x: int, y: int,
+    xflag1: bool, xflag2: bool, yflag1: bool, yflag2: bool;
+
+begin
+  x = random;
+  assume x>=0 and x<m;
+  y = random;
+  assume y>=0 and y<n;
+
+  a=random;
+
+  i=0;
+  j=0;
+ 
+  a = random;
+  xflag1= x<i;
+  xflag2= x<=i;
+
+  jdir = true;
+
+  if i<m then /* unroll 1 */
+    j=0;
+    if j<n then /* unroll 1 */
+      yflag1= y<j;
+      yflag2= y<=j;
+      xflag1= x<i;
+      xflag2= x<=i;
+      if xflag2 and not xflag1 and yflag2 and not yflag1 then
+        a = 42;
+      endif;
+      j=j+1;
+
+      while j>=0 and j<n do
+        yflag1= y<j;
+        yflag2= y<=j;
+        xflag1= x<i;
+        xflag2= x<=i;
+
+        if xflag2 and not xflag1 and yflag2 and not yflag1 then
+          a = 42;
+        endif;
+
+	if jdir then
+	  j=j+1;
+        else
+          j=j-1;
+        endif;
+      done;
+    endif;
+
+    i=i+1;
+    jdir=not jdir;
+
+    while i<m do
+      j=0;
+      if j>=0 and j<n then /* unroll 1 */
+        yflag1= y<j;
+        yflag2= y<=j;
+        xflag1= x<i;
+        xflag2= x<=i;
+        if xflag2 and not xflag1 and yflag2 and not yflag1 then
+          a = 42;
+        endif;
+        j=j+1;
+
+        while j<n do
+          yflag1= y<j;
+          yflag2= y<=j;
+          xflag1= x<i;
+          xflag2= x<=i;
+
+          if xflag2 and not xflag1 and yflag2 and not yflag1 then
+            a = 42;
+          endif;
+
+
+
+	  if jdir then
+	    j=j+1;
+          else
+            j=j-1;
+            if j<=0 then j=0; endif;
+          endif;
+        done;
+      endif;
+
+      jdir=not jdir;
+      if random then
+        i=i+1;
+      else
+        i=i-1;
+      endif;
+    done;
+  endif;
+
+  xflag1 = random;
+  xflag2 = random;
+  yflag1 = random;
+  yflag2 = random;
+end
+
+/*
+{ (not jdir) and
+                        [|a-42=0; i-m=0; j-n=0; y>=0; x>=0; j-y-1>=0;
+                          i-x-1>=0|] or
+                        (jdir) and
+                        [|a-42=0; y=0; j-1=0; n-1=0; i-m=0; x>=0; i-x-1>=0|] }
+*/

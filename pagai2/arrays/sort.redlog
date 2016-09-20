@@ -1,0 +1,131 @@
+load_package redlog;
+rlset z;
+
+finv :=
+  (x0l and x0r and x2l and x2r and not y0l and y0r and not y2l
+   and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x+1=0 and -i+k+1=0 and -a+c>=0 and -a+b>=0 and -i+y>=0 and -y+z-1>=0 and
+    n-z-1>=0 and i-1>=0) or
+  (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+   and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x+1=0 and -k+y=0 and -a+c>=0 and -a+b-1>=0 and -i+k>=0 and -k+z-1>=0 and
+    n-z-1>=0 and i-1>=0) or
+  (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+   and not y2r and not z0l and z0r and z2l and z2r) and
+  (-i+x+1=0 and -k+z=0 and -a+c-1>=0 and -a+b-1>=0 and -i+y>=0 and -k+n-1>=0 and
+    k-y-1>=0 and i-1>=0) or
+  (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+   and not y2r and not z0l and z0r and z2l and not z2r) and
+  (-i+x+1=0 and -a+c-1>=0 and -a+b-1>=0 and -i+y>=0 and -k+n-1>=0 and
+    -y+z-1>=0 and k-z-1>=0 and i-1>=0) or
+  (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+   and not y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x+1=0 and -a+c>=0 and -a+b-1>=0 and -i+y>=0 and -k+z-1>=0 and n-z-1>=0 and
+    k-y-1>=0 and i-1>=0) or
+  (x0l and x0r and x2l and not x2r and not y0l and y0r
+   and not y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x+1=0 and -a+c>=0 and -a+b>=0 and -i+k>=0 and -k+y-1>=0 and -y+z-1>=0 and
+    n-z-1>=0 and i-1>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+   and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+y+1=0 and -i+k+1=0 and -b+c>=0 and -i+z>=0 and x>=0 and n-z-1>=0 and
+    i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+   and not y2r and not z0l and z0r and z2l and z2r) and
+  (-i+y+1=0 and -k+z=0 and -b+c-1>=0 and -i+k>=0 and -k+n-1>=0 and x>=0 and
+    i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+   and not y2r and not z0l and z0r and z2l and not z2r) and
+  (-i+y+1=0 and -b+c-1>=0 and -i+z>=0 and -k+n-1>=0 and x>=0 and k-z-1>=0 and
+    i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+   and not y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+y+1=0 and -b+c>=0 and -i+k>=0 and -k+z-1>=0 and x>=0 and n-z-1>=0 and
+    i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and z0l and z0r and z2l and z2r) and
+  (-i+z+1=0 and -i+k+1=0 and -i+n-1>=0 and -x+y-1>=0 and x>=0 and i-y-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and z0l and z0r and z2l and not z2r) and
+  (-i+z+1=0 and -i+k>=0 and -k+n-1>=0 and -x+y-1>=0 and x>=0 and i-y-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and z0l and not z0r and z2l and not z2r) and
+  (-i+n-1>=0 and -i+k+1>=0 and -k+n-1>=0 and -x+y-1>=0 and -y+z-1>=0 and 
+    x>=0 and i-z-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and not z0l and z0r and z2l and z2r) and
+  (-k+z=0 and -i+k>=0 and -k+n-1>=0 and -x+y-1>=0 and x>=0 and i-y-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and not z0l and z0r and z2l and not z2r) and
+  (-i+z>=0 and -k+n-1>=0 and -x+y-1>=0 and x>=0 and k-z-1>=0 and i-y-2>=0) or
+  (x0l and not x0r and x2l and not x2r and y0l and not y0r
+   and y2l and not y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+k+1>=0 and -k+z-1>=0 and -x+y-1>=0 and x>=0 and n-z-1>=0 and i-y-2>=0) or
+  (x0l and not x0r and x2l and not x2r and not y0l and y0r
+   and y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-k+y=0 and -i+k>=0 and -k+z-1>=0 and x>=0 and n-z-1>=0 and i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and z2l and z2r) and
+  (-k+z=0 and -i+y>=0 and -k+n-1>=0 and x>=0 and k-y-1>=0 and i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and z2l and not z2r) and
+  (-i+y>=0 and -k+n-1>=0 and -y+z-1>=0 and x>=0 and k-z-1>=0 and i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+y>=0 and -k+z-1>=0 and x>=0 and n-z-1>=0 and k-y-1>=0 and i-x-2>=0) or
+  (x0l and not x0r and x2l and not x2r and not y0l and y0r
+   and not y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+k+1>=0 and -k+y-1>=0 and -y+z-1>=0 and x>=0 and n-z-1>=0 and i-x-2>=0) or
+  (not x0l and x0r and x2l and x2r and not y0l and y0r
+   and not y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-k+x=0 and -i+k>=0 and -k+y-1>=0 and -y+z-1>=0 and n-z-1>=0 and i-1>=0) or
+  (not x0l and x0r and x2l and not x2r and not y0l and y0r
+   and y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-k+y=0 and -i+x>=0 and -k+z-1>=0 and n-z-1>=0 and k-x-1>=0 and i-1>=0) or
+  (not x0l and x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and z2l and z2r) and
+  (-k+z=0 and -i+x>=0 and -k+n-1>=0 and -x+y-1>=0 and k-y-1>=0 and i-1>=0) or
+  (not x0l and x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and z2l and not z2r) and
+  (-i+x>=0 and -k+n-1>=0 and -x+y-1>=0 and -y+z-1>=0 and k-z-1>=0 and i-1>=0) or
+  (not x0l and x0r and x2l and not x2r and not y0l and y0r
+   and y2l and not y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x>=0 and -k+z-1>=0 and -x+y-1>=0 and n-z-1>=0 and k-y-1>=0 and i-1>=0) or
+  (not x0l and x0r and x2l and not x2r and not y0l and y0r
+   and not y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+x>=0 and -k+y-1>=0 and -y+z-1>=0 and n-z-1>=0 and k-x-1>=0 and i-1>=0) or
+  (not x0l and x0r and not x2l and x2r and not y0l and y0r
+   and not y2l and y2r and not z0l and z0r and not z2l and z2r) and
+  (-i+k+1>=0 and -k+x-1>=0 and -x+y-1>=0 and -y+z-1>=0 and n-z-1>=0 and i-1>=0) or
+  (not x0l and not x0r and not x2l and not x2r and not y0l
+   and not y0r and not y2l and not y2r and not z0l and not z0r
+   and not z2l and not z2r) and
+  (i=0 and -x+y-1>=0 and -y+z-1>=0 and x>=0 and n-z-1>=0) $
+
+int1 := rlsimpl(sub(y=i-1, -i+y+1=0 and -i+k+1=0 and -b+c>=0 and -i+z>=0 and x>=0 and n-z-1>=0 and i-x-2>=0));
+int2 := rlsimpl(sub(y=i-1, -i+y+1=0 and -k+z=0 and -b+c-1>=0 and -i+k>=0 and -k+n-1>=0 and x>=0 and i-x-2>=0);
+  
+
+g := 0<=x and x<y and y<n;
+
+hinv := rlsimpl(rlqe(all({x,y}, n>=2 and (g impl ex({a,b},finv))))) $
+% i>=n or i<0 or k>=n or k<0 or (i<k and i>0) or (i<=0 or i>=0 and k<0 and n>0)
+
+fend :=
+  (-i+y=0 and -i+x+1=0 and -i+n-1=0 and -i+k+1=0 and -a+b>=0 and i-1>=0) or
+  (-i+y=0 and -i+x+1=0 and -i+n-1=0 and -i+k=0 and -a+b-1>=0 and i-1>=0) or
+  (-i+y+1=0 and -i+n-1=0 and -i+k+1=0 and -a+b>=0 and x>=0 and i-x-2>=0) or
+  (-i+y+1=0 and -i+n-1=0 and -i+k=0 and -a+b>=0 and x>=0 and i-x-2>=0) or
+  (-i+n-1=0 and -a+b>=0 and -i+k+1>=0 and -x+y-1>=0 and x>=0 and i-k>=0 and i-y-2>=0) or
+  (-i+y=0 and -i+n-1=0 and -i+k=0 and -a+b>=0 and x>=0 and i-x-2>=0) or
+  (-i+y=0 and -i+n-1=0 and -i+k+1=0 and -a+b>=0 and x>=0 and i-x-2>=0) or
+  (-i+y+1=0 and -i+n-1=0 and -i+k+1=0 and x>=0 and i-x-2>=0 and a-b-1>=0) or
+  (-i+y+1=0 and -i+n-1=0 and -i+k=0 and x>=0 and i-x-2>=0 and a-b-1>=0) or
+  (-i+n-1=0 and -i+k+1>=0 and -x+y-1>=0 and x>=0 and i-k>=0 and i-y-2>=0 and a-b-1>=0) or
+  (-i+y=0 and -i+n-1=0 and -i+k=0 and x>=0 and i-x-2>=0 and a-b-1>=0) or
+  (-i+y=0 and -i+n-1=0 and -i+k+1=0 and x>=0 and i-x-2>=0 and a-b-1>=0) $
+
+fend2 := rlsimpl(sub(i=n-1,fend));
+fend3 := rlsimpl(rlqe(ex({a,b},fend2)));
+
+hend := rlsimpl(rlqe(all({x,y},n>=2 and (g impl fend3))));

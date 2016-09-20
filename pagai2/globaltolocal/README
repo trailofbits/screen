@@ -1,0 +1,10 @@
+optbr is an LLVM pass that transform the control flow graph in order to
+guarantee the following property on the CFG:
+There is at most one transition between the two same basicblocks.
+
+In other words, there is no conditionnal branch for with both valuations of the
+condition branch to the same destination basicblock.
+
+Usage:
+
+opt -load optbr.so -optbr <bc source file> -o <bc output file>

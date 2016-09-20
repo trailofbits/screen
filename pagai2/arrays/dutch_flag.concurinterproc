@@ -1,0 +1,69 @@
+typedef kind = enum { LOW, MIDDLE, HIGH };
+
+var n: int, i: int, p: int, q: int, read: kind, read2: kind, data: kind,
+  x: int,
+  x0l: bool, x0r: bool,
+  x1l: bool, x1r: bool,
+  x2l: bool, x2r: bool;
+
+begin
+  assume 0<=x and x<n;
+  p = -1;
+  q = n;
+  i = 0;
+  x0l = false;
+  x0r = false;
+  x1l = false;
+  x1r = false;
+  x2l = false;
+  x2r = false;
+  while i<q do
+    x0l = x<=i;
+    x0r = x>=i;
+    read = random;
+    if x0l and x0r then
+      read = data;
+    endif;
+    if read == LOW then
+      p = p+1;
+      read2 = random;
+      x1l = x<=p;
+      x1r = x>=p;
+      if x1l and x1r then
+        read2 = data;
+        data = read;
+      endif;
+      if x0l and x0r then
+        data = read2;
+      endif;
+      i = i+1;
+    else
+      if read == HIGH then
+        q = q-1;
+        read2 = random;
+        x2l = x<=q;
+        x2r = x>=q;
+        if x2l and x2r then
+          read2 = data;
+          data = read;
+        endif;
+        if x0l and x0r then
+          data = read2;
+        endif;
+      else
+        i = i+1;
+      endif;
+    endif;
+    read = random;
+    read2 = random;
+  done;
+  /* assume x<=p;
+  assume not (data==LOW);
+  OK */
+  /* assume x>=q;
+  assume not (data==HIGH);
+  OK */
+  /*assume x>p and x<q;
+  assume not (data==MIDDLE);
+  NOT OK */
+end

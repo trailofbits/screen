@@ -1,0 +1,16 @@
+load_package redlog;
+rlset z;
+
+f :=
+  (-q+y+1=0 and -p+x-1>=0 and q-x-2>=0 and p>=0 and n-q-1>=0) or
+  (-n+y+1=0 and -n+q=0 and -p+x-1>=0 and p>=0 and n-x-2>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and p-x-1>=0 and p>=0 and n-q-1>=0) or
+  (-n+y+1=0 and -n+q=0 and x>=0 and p-x-1>=0 and n-p-2>=0);
+
+fp := sub(y=q-1, f);
+
+g := all(x, q>1 and ((0 <= x and x<q-1) impl fp));
+h := rlqe(ex(n, g));
+
+
+

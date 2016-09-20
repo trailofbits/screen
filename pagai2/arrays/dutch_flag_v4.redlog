@@ -1,0 +1,105 @@
+load_package redlog;
+rlset z;
+
+low :=
+  (-p+y=0 and -p+x=0 and -p+q-1=0 and p>=0 and n-p-2>=0) or
+  (-p+x=0 and -p+q-1=0 and p-y-3>=0 and p-2>=0 and n-p-1>=0) or
+  (-n+y+1=0 and -n+x+1=0 and -n+q=0 and -n+p+1=0 and n-1>=0) or
+  (-q+y+1=0 and -q+x+1=0 and -p+q-2>=0 and p>=0 and n-q-1>=0) or
+  (-p+y=0 and -q+x+1=0 and -p+q-3>=0 and p>=0 and n-q>=0) or
+  (-q+x+1=0 and -p+q-2>=0 and q-2>=0 and 2q-y-6>=0 and
+    p-y-1>=0 and p+1>=0 and n-q>=0) or
+  (-n+y+1=0 and -n+x+1=0 and -n+q=0 and p>=0 and n-p-2>=0) or
+  (-p+y=0 and -p+x=0 and -p+q-1>=0 and p>=0 and n-q-1>=0) or
+  (-p+x=0 and -p+q-1>=0 and p-y-1>=0 and p+1>=0 and n-p-2>=0 and
+    n-p+q-y-5>=0 and n-q>=0 and n-2>=0 and 2n-2p+q-6>=0 and
+    2n-y-6>=0 and 3n-2p+q-y-10>=0) or
+  (-n+q=0 and -p+y=0 and -p+x=0 and p>=0 and n-p-2>=0) or
+  (-p+y=0 and -p+q-1=0 and p-x-1>=0 and p>=0 and n-p-2>=0 and
+    n-3>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and p-x-1>=0 and p>=0 and n-q-1>=0) or
+  (-p+y=0 and -p+q-1>=0 and p-x-1>=0 and p>=0 and n-p-2>=0 and
+    n-p+q-4>=0 and n-q>=0 and n+p-x-4>=0) or
+  (-p+q-1>=0 and p-x>=0 and p-y-1>=0 and p>=0 and n-q>=0 and
+    n-y-3>=0 and n-2>=0 and n+p-2x-3>=0 and n+p-y-4>=0 and
+    2n-x-5>=0 and 2n-y-6>=0 and 2n+p-2x-y-7>=0 and
+    2n+p-2x-6>=0 and 3n-x-y-9>=0 and 3n+p-2x-y-10>=0 and
+    4n-q-x-2y-10>=0 and 5n-q-x-2y-13>=0 and
+    6n+p-2q-2x-3y-15>=0 and 7n+p-2q-2x-3y-18>=0) or
+  (-n+y+1=0 and -n+q=0 and -n+p+1=0 and x>=0 and n-x-2>=0) or
+  (-n+y+1=0 and -n+q=0 and x>=0 and p-x-1>=0 and n-p-2>=0) or
+  (-n+q=0 and -p+y=0 and x>=0 and p-x-1>=0 and n-p-2>=0) or
+  (-n+q=0 and -x+y>=0 and x>=0 and p-y-1>=0 and n-p-1>=0) or
+  (-q+y+1=0 and -p+x-1>=0 and q-x-2>=0 and p>=0 and n-q-1>=0) or
+  (-p+y=0 and -p+x-1>=0 and q-x-1>=0 and p>=0 and n-q>=0 and
+    n-x-2>=0) or
+  (-p+x-1>=0 and q-x-1>=0 and p-y-1>=0 and p+1>=0 and 
+    n-q>=0 and n-x-2>=0) or
+  (-n+y+1=0 and -n+q=0 and -p+x-1>=0 and p>=0 and n-x-2>=0) or
+  (p+1=0 and -x+y>=0 and -y-1>=0 and q>=0 and n-q-1>=0 and n-3>=0) or
+  (-q+x=0 and -p+q-2>=0 and p-y-1>=0 and p>=0 and n-p-3>=0 and
+    n-q>=0) or
+  (-p+q-1>=0 and -q+x-1>=0 and p-y-1>=0 and p>=0 and n-p-3>=0 and
+    n-q>=0) or
+  (-p+y=0 and -q+x=0 and -p+q-2>=0 and p>=0 and n-q>=0 and n-3>=0) or
+  (-q+x=0 and -p+q-1>=0 and q-1>=0 and 2q-y-4>=0 and p-y-1>=0 and
+    p+1>=0 and n-q>=0 and n-y-3>=0 and n-2>=0 and 2n-y-6>=0) or
+  (-p+y=0 and -p+q-1=0 and -p+x-3>=0 and p-1>=0 and n-p-2>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and -q+x-2>=0 and p-1>=0 and
+    n-q-1>=0) or
+  (-p+y=0 and -p+q-1>=0 and -q+x-1>=0 and p>=0 and
+    n-2p+q-4>=0 and n-q>=0 and n-3>=0) or
+  (-p+q-1>=0 and -q+x-1>=0 and p-y-1>=0 and p+1>=0 and 
+    n-q>=0 and n-y-3>=0 and n-2>=0 and 2n-y-6>=0);
+
+low2 := all(x, y>=0 and ((0<=x and x<=y) impl low));
+low3 := rlqe low2 $
+
+rlqe(ex({n,y,p,q},low3 and y>p)); % false
+
+middle :=
+  (-q+y+1=0 and -q+x+1=0 and -p+q-2>=0 and p>=0 and n-q-1>=0) or
+  (-q+x+1=0 and -p+y-1>=0 and q-y-2>=0 and p>=0 and n-q>=0) or
+  (-n+y+1=0 and -n+x+1=0 and -n+q=0 and p>=0 and n-p-2>=0) or
+  (-q+y+1=0 and -q+x+1=0 and p+1=0 and q-1>=0 and n-q-1>=0) or
+  (-q+x+1=0 and p+1=0 and y>=0 and q-y-3>=0 and n-q-4>=0) or
+  (-n+y+1=0 and -n+x+1=0 and -n+q=0 and p+1=0 and n-1>=0) or
+  (-p+x=0 and -q+y+1=0 and -p+q-2>=0 and p>=0 and n-p-3>=0 and n-q>=0) or
+  (-p+x=0 and -p+y-1>=0 and q-y-1>=0 and p>=0 and n-q>=0 and n-y-2>=0) or
+  (-n+y+1=0 and -n+q=0 and -p+x=0 and p>=0 and n-p-2>=0) or
+  (-n+q=0 and -p+x=0 and -p+y-1>=0 and p>=0 and n-y-2>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and p-x-1>=0 and p+1>=0 and n-q>=0 and n+q-x-6>=0 and n+q-4>=0) or
+  (-p+y-1>=0 and q-y-1>=0 and p-x-1>=0 and p+1>=0 and n-q>=0 and n-y-2>=0) or
+  (-n+y+1=0 and -n+q=0 and x>=0 and p-x-1>=0 and n-p-2>=0) or
+  (-n+q=0 and -p+y-1>=0 and x>=0 and p-x-1>=0 and n-y-2>=0) or
+  (-q+y+1=0 and -p+x-1>=0 and q-x-2>=0 and p>=0 and n-q>=0) or
+  (-p+y-1>=0 and -p+x-1>=0 and q-x-1>=0 and q-y-1>=0 and p>=0 and n-q>=0 and n-x-2>=0 and n-y-2>=0 and 3n-q-x-y-5>=0 and 4n-p-2q-8>=0) or
+  (-n+y+1=0 and -n+q=0 and -p+x-1>=0 and p>=0 and n-x-2>=0) or
+  (-n+q=0 and -p+x-1>=0 and -x+y>=0 and p>=0 and n-y-2>=0) or
+  (-q+y+1=0 and p+1=0 and q-x-2>=0 and q-1>=0 and n-q-1>=0 and n-3>=0) or
+  (p+1=0 and y>=0 and q-x-1>=0 and q-y-1>=0 and n-q-1>=0) or
+  (-n+y+1=0 and -n+q=0 and p+1=0 and x>=0 and n-x-2>=0) or
+  (-n+q=0 and p+1=0 and -x+y>=0 and x>=0 and n-y-2>=0) or
+  (-q+y+1=0 and -q+x=0 and -p+q-2>=0 and q-3>=0 and p>=0 and n-q>=0) or
+  (-q+x=0 and -p+y-1>=0 and q-y-2>=0 and p>=0 and n-q>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and -q+x-1>=0 and x-4>=0 and p>=0 and n-q>=0 and n-3>=0) or
+  (-p+y-1>=0 and -q+x-1>=0 and q-y-1>=0 and p>=0 and n-q>=0 and n-y-2>=0) or
+  (-q+x=0 and p+1=0 and y>=0 and q-y-2>=0 and n-q-5>=0) or
+  (p+1=0 and -q+x-1>=0 and y>=0 and q-y-1>=0 and n+q-2x-4>=0);
+
+middle2 := all(x, y>=0 and ((0<=x and x<=y) impl middle)) $
+middle3 := rlqe middle2 $
+
+rlqe(ex({n,y,p,q},middle3 and y<=p)); % false
+rlqe(ex({n,y,p,q},middle3 and y>=q)); % false
+
+high :=
+  (-q+y+1=0 and -p+x-1>=0 and q-x-2>=0 and p>=0 and n-q-1>=0) or
+  (-n+y+1=0 and -n+q=0 and -p+x-1>=0 and p>=0 and n-x-2>=0) or
+  (-q+y+1=0 and -p+q-2>=0 and p-x-1>=0 and p>=0 and n-q-1>=0) or
+  (-n+y+1=0 and -n+q=0 and x>=0 and p-x-1>=0 and n-p-2>=0) ;
+
+high2 := all(x, y>=0 and ((0<=x and x<=y) impl high)) $
+high3 := rlqe high2 $
+
+rlqe(ex({n,y,p,q},high3 and y<q)); % false

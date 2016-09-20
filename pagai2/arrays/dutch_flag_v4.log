@@ -1,0 +1,592 @@
+
+Step 1
+dynamic=true, before thresholds
+[32mResult of forward analysis projected on single program thread[m
+typedef kind = enum {LOW, MIDDLE, HIGH};
+var n : int, i : int, p : int, q : int, read : kind, read2 : kind,
+    datax : kind, x : int, x0l : bool, x0r : bool, x1l : bool, x1r : bool,
+    x2l : bool, x2r : bool, datay : kind, y : int, y0l : bool, y0r : bool,
+    y1l : bool, y1r : bool, y2l : bool, y2r : bool;
+begin
+  /* [31m(L13C5)
+     { top }[m */
+  assume 0 <= x and x <= y and y < n; /* [31mL14C31 unknown[m */
+  p = - (1); /* [31mL15C9 unknown[m */
+  q = n; /* [31mL16C8 unknown[m */
+  i = 0; /* [31mL17C8 unknown[m */
+  x0l = false; /* [31mL19C14 unknown[m */
+  x0r = false; /* [31mL20C14 unknown[m */
+  x1l = false; /* [31mL21C14 unknown[m */
+  x1r = false; /* [31mL22C14 unknown[m */
+  x2l = false; /* [31mL23C14 unknown[m */
+  x2r = false; /* [31mL24C14 unknown[m */
+  y0l = false; /* [31mL26C14 unknown[m */
+  y0r = false; /* [31mL27C14 unknown[m */
+  y1l = false; /* [31mL28C14 unknown[m */
+  y1r = false; /* [31mL29C14 unknown[m */
+  y2l = false; /* [31mL30C14 unknown[m */
+  y2r = false; /* [31m(L31C14)
+                  idd with 1051 nodes, 142 leaves and 2153 paths[m */
+  while i < q do
+    /* [31m(L33C14)
+       idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if p < - (1) then
+      /* [31mL34C16 bottom[m */
+      fail; /* [31mL34C22 unknown[m */
+    endif; /* [31m(L34C29)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if p >= i then
+      /* [31mL35C16 bottom[m */
+      fail; /* [31mL35C22 unknown[m */
+    endif; /* [31m(L35C29)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if i >= q then
+      /* [31mL36C16 bottom[m */
+      fail; /* [31mL36C22 unknown[m */
+    endif; /* [31m(L36C29)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if q > n then
+      /* [31mL37C15 bottom[m */
+      fail; /* [31mL37C21 unknown[m */
+    endif; /* [31m(L37C28)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if x >= q and datax != HIGH then
+      /* [31mL39C32 bottom[m */
+      fail; /* [31mL39C38 unknown[m */
+    endif; /* [31m(L39C45)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if x <= p and datax != LOW then
+      /* [31mL40C31 bottom[m */
+      fail; /* [31mL40C37 unknown[m */
+    endif; /* [31m(L40C44)
+              idd with 996 nodes, 132 leaves and 2131 paths[m */
+    if x > p and x < i and (datax == LOW or datax == HIGH) then
+      /* [31m(L41C55)
+         { (x0l and x0r and not x1l and x1r and x2l and not x2r and not y0l
+            and y0r and not y1l and y1r and y2l and not y2r
+            and datax in {LOW,HIGH}) and
+           [|-i+x+1=0; -i+y>=0; q-y-1>=0; p>=0; n-q-1>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and not x2l and not x2r
+            and not y0l and y0r and not y1l and y1r and not y2l and not y2r
+            and datax in {LOW,HIGH}) and
+           [|-i+x+1=0; -n+q=0; -i+y>=0; p>=0; n-y-1>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and x2l and not x2r and y0l
+            and y0r and not y1l and y1r and y2l and not y2r and datax = LOW
+            and datay = LOW
+            or x0l and x0r and not x1l and x1r and x2l and not x2r and y0l
+               and y0r and not y1l and y1r and y2l and not y2r
+               and datax = HIGH and datay = HIGH) and
+           [|-i+y+1=0; -i+x+1=0; -i+q-1>=0; p>=0; n-q-1>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and x2l and not x2r and not y0l
+            and y0r and not y1l and y1r and y2l and y2r
+            and datax in {LOW,HIGH} and datay = HIGH) and
+           [|-i+x+1=0; -q+y=0; -i+q-1>=0; p>=0; n-q-1>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and x2l and not x2r and not y0l
+            and y0r and not y1l and y1r and not y2l and y2r
+            and datax in {LOW,HIGH} and datay = HIGH) and
+           [|-i+x+1=0; -i+q-1>=0; -q+y-1>=0; p>=0; n-y-1>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and not x2l and not x2r and y0l
+            and y0r and not y1l and y1r and not y2l and not y2r
+            and datax = LOW and datay = LOW
+            or x0l and x0r and not x1l and x1r and not x2l and not x2r
+               and y0l and y0r and not y1l and y1r and not y2l and not y2r
+               and datax = HIGH and datay = HIGH) and
+           [|-i+y+1=0; -i+x+1=0; -n+q=0; -i+n-1>=0; p>=0; i-p-2>=0|] or
+           (x0l and x0r and not x1l and x1r and x2l and not x2r and y0l
+            and not y0r and y1l and not y1r and y2l and not y2r
+            and datax in {LOW,HIGH} and datay = LOW) and
+           [|-i+x+1=0; -i+q-1>=0; p-y-2>=0; p-1>=0; n-q>=0; i-p-2>=0|] }[m */
+      fail; /* [31mL41C61 unknown[m */
+    endif; /* [31m(L41C68)
+              idd with 1006 nodes, 135 leaves and 2070 paths[m */
+    if y >= q and datay != HIGH then
+      /* [31mL43C32 bottom[m */
+      fail; /* [31mL43C38 unknown[m */
+    endif; /* [31m(L43C45)
+              idd with 1006 nodes, 135 leaves and 2070 paths[m */
+    if y <= p and datay != LOW then
+      /* [31mL44C31 bottom[m */
+      fail; /* [31mL44C37 unknown[m */
+    endif; /* [31m(L44C44)
+              idd with 1006 nodes, 135 leaves and 2070 paths[m */
+    if y > p and y < i and (datay == LOW or datay == HIGH) then
+      /* [31m(L45C55)
+         { (x0l and not x0r and not x1l and x1r and x2l and not x2r and y0l
+            and y0r and not y1l and y1r and y2l and not y2r
+            and datax = MIDDLE and datay in {LOW,HIGH}) and
+           [|-i+y+1=0; -i+q-1>=0; -p+x-1>=0; p>=0; n-q-1>=0; i-x-2>=0|] or
+           (x0l and not x0r and not x1l and x1r and not x2l and not x2r
+            and y0l and y0r and not y1l and y1r and not y2l and not y2r
+            and datax = MIDDLE and datay in {LOW,HIGH}) and
+           [|-i+y+1=0; -n+q=0; -i+n-1>=0; -p+x-1>=0; p>=0; i-x-2>=0|] or
+           (not x0l and x0r and not x1l and x1r and not x2l and x2r and y0l
+            and y0r and not y1l and y1r and y2l and not y2r and datax = HIGH
+            and datay in {LOW,HIGH}) and
+           [|-i+y+1=0; -i+q-1>=0; -q+x-2>=0; p-1>=0; n-q-1>=0; i-p-2>=0|] or
+           (x0l and not x0r and x1l and not x1r and x2l and not x2r and y0l
+            and y0r and not y1l and y1r and y2l and not y2r and datax = LOW
+            and datay in {LOW,HIGH}) and
+           [|-i+y+1=0; -i+q-1>=0; p-x-1>=0; p>=0; n-q-1>=0; i-p-2>=0|] or
+           (x0l and not x0r and x1l and not x1r and not x2l and not x2r
+            and y0l and y0r and not y1l and y1r and not y2l and not y2r
+            and datax = LOW and datay in {LOW,HIGH}) and
+           [|-i+y+1=0; -n+q=0; -i+n-1>=0; x>=0; p-x-1>=0; i-p-2>=0|] }[m */
+      fail; /* [31mL45C61 unknown[m */
+    endif; /* [31mL45C68 unknown[m */
+    x0l = x <= i; /* [31mL47C15 unknown[m */
+    x0r = x >= i; /* [31mL48C15 unknown[m */
+    y0l = y <= i; /* [31mL49C15 unknown[m */
+    y0r = y >= i; /* [31mL50C15 unknown[m */
+    read = random; /* [31m(L51C18)
+                      idd with 886 nodes, 119 leaves and 2199 paths[m */
+    if x0l and x0r then
+      /* [31mL52C23 unknown[m */
+      assume read == datax; /* [31mL53C27 unknown[m */
+    endif; /* [31m(L54C10)
+              idd with 932 nodes, 119 leaves and 5037 paths[m */
+    if y0l and y0r then
+      /* [31mL55C23 unknown[m */
+      assume read == datay; /* [31mL56C27 unknown[m */
+    endif; /* [31m(L57C10)
+              idd with 1094 nodes, 117 leaves and 5633 paths[m */
+    if read == LOW then
+      /* [31mL59C23 unknown[m */
+      p = p + 1; /* [31mL60C14 unknown[m */
+      read2 = random; /* [31mL62C21 unknown[m */
+      x1l = x <= p; /* [31mL63C17 unknown[m */
+      x1r = x >= p; /* [31mL64C17 unknown[m */
+      y1l = y <= p; /* [31mL65C17 unknown[m */
+      y1r = y >= p; /* [31m(L66C17)
+                       idd with 628 nodes, 81 leaves and 1064 paths[m */
+      if x1l and x1r then
+        /* [31mL67C25 unknown[m */
+        assume read2 == datax; /* [31mL68C30 unknown[m */
+        datax = read; /* [31mL69C21 unknown[m */
+      endif; /* [31m(L70C12)
+                idd with 661 nodes, 81 leaves and 1838 paths[m */
+      if y1l and y1r then
+        /* [31mL71C25 unknown[m */
+        assume read2 == datay; /* [31mL72C30 unknown[m */
+        datay = read; /* [31mL73C21 unknown[m */
+      endif; /* [31m(L74C12)
+                idd with 721 nodes, 80 leaves and 2064 paths[m */
+      if x0l and x0r then
+        /* [31mL75C25 unknown[m */
+        datax = read2; /* [31mL76C22 unknown[m */
+      endif; /* [31m(L77C12)
+                idd with 756 nodes, 80 leaves and 2817 paths[m */
+      if y0l and y0r then
+        /* [31mL78C25 unknown[m */
+        datay = read2; /* [31mL79C22 unknown[m */
+      endif; /* [31m(L80C12)
+                idd with 850 nodes, 80 leaves and 3265 paths[m */
+      i = i + 1; /* [31mL82C14 unknown[m */
+    else
+      /* [31m(L83C8)
+         idd with 1026 nodes, 115 leaves and 4439 paths[m */
+      if read == HIGH then
+        /* [31mL85C26 unknown[m */
+        q = q - 1; /* [31mL86C16 unknown[m */
+        read2 = random; /* [31mL88C23 unknown[m */
+        x2l = x <= q; /* [31mL89C19 unknown[m */
+        x2r = x >= q; /* [31mL90C19 unknown[m */
+        y2l = y <= q; /* [31mL91C19 unknown[m */
+        y2r = y >= q; /* [31m(L92C19)
+                         idd with 646 nodes, 91 leaves and 1113 paths[m */
+        if x2l and x2r then
+          /* [31mL93C27 unknown[m */
+          assume read2 == datax; /* [31mL94C32 unknown[m */
+          datax = read; /* [31mL95C23 unknown[m */
+        endif; /* [31m(L96C14)
+                  idd with 693 nodes, 91 leaves and 1642 paths[m */
+        if y2l and y2r then
+          /* [31mL97C27 unknown[m */
+          assume read2 == datay; /* [31mL98C32 unknown[m */
+          datay = read; /* [31mL99C23 unknown[m */
+        endif; /* [31m(L100C14)
+                  idd with 782 nodes, 91 leaves and 1904 paths[m */
+        if x0l and x0r then
+          /* [31mL101C27 unknown[m */
+          datax = read2; /* [31mL102C24 unknown[m */
+        endif; /* [31m(L103C14)
+                  idd with 823 nodes, 91 leaves and 3098 paths[m */
+        if y0l and y0r then
+          /* [31mL104C27 unknown[m */
+          datay = read2; /* [31mL105C24 unknown[m */
+        endif; /* [31mL106C14 unknown[m */
+      else
+        /* [31mL107C10 unknown[m */
+        i = i + 1; /* [31mL108C16 unknown[m */
+      endif; /* [31mL109C12 unknown[m */
+    endif; /* [31m(L110C10)
+              idd with 2433 nodes, 254 leaves and 9586 paths[m */
+    read = random; /* [31mL111C18 unknown[m */
+    read2 = random; /* [31mL112C19 unknown[m */
+  done; /* [31mL113C7 unknown[m */
+  i = random; /* [31mL114C13 unknown[m */
+  datax = random; /* [31m(L115C17)
+                     { (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and y0l and y0r and not y1l and y1r and y2l
+                        and not y2r) and
+                       [|-q+y+1=0; -q+x+1=0; -p+q-2>=0; p>=0; n-q-1>=0|] or
+                       (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-q+x+1=0; -p+y-1>=0; q-y-2>=0; p>=0; n-q>=0|] or
+                       (x0l and x0r and not x1l and x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and not y2l and not y2r) and
+                       [|-n+y+1=0; -n+x+1=0; -n+q=0; p>=0; n-p-2>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and not y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; -q+x+1=0; p+1=0; q-1>=0; n-q-1>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and not y1l
+                        and not y1r and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+x+1=0; p+1=0; y>=0; q-y-3>=0; n-q-4>=0|] or
+                       (x0l and x0r and not x1l and not x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and not y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+y+1=0; -n+x+1=0; -n+q=0; p+1=0; n-1>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and y0l and y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-p+x=0; -q+y+1=0; -p+q-2>=0; p>=0; n-p-3>=0; n-q>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-p+x=0; -p+y-1>=0; q-y-1>=0; p>=0; n-q>=0; n-y-2>=0|] or
+                       (x0l and not x0r and x1l and x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+y+1=0; -n+q=0; -p+x=0; p>=0; n-p-2>=0|] or
+                       (x0l and not x0r and x1l and x1r and not x2l
+                        and not x2r and y0l and not y0r and not y1l and y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+q=0; -p+x=0; -p+y-1>=0; p>=0; n-y-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; -p+q-2>=0; p-x-1>=0; p+1>=0; n-q>=0;
+                         n+q-x-6>=0; n+q-4>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and not y1l and y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-p+y-1>=0; q-y-1>=0; p-x-1>=0; p+1>=0; n-q>=0;
+                         n-y-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and not y2l and not y2r) and
+                       [|-n+y+1=0; -n+q=0; x>=0; p-x-1>=0; n-p-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and not x2l
+                        and not x2r and y0l and not y0r and not y1l and y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+q=0; -p+y-1>=0; x>=0; p-x-1>=0; n-y-2>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; -p+x-1>=0; q-x-2>=0; p>=0; n-q>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and not y0r and not y1l and y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-p+y-1>=0; -p+x-1>=0; q-x-1>=0; q-y-1>=0; p>=0;
+                         n-q>=0; n-x-2>=0; n-y-2>=0; 3n-q-x-y-5>=0;
+                         4n-p-2q-8>=0|] or
+                       (x0l and not x0r and not x1l and x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and not y2l and not y2r) and
+                       [|-n+y+1=0; -n+q=0; -p+x-1>=0; p>=0; n-x-2>=0|] or
+                       (x0l and not x0r and not x1l and x1r and not x2l
+                        and not x2r and y0l and not y0r and not y1l and y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+q=0; -p+x-1>=0; -x+y>=0; p>=0; n-y-2>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and not y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; p+1=0; q-x-2>=0; q-1>=0; n-q-1>=0; n-3>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and not y1l
+                        and not y1r and y2l and not y2r and datay = MIDDLE) and
+                       [|p+1=0; y>=0; q-x-1>=0; q-y-1>=0; n-q-1>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and not x2l
+                        and not x2r and y0l and y0r and not y1l and not y1r
+                        and not y2l and not y2r and datay = MIDDLE) and
+                       [|-n+y+1=0; -n+q=0; p+1=0; x>=0; n-x-2>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and not x2l
+                        and not x2r and y0l and not y0r and not y1l
+                        and not y1r and not y2l and not y2r
+                        and datay = MIDDLE) and
+                       [|-n+q=0; p+1=0; -x+y>=0; x>=0; n-y-2>=0|] or
+                       (not x0l and x0r and not x1l and x1r and x2l and x2r
+                        and y0l and y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; -q+x=0; -p+q-2>=0; q-3>=0; p>=0; n-q>=0|] or
+                       (not x0l and x0r and not x1l and x1r and x2l and x2r
+                        and y0l and not y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-q+x=0; -p+y-1>=0; q-y-2>=0; p>=0; n-q>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and y0r and not y1l and y1r and y2l
+                        and not y2r and datay = MIDDLE) and
+                       [|-q+y+1=0; -p+q-2>=0; -q+x-1>=0; x-4>=0; p>=0;
+                         n-q>=0; n-3>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and not y0r and not y1l and y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-p+y-1>=0; -q+x-1>=0; q-y-1>=0; p>=0; n-q>=0;
+                         n-y-2>=0|] or
+                       (not x0l and x0r and not x1l and not x1r and x2l
+                        and x2r and y0l and not y0r and not y1l and not y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|-q+x=0; p+1=0; y>=0; q-y-2>=0; n-q-5>=0|] or
+                       (not x0l and x0r and not x1l and not x1r and not x2l
+                        and x2r and y0l and not y0r and not y1l and not y1r
+                        and y2l and not y2r and datay = MIDDLE) and
+                       [|p+1=0; -q+x-1>=0; y>=0; q-y-1>=0; n+q-2x-4>=0|] or
+                       (x0l and x0r and x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and y2l
+                        and y2r and datay = HIGH) and
+                       [|-p+y-1=0; -p+x=0; -p+q-1=0; p>=0; n-p-2>=0|] or
+                       (x0l and x0r and x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r and datay = HIGH) and
+                       [|-p+x=0; -p+q-1=0; -p+y-2>=0; p>=0; n-y-1>=0|] or
+                       (not x0l and x0r and not x1l and x1r and x2l and x2r
+                        and not y0l and y0r and not y1l and y1r and y2l
+                        and y2r and datay = HIGH
+                        or x0l and x0r and not x1l and x1r and x2l and x2r
+                           and y0l and y0r and not y1l and y1r and y2l
+                           and y2r and datay = HIGH) and
+                       [|-q+y=0; -q+x=0; -p+q-1>=0; p>=0; n-q-1>=0|] or
+                       (x0r and not x1l and x1r and x2l and x2r and not y0l
+                        and y0r and not y1l and y1r and not y2l and y2r
+                        and datay = HIGH) and
+                       [|-q+x=0; -p+q-1>=0; -q+y-1>=0; p>=0; n-y-1>=0|] or
+                       (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and y2l
+                        and y2r and datay = HIGH) and
+                       [|-q+y=0; -q+x+1=0; -p+q-2>=0; p>=0; n-q-1>=0|] or
+                       (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r and datay = HIGH) and
+                       [|-q+x+1=0; -p+q-2>=0; -q+y-1>=0; p>=0; n-y-1>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l and x2r
+                        and y0l and y0r and not y1l and not y1r and y2l
+                        and y2r and datay = HIGH) and
+                       [|-q+y=0; -q+x=0; p+1=0; q>=0; n-q-1>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and not y1l and not y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|-q+x=0; p+1=0; -q+y-1>=0; q>=0; n-y-1>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l
+                        and not y1r and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -q+x+1=0; p+1=0; q-1>=0; n-q-1>=0|] or
+                       (x0l and x0r and not x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l
+                        and not y1r and not y2l and y2r and datay = HIGH) and
+                       [|-q+x+1=0; p+1=0; -q+y-1>=0; q-1>=0; n-y-1>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and y0l and y0r and not y1l and y1r and y2l and y2r
+                        and datay = HIGH) and
+                       [|-p+x=0; -q+y=0; -p+q-1>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and y2l
+                        and y2r and datay = HIGH) and
+                       [|-p+x=0; -q+y=0; -p+q-2>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r and datay = HIGH) and
+                       [|-p+x=0; -p+q-1>=0; -q+y-1>=0; p>=0; n-y-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+q-1>=0; p-x-1>=0; p+1>=0; n-q-1>=0;
+                         n-3>=0; 2n+p-2q-3>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and not y2r and datay in {LOW,HIGH}) and
+                       [|-q+y+1=0; -p+q-2>=0; p-x-1>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+q-1>=0; q-1>=0; p-x-1>=0; p+1>=0;
+                         n-q-1>=0; n+q-x-5>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|-p+q-1>=0; -q+y-1>=0; p-x-1>=0; p+1>=0; n-y-1>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+x-1>=0; q-x-1>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and y1r
+                        and y2l and not y2r and datay in {LOW,HIGH}) and
+                       [|-q+y+1=0; -p+x-1>=0; q-x-2>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+x-1>=0; q-x-2>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|-p+x-1>=0; -q+y-1>=0; q-x-1>=0; p>=0; n-y-1>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and not y1l and not y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; p+1=0; q-x-1>=0; q>=0; n-q-1>=0; n+q-3>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l
+                        and not y1r and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; p+1=0; q-x-2>=0; q-1>=0; n-q-1>=0; n-3>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l
+                        and not y1r and not y2l and y2r and datay = HIGH) and
+                       [|p+1=0; -q+y-1>=0; q-x-1>=0; q>=0; n-y-1>=0; n-3>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and y0r and not y1l and y1r and y2l
+                        and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+q-1>=0; -q+x-2>=0; x-4>=0; p>=0;
+                         n-q-1>=0; n-3>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and y0r and not y1l and y1r and y2l
+                        and not y2r and datay in {LOW,HIGH}) and
+                       [|-q+y+1=0; -p+q-2>=0; -q+x-2>=0; p-1>=0; n-q-1>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and not y0l and y0r and not y1l and y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -p+q-1>=0; -q+x-1>=0; q-2>=0; p>=0; n-q-1>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|-p+q-1>=0; -q+y>=0; -q+x-1>=0; y-2>=0; p>=0;
+                         n-q+2y-6>=0; n-y-1>=0|] or
+                       (not x0l and x0r and not x1l and not x1r and x2l
+                        and x2r and not y0l and y0r and not y1l and not y1r
+                        and y2l and y2r and datay = HIGH) and
+                       [|-q+y=0; -q+x=0; p+1=0; q-1>=0; n-q-1>=0|] or
+                       (not x0l and x0r and not x1l and not x1r and x2l
+                        and x2r and not y0l and y0r and not y1l and not y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|-q+x=0; p+1=0; -q+y-1>=0; q-1>=0; n-y-1>=0|] or
+                       (not x0l and x0r and not x1l and not x1r and not x2l
+                        and x2r and not y0l and y0r and not y1l and not y1r
+                        and not y2l and y2r and datay = HIGH) and
+                       [|p+1=0; -q+x-1>=0; -x+y>=0; q>=0; n-y-1>=0|] or
+                       (x0l and x0r and x1l and x1r and x2l and not x2r
+                        and y0l and y0r and y1l and y1r and y2l and not y2r
+                        and datay = LOW) and
+                       [|-p+y=0; -p+x=0; -p+q-1=0; p>=0; n-p-2>=0|] or
+                       (x0l and x0r and x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and y1l and not y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+x=0; -p+q-1=0; p-y-3>=0; p-2>=0; n-p-1>=0|] or
+                       (x0l and x0r and x1l and x1r and not x2l and not x2r
+                        and y0l and y0r and y1l and y1r and not y2l
+                        and not y2r and datay = LOW) and
+                       [|-n+y+1=0; -n+x+1=0; -n+q=0; -n+p+1=0; n-1>=0|] or
+                       (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -q+x+1=0; -p+q-3>=0; p>=0; n-q>=0|] or
+                       (x0l and x0r and not x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and y1l and not y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-q+x+1=0; -p+q-2>=0; q-2>=0; 2q-y-6>=0; p-y-1>=0;
+                         p+1>=0; n-q>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+x=0; -p+q-1>=0; p>=0; n-q-1>=0|] or
+                       (x0l and not x0r and x1l and x1r and x2l and not x2r
+                        and y0l and not y0r and y1l and not y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+x=0; -p+q-1>=0; p-y-1>=0; p+1>=0; n-p-2>=0;
+                         n-p+q-y-5>=0; n-q>=0; n-2>=0; 2n-2p+q-6>=0;
+                         2n-y-6>=0; 3n-2p+q-y-10>=0|] or
+                       (x0l and not x0r and x1l and x1r and not x2l
+                        and not x2r and y0l and not y0r and y1l and y1r
+                        and not y2l and not y2r and datay = LOW) and
+                       [|-n+q=0; -p+y=0; -p+x=0; p>=0; n-p-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+q-1=0; p-x-1>=0; p>=0; n-p-2>=0; n-3>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and y1l and y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+q-1>=0; p-x-1>=0; p>=0; n-p-2>=0;
+                         n-p+q-4>=0; n-q>=0; n+p-x-4>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and y1l and not y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+q-1>=0; p-x>=0; p-y-1>=0; p>=0; n-q>=0; n-y-3>=0;
+                         n-2>=0; n+p-2x-3>=0; n+p-y-4>=0; 2n-x-5>=0;
+                         2n-y-6>=0; 2n+p-2x-y-7>=0; 2n+p-2x-6>=0;
+                         3n-x-y-9>=0; 3n+p-2x-y-10>=0; 4n-q-x-2y-10>=0;
+                         5n-q-x-2y-13>=0; 6n+p-2q-2x-3y-15>=0;
+                         7n+p-2q-2x-3y-18>=0|] or
+                       (x0l and not x0r and x1l and not x1r and not x2l
+                        and not x2r and y0l and y0r and y1l and y1r
+                        and not y2l and not y2r and datay = LOW) and
+                       [|-n+y+1=0; -n+q=0; -n+p+1=0; x>=0; n-x-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and not x2l
+                        and not x2r and y0l and not y0r and y1l and y1r
+                        and not y2l and not y2r and datay = LOW) and
+                       [|-n+q=0; -p+y=0; x>=0; p-x-1>=0; n-p-2>=0|] or
+                       (x0l and not x0r and x1l and not x1r and not x2l
+                        and not x2r and y0l and not y0r and y1l and not y1r
+                        and not y2l and not y2r and datay = LOW) and
+                       [|-n+q=0; -x+y>=0; x>=0; p-y-1>=0; n-p-1>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and not y0r and y1l and y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+x-1>=0; q-x-1>=0; p>=0; n-q>=0; n-x-2>=0|] or
+                       (x0l and not x0r and not x1l and x1r and x2l
+                        and not x2r and y0l and not y0r and y1l and not y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+x-1>=0; q-x-1>=0; p-y-1>=0; p+1>=0; n-q>=0;
+                         n-x-2>=0|] or
+                       (x0l and not x0r and not x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and not y1l
+                        and not y1r and y2l and not y2r and datay = LOW) and
+                       [|p+1=0; -x+y>=0; -y-1>=0; q>=0; n-q-1>=0; n-3>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l and x2r
+                        and y0l and not y0r and y1l and not y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-q+x=0; -p+q-2>=0; p-y-1>=0; p>=0; n-p-3>=0; n-q>=0|] or
+                       (not x0l and x0r and x1l and not x1r and not x2l
+                        and x2r and y0l and not y0r and y1l and not y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+q-1>=0; -q+x-1>=0; p-y-1>=0; p>=0; n-p-3>=0;
+                         n-q>=0|] or
+                       (not x0l and x0r and not x1l and x1r and x2l and x2r
+                        and y0l and not y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -q+x=0; -p+q-2>=0; p>=0; n-q>=0; n-3>=0|] or
+                       (not x0l and x0r and not x1l and x1r and x2l and x2r
+                        and y0l and not y0r and y1l and not y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-q+x=0; -p+q-1>=0; q-1>=0; 2q-y-4>=0; p-y-1>=0;
+                         p+1>=0; n-q>=0; n-y-3>=0; n-2>=0; 2n-y-6>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+q-1=0; -p+x-3>=0; p-1>=0; n-p-2>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and not y0r and y1l and y1r and y2l
+                        and not y2r and datay = LOW) and
+                       [|-p+y=0; -p+q-1>=0; -q+x-1>=0; p>=0; n-2p+q-4>=0;
+                         n-q>=0; n-3>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and y0l and not y0r and y1l and not y1r
+                        and y2l and not y2r and datay = LOW) and
+                       [|-p+q-1>=0; -q+x-1>=0; p-y-1>=0; p+1>=0; n-q>=0;
+                         n-y-3>=0; n-2>=0; 2n-y-6>=0|] }[m */
+end
+
+Size of (explored) equation system: 37 variables, 49 functions
+Time = 15.727000
+manager.size=520,520

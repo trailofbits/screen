@@ -1,0 +1,111 @@
+var
+  n: int, i: int, j: int, k: int,
+  x: int, y: int,
+  x0l: bool, x0r: bool,
+  x1l: bool, x1r: bool,
+  x2l: bool, x2r: bool,
+  y0l: bool, y0r: bool,
+  y1l: bool, y1r: bool,
+  y2l: bool, y2r: bool,
+  a: int, b:int,
+  min: int, tmp: int;
+
+begin
+  assume i>=0 and i<n-1;
+
+  assume x>=0 and x<=y and y<n;
+
+  x0l = false;
+  x0r = false;
+  y0l = false;
+  y0r = false;
+  x2l = false;
+  x2r = false;
+  y2l = false;
+  y2r = false;
+
+    x0l = x<=i;
+    x0r = x>=i;
+    y0l = y<=i;
+    y0r = y>=i;
+    min = random;
+    if x0l and x0r then
+      assume min == a;
+    endif;
+    if y0l and y0r then
+      assume min == b;
+    endif;
+
+    k=i;
+    x2l = x<=k;
+    x2r = x>=k;
+    y2l = y<=k;
+    y2r = y>=k;
+  
+    tmp = random;
+
+    j=i+1;
+    x1l = false;
+    x1r = false;
+    y1l = false;
+    y1r = false;
+    while j<n do
+      x1l = x<=j;
+      x1r = x>=j;
+      y1l = y<=j;
+      y1r = y>=j;
+
+      tmp = random;
+      if x1l and x1r then
+        assume tmp == a;
+      endif;
+      if y1l and y1r then
+        assume tmp == b;
+      endif;
+      if tmp < min then
+        k = j;
+        x2l = x<=k;
+        x2r = x>=k;
+        y2l = y<=k;
+        y2r = y>=k;
+        min = tmp;
+      endif;    
+      j = j+1;
+      tmp = random;
+    done;
+
+    j = random;
+    x1l = random;
+    x1r = random;
+    y1l = random;
+    y1r = random;
+
+    if k>i then
+      tmp = random;
+      if x0l and x0r then
+        assume tmp == a;
+      endif;
+      if y0l and y0r then
+        assume tmp == b;
+      endif;
+      if x2l and x2r then
+        a = tmp;
+      endif;
+      if y2l and y2r then
+        b = tmp;
+      endif;
+      if x0l and x0r then
+        a = min;
+      endif;
+      if y0l and y0r then
+        b = min;
+      endif;
+    endif;
+
+  min = random;
+  tmp = random;
+  k = random;
+  x1l = random;
+  x1r = random;
+
+end

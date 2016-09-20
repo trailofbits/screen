@@ -1,0 +1,44 @@
+var n: int, i: int, j: int, k: int,
+  x: int,
+  x0l: bool, x0r: bool,
+  x1l: bool, x1r: bool,
+  a: int, min: int, tmp: int;
+
+begin
+  x = random;
+  assume x>=0 and x<n;
+  a = random;
+  assume i>=0 and i<n-1;
+
+  x0l = x<=i;
+  x0r = x>=i;
+  tmp = random;
+  if x0l and x0r then
+    min = a;
+  endif;
+  k=i;
+
+  j=i+1;
+  x1l = false;
+  x1r = false;
+  while j<n do
+    x1l = x<=j;
+    x1r = x>=j;
+    tmp = random;
+    if x1l and x1r then
+      tmp = a;
+    endif;
+    if tmp < min then
+      k = j;
+      min = tmp;
+    endif;    
+    j = j+1;
+  done;
+  j = random;
+  tmp = random;
+  x1l = false;
+  x1r = false;
+
+  assume x>=i;
+  assume a<min; /* BOTTOM: for all x>=i, a[x]>=min (use -threshold true) */
+end

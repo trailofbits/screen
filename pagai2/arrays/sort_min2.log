@@ -1,0 +1,1453 @@
+
+Step 1
+
+Step 2
+dynamic=true, before thresholds
+[32mResult of forward analysis projected on single program thread[m
+var n : int, i : int, j : int, k : int, x : int, y : int, x0l : bool,
+    x0r : bool, x1l : bool, x1r : bool, x2l : bool, x2r : bool, y0l : bool,
+    y0r : bool, y1l : bool, y1r : bool, y2l : bool, y2r : bool, a : int,
+    b : int, min : int, tmp : int;
+begin
+  /* [31m(L13C5)
+     { top }[m */
+  assume i >= 0 and i < n - 1; /* [31mL14C24 unknown[m */
+  assume x >= 0 and x <= y and y < n; /* [31mL16C31 unknown[m */
+  x0l = false; /* [31mL18C14 unknown[m */
+  x0r = false; /* [31mL19C14 unknown[m */
+  y0l = false; /* [31mL20C14 unknown[m */
+  y0r = false; /* [31mL21C14 unknown[m */
+  x2l = false; /* [31mL22C14 unknown[m */
+  x2r = false; /* [31mL23C14 unknown[m */
+  y2l = false; /* [31mL24C14 unknown[m */
+  y2r = false; /* [31mL25C14 unknown[m */
+  x0l = x <= i; /* [31mL27C15 unknown[m */
+  x0r = x >= i; /* [31mL28C15 unknown[m */
+  y0l = y <= i; /* [31mL29C15 unknown[m */
+  y0r = y >= i; /* [31mL30C15 unknown[m */
+  min = random; /* [31m(L31C17)
+                   { (x0l and x0r and not x2l and not x2r and y0l and y0r
+                      and not y2l and not y2r) and
+                     [|-i+y=0; -i+x=0; -i+n-2>=0; i>=0|] or
+                     (x0l and x0r and not x2l and not x2r and not y0l and y0r
+                      and not y2l and not y2r) and
+                     [|-i+x=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+                     (x0l and not x0r and not x2l and not x2r and y0l and y0r
+                      and not y2l and not y2r) and
+                     [|-i+y=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+                     (x0l and not x0r and not x2l and not x2r and y0l
+                      and not y0r and not y2l and not y2r) and
+                     [|-i+n-2>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                     (x0l and not x0r and not x2l and not x2r and not y0l
+                      and y0r and not y2l and not y2r) and
+                     [|-i+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0|] or
+                     (not x0l and x0r and not x2l and not x2r and not y0l
+                      and y0r and not y2l and not y2r) and
+                     [|-i+x-1>=0; -x+y>=0; n-y-1>=0; i>=0|] }[m */
+  if x0l and x0r then
+    /* [31mL32C23 unknown[m */
+    assume min == a; /* [31mL33C22 unknown[m */
+  endif; /* [31m(L34C10)
+            { (x0l and x0r and not x2l and not x2r and y0l and y0r
+               and not y2l and not y2r) and
+              [|-a+min=0; -i+y=0; -i+x=0; -i+n-2>=0; i>=0|] or
+              (x0l and x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-a+min=0; -i+x=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+              (x0l and not x0r and not x2l and not x2r and y0l and y0r
+               and not y2l and not y2r) and
+              [|-i+y=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+              (x0l and not x0r and not x2l and not x2r and y0l and not y0r
+               and not y2l and not y2r) and
+              [|-i+n-2>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+              (x0l and not x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-i+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0|] or
+              (not x0l and x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-i+x-1>=0; -x+y>=0; n-y-1>=0; i>=0|] }[m */
+  if y0l and y0r then
+    /* [31mL35C23 unknown[m */
+    assume min == b; /* [31mL36C22 unknown[m */
+  endif; /* [31m(L37C10)
+            { (x0l and x0r and not x2l and not x2r and y0l and y0r
+               and not y2l and not y2r) and
+              [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+n-2>=0; i>=0|] or
+              (x0l and x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-a+min=0; -i+x=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+              (x0l and not x0r and not x2l and not x2r and y0l and y0r
+               and not y2l and not y2r) and
+              [|-b+min=0; -i+y=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+              (x0l and not x0r and not x2l and not x2r and y0l and not y0r
+               and not y2l and not y2r) and
+              [|-i+n-2>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+              (x0l and not x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-i+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0|] or
+              (not x0l and x0r and not x2l and not x2r and not y0l and y0r
+               and not y2l and not y2r) and
+              [|-i+x-1>=0; -x+y>=0; n-y-1>=0; i>=0|] }[m */
+  k = i; /* [31mL39C8 unknown[m */
+  x2l = x <= k; /* [31mL40C15 unknown[m */
+  x2r = x >= k; /* [31mL41C15 unknown[m */
+  y2l = y <= k; /* [31mL42C15 unknown[m */
+  y2r = y >= k; /* [31mL43C15 unknown[m */
+  tmp = random; /* [31mL45C17 unknown[m */
+  j = i + 1; /* [31mL47C10 unknown[m */
+  x1l = false; /* [31mL48C16 unknown[m */
+  x1r = false; /* [31mL49C16 unknown[m */
+  y1l = false; /* [31mL50C16 unknown[m */
+  y1r = false; /* [31m(L51C16)
+                  { (x0l and x0r and x1l and not x1r and x2l and x2r and y0l
+                     and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+j-2>=0;
+                      -j+n>=0; i>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-a+min=0; -i+x=0; -i+k=0; -j+y+1=0; -a+b>=0; -i+j-2>=0;
+                      -j+n>=0; i>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0; -j+n>=0;
+                      j-y-2>=0; i>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -i+x=0; -i+k=0; -i+j-2>=0; -j+y>=0; n-y-1>=0;
+                      i>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                    [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -j+n>=0; j-k-1>=0;
+                      i>=0; a-min-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                    [|-b+min=0; -i+x=0; -j+y+1=0; -j+k+1=0; -i+j-2>=0;
+                      -j+n>=0; i>=0; a-b-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-i+x=0; -j+y+1=0; -i+k-1>=0; -j+n>=0; j-k-2>=0; 
+                      i>=0; b-min>=0; a-min-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -j+n>=0; j-k-2>=0;
+                      i>=0; a-b-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l
+                     and not y2r) and
+                    [|-i+x=0; -i+y-1>=0; -j+n>=0; k-y-1>=0; j-k-1>=0; 
+                      i>=0; b-min-1>=0; a-min-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-i+x=0; -i+k-1>=0; -j+n>=0; -k+y-1>=0; j-y-2>=0; 
+                      i>=0; b-min>=0; a-min-1>=0|] or
+                    (x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-i+x=0; -i+k-1>=0; -j+y>=0; n-y-1>=0; j-k-1>=0; 
+                      i>=0; a-min-1>=0|] or
+                    (x0l and x0r and not x1l and not x1r and x2l and x2r
+                     and y0l and y0r and not y1l and not y1r and y2l and y2r) and
+                    [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+j-1=0;
+                      -i+n-2>=0; i>=0|] or
+                    (x0l and x0r and not x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and not y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -i+x=0; -i+k=0; -i+j-1=0; -i+y-1>=0;
+                      n-y-1>=0; i>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and y0l and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-b+min=0; -i+y=0; -i+k=0; -i+j-2>=0; -j+n>=0; x>=0;
+                      i-x-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                    [|-i+y=0; -i+k-1>=0; -j+n>=0; x>=0; j-k-1>=0; i-x-1>=0;
+                      b-min-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and y0l and not y0r and y1l and not y1r and y2l
+                     and not y2r) and
+                    [|-i+k>=0; -i+j-2>=0; -j+n>=0; -x+y>=0; x>=0; j-k-1>=0;
+                      i-y-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                    [|-b+min=0; -j+y+1=0; -j+k+1=0; -i+j-2>=0; -j+n>=0; 
+                      x>=0; i-x-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-j+y+1=0; -i+k>=0; -j+n>=0; x>=0; j-k-2>=0; i-x-1>=0;
+                      b-min>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-b+min=0; -k+y=0; -i+k-1>=0; -j+n>=0; x>=0; j-k-2>=0;
+                      i-x-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l
+                     and not y2r) and
+                    [|-i+y-1>=0; -j+n>=0; x>=0; k-y-1>=0; j-k-1>=0; i-x-1>=0;
+                      b-min-1>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-i+k>=0; -j+n>=0; -k+y-1>=0; x>=0; j-y-2>=0; i-x-1>=0;
+                      b-min>=0|] or
+                    (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-i+k>=0; -i+j-2>=0; -j+y>=0; x>=0; n-y-1>=0; j-k-1>=0;
+                      i-x-1>=0|] or
+                    (x0l and not x0r and not x1l and not x1r and x2l
+                     and not x2r and y0l and y0r and not y1l and not y1r
+                     and y2l and y2r) and
+                    [|-b+min=0; -i+y=0; -i+k=0; -i+j-1=0; -i+n-2>=0; 
+                      x>=0; i-x-1>=0|] or
+                    (x0l and not x0r and not x1l and not x1r and x2l
+                     and not x2r and y0l and not y0r and not y1l and not y1r
+                     and y2l and not y2r) and
+                    [|-i+k=0; -i+j-1=0; -i+n-2>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                    (x0l and not x0r and not x1l and not x1r and x2l
+                     and not x2r and not y0l and y0r and not y1l and not y1r
+                     and not y2l and y2r) and
+                    [|-i+k=0; -i+j-1=0; -i+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0|] or
+                    (not x0l and x0r and x1l and x1r and x2l and x2r
+                     and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                    [|-a+min=0; -a+b=0; -j+y+1=0; -j+x+1=0; -j+k+1=0;
+                      -i+j-2>=0; -j+n>=0; i>=0|] or
+                    (not x0l and x0r and x1l and x1r and x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -j+x+1=0; -j+k+1=0; -i+j-2>=0; -j+y>=0;
+                      n-y-1>=0; i>=0|] or
+                    (not x0l and x0r and x1l and x1r and not x2l and x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-a+b=0; -j+y+1=0; -j+x+1=0; -i+k>=0; -j+n>=0; j-k-2>=0;
+                      i>=0; a-min>=0|] or
+                    (not x0l and x0r and x1l and x1r and not x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-j+x+1=0; -i+k>=0; -j+y>=0; n-y-1>=0; j-k-2>=0; 
+                      i>=0; a-min>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-a+min=0; -j+y+1=0; -k+x=0; -a+b>=0; -i+k-1>=0;
+                      -j+n>=0; j-k-2>=0; i>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -j+n>=0;
+                      j-k-2>=0; i>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -j+n>=0;
+                      -k+y-1>=0; j-y-2>=0; i>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-a+min=0; -k+x=0; -i+k-1>=0; -j+y>=0; n-y-1>=0;
+                      j-k-2>=0; i>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                    [|-b+min=0; -j+y+1=0; -j+k+1=0; -i+x-1>=0; -j+n>=0;
+                      j-x-2>=0; i>=0; a-b-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-j+y+1=0; -i+x-1>=0; -j+n>=0; k-x-1>=0; j-k-2>=0; 
+                      i>=0; b-min>=0; a-min-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                    [|-b+min=0; -k+y=0; -i+x-1>=0; -j+n>=0; k-x-1>=0;
+                      j-k-2>=0; i>=0; a-b-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and y2l
+                     and not y2r) and
+                    [|-i+x-1>=0; -j+n>=0; -x+y>=0; k-y-1>=0; j-k-1>=0; 
+                      i>=0; b-min-1>=0; a-min-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-i+x-1>=0; -j+n>=0; -k+y-1>=0; k-x-1>=0; j-y-2>=0;
+                      i>=0; b-min>=0; a-min-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-i+x-1>=0; -j+y>=0; n-y-1>=0; k-x-1>=0; j-k-1>=0; 
+                      i>=0; a-min-1>=0|] or
+                    (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                     and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                    [|-j+y+1=0; -i+k>=0; -j+n>=0; -k+x-1>=0; j-x-2>=0; 
+                      i>=0; b-min>=0; a-min>=0|] or
+                    (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                     and not y0l and y0r and y1l and not y1r and not y2l
+                     and y2r) and
+                    [|-i+k>=0; -j+n>=0; -k+x-1>=0; -x+y>=0; j-y-2>=0; 
+                      i>=0; b-min>=0; a-min>=0|] or
+                    (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-i+k>=0; -j+y>=0; -k+x-1>=0; n-y-1>=0; j-x-2>=0; 
+                      i>=0; a-min>=0|] or
+                    (not x0l and x0r and not x1l and x1r and not x2l and x2r
+                     and not y0l and y0r and not y1l and y1r and not y2l
+                     and y2r) and
+                    [|-i+k>=0; -i+j-2>=0; -j+x>=0; -x+y>=0; n-y-1>=0;
+                      j-k-1>=0; i>=0|] or
+                    (not x0l and x0r and not x1l and not x1r and not x2l
+                     and x2r and not y0l and y0r and not y1l and not y1r
+                     and not y2l and y2r) and
+                    [|-i+k=0; -i+j-1=0; -i+x-1>=0; -x+y>=0; n-y-1>=0; i>=0|] }[m */
+  while j < n do
+    /* [31mL52C16 unknown[m */
+    x1l = x <= j; /* [31mL53C17 unknown[m */
+    x1r = x >= j; /* [31mL54C17 unknown[m */
+    y1l = y <= j; /* [31mL55C17 unknown[m */
+    y1r = y >= j; /* [31mL56C17 unknown[m */
+    tmp = random; /* [31m(L58C19)
+                     { (x0l and x0r and x1l and not x1r and x2l and x2r
+                        and y0l and y0r and y1l and not y1r and y2l and y2r) and
+                       [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+j-1>=0;
+                         -j+n-1>=0; i>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and y1l and y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -i+x=0; -i+k=0; -j+y=0; -i+j-1>=0;
+                         -j+n-1>=0; i>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and y1l and not y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0;
+                         -j+n-1>=0; j-y-1>=0; i>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -i+x=0; -i+k=0; -i+j-1>=0; -j+y-1>=0;
+                         n-y-1>=0; i>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and y0l and y0r and y1l and not y1r and y2l
+                        and not y2r) and
+                       [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -j+n-1>=0;
+                         j-k-1>=0; i>=0; a-min-1>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and not y0l and y0r and y1l and y1r and not y2l
+                        and y2r) and
+                       [|-i+x=0; -j+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                         i>=0; a-min-1>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and not y0l and y0r and y1l and not y1r and y2l
+                        and y2r) and
+                       [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -j+n-1>=0;
+                         j-k-1>=0; i>=0; a-b-1>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and not y0l and y0r and y1l and not y1r and y2l
+                        and not y2r) and
+                       [|-i+x=0; -i+y-1>=0; -j+n-1>=0; k-y-1>=0; j-k-1>=0;
+                         i>=0; b-min-1>=0; a-min-1>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and not y0l and y0r and y1l and not y1r and not y2l
+                        and y2r) and
+                       [|-i+x=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0; j-y-1>=0;
+                         i>=0; b-min>=0; a-min-1>=0|] or
+                       (x0l and x0r and x1l and not x1r and x2l and not x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r) and
+                       [|-i+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                         i>=0; a-min-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and y1l and not y1r
+                        and y2l and y2r) and
+                       [|-b+min=0; -i+y=0; -i+k=0; -i+j-1>=0; -j+n-1>=0;
+                         x>=0; i-x-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and y0r and y1l and not y1r
+                        and y2l and not y2r) and
+                       [|-i+y=0; -i+k-1>=0; -j+n-1>=0; x>=0; j-k-1>=0;
+                         i-x-1>=0; b-min-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and y0l and not y0r and y1l and not y1r
+                        and y2l and not y2r) and
+                       [|-i+k>=0; -j+n-1>=0; -x+y>=0; x>=0; j-k-1>=0;
+                         i-y-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and y1r
+                        and not y2l and y2r) and
+                       [|-j+y=0; -i+k>=0; -j+n-1>=0; x>=0; j-k-1>=0; i-x-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and y2l and y2r) and
+                       [|-b+min=0; -k+y=0; -i+k-1>=0; -j+n-1>=0; x>=0;
+                         j-k-1>=0; i-x-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and y2l and not y2r) and
+                       [|-i+y-1>=0; -j+n-1>=0; x>=0; k-y-1>=0; j-k-1>=0;
+                         i-x-1>=0; b-min-1>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and not y2l and y2r) and
+                       [|-i+k>=0; -j+n-1>=0; -k+y-1>=0; x>=0; j-y-1>=0;
+                         i-x-1>=0; b-min>=0|] or
+                       (x0l and not x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r) and
+                       [|-i+k>=0; -j+y-1>=0; x>=0; n-y-1>=0; j-k-1>=0;
+                         i-x-1>=0|] or
+                       (not x0l and x0r and x1l and x1r and not x2l and x2r
+                        and not y0l and y0r and y1l and y1r and not y2l
+                        and y2r) and
+                       [|-j+y=0; -j+x=0; -i+k>=0; -j+n-1>=0; j-k-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and x1r and not x2l and x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r) and
+                       [|-j+x=0; -i+k>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and y1l and y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -j+y=0; -k+x=0; -i+k-1>=0; -j+n-1>=0;
+                         j-k-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and y1l and not y1r and y2l
+                        and y2r) and
+                       [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0;
+                         -j+n-1>=0; j-k-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and y1l and not y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -j+n-1>=0;
+                         -k+y-1>=0; j-y-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l and x2r
+                        and not y0l and y0r and not y1l and y1r and not y2l
+                        and y2r) and
+                       [|-a+min=0; -k+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0;
+                         j-k-1>=0; i>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and y1r
+                        and not y2l and y2r) and
+                       [|-j+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0;
+                         i>=0; a-min-1>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and y2l and y2r) and
+                       [|-b+min=0; -k+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0;
+                         j-k-1>=0; i>=0; a-b-1>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and y2l and not y2r) and
+                       [|-i+x-1>=0; -j+n-1>=0; -x+y>=0; k-y-1>=0; j-k-1>=0;
+                         i>=0; b-min-1>=0; a-min-1>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and y1l and not y1r
+                        and not y2l and y2r) and
+                       [|-i+x-1>=0; -j+n-1>=0; -k+y-1>=0; k-x-1>=0; j-y-1>=0;
+                         i>=0; b-min>=0; a-min-1>=0|] or
+                       (not x0l and x0r and x1l and not x1r and x2l
+                        and not x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r) and
+                       [|-i+x-1>=0; -j+y-1>=0; n-y-1>=0; k-x-1>=0; j-k-1>=0;
+                         i>=0; a-min-1>=0|] or
+                       (not x0l and x0r and x1l and not x1r and not x2l
+                        and x2r and not y0l and y0r and y1l and y1r
+                        and not y2l and y2r) and
+                       [|-j+y=0; -i+k>=0; -j+n-1>=0; -k+x-1>=0; j-x-1>=0;
+                         i>=0; a-min>=0|] or
+                       (not x0l and x0r and x1l and not x1r and not x2l
+                        and x2r and not y0l and y0r and y1l and not y1r
+                        and not y2l and y2r) and
+                       [|-i+k>=0; -j+n-1>=0; -k+x-1>=0; -x+y>=0; j-y-1>=0;
+                         i>=0; b-min>=0; a-min>=0|] or
+                       (not x0l and x0r and x1l and not x1r and not x2l
+                        and x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r) and
+                       [|-i+k>=0; -j+y-1>=0; -k+x-1>=0; n-y-1>=0; j-x-1>=0;
+                         i>=0; a-min>=0|] or
+                       (not x0l and x0r and not x1l and x1r and not x2l
+                        and x2r and not y0l and y0r and not y1l and y1r
+                        and not y2l and y2r) and
+                       [|-i+k>=0; -j+x-1>=0; -x+y>=0; n-y-1>=0; j-k-1>=0;
+                         i>=0|] }[m */
+    if x1l and x1r then
+      /* [31mL59C25 unknown[m */
+      assume tmp == a; /* [31mL60C24 unknown[m */
+    endif; /* [31m(L61C12)
+              { (x0l and x0r and x1l and not x1r and x2l and x2r and y0l
+                 and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+j-1>=0;
+                  -j+n-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -j+y=0; -i+j-1>=0; -j+n-1>=0;
+                  i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0; -j+n-1>=0;
+                  j-y-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -i+j-1>=0; -j+y-1>=0; n-y-1>=0;
+                  i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r and y0l
+                 and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-i+x=0; -j+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x=0; -i+y-1>=0; -j+n-1>=0; k-y-1>=0; j-k-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0; j-y-1>=0; 
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+y=0; -i+k=0; -i+j-1>=0; -j+n-1>=0; x>=0;
+                  i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y=0; -i+k-1>=0; -j+n-1>=0; x>=0; j-k-1>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and not y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+k>=0; -j+n-1>=0; -x+y>=0; x>=0; j-k-1>=0; i-y-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-j+y=0; -i+k>=0; -j+n-1>=0; x>=0; j-k-1>=0; i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+k-1>=0; -j+n-1>=0; x>=0; j-k-1>=0;
+                  i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y-1>=0; -j+n-1>=0; x>=0; k-y-1>=0; j-k-1>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+y-1>=0; x>=0; j-y-1>=0; i-x-1>=0;
+                  b-min>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+y-1>=0; x>=0; n-y-1>=0; j-k-1>=0; i-x-1>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -j+y=0; -j+x=0; -i+k>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -j+x=0; -i+k>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -j+y=0; -k+x=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0;
+                  j-y-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-j+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -x+y>=0; k-y-1>=0; j-k-1>=0; 
+                  i>=0; b-min-1>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -k+y-1>=0; k-x-1>=0; j-y-1>=0; 
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+y-1>=0; n-y-1>=0; k-x-1>=0; j-k-1>=0; 
+                  i>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-j+y=0; -i+k>=0; -j+n-1>=0; -k+x-1>=0; j-x-1>=0; i>=0;
+                  a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+x-1>=0; -x+y>=0; j-y-1>=0; i>=0;
+                  b-min>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+y-1>=0; -k+x-1>=0; n-y-1>=0; j-x-1>=0; 
+                  i>=0; a-min>=0|] or
+                (not x0l and x0r and not x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+x-1>=0; -x+y>=0; n-y-1>=0; j-k-1>=0; i>=0|] }[m */
+    if y1l and y1r then
+      /* [31mL62C25 unknown[m */
+      assume tmp == b; /* [31mL63C24 unknown[m */
+    endif; /* [31m(L64C12)
+              { (x0l and x0r and x1l and not x1r and x2l and x2r and y0l
+                 and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+j-1>=0;
+                  -j+n-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -b+tmp=0; -i+x=0; -i+k=0; -j+y=0; -i+j-1>=0;
+                  -j+n-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0; -j+n-1>=0;
+                  j-y-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -i+j-1>=0; -j+y-1>=0; n-y-1>=0;
+                  i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r and y0l
+                 and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -i+x=0; -j+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x=0; -i+y-1>=0; -j+n-1>=0; k-y-1>=0; j-k-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0; j-y-1>=0; 
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+y=0; -i+k=0; -i+j-1>=0; -j+n-1>=0; x>=0;
+                  i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y=0; -i+k-1>=0; -j+n-1>=0; x>=0; j-k-1>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and not y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+k>=0; -j+n-1>=0; -x+y>=0; x>=0; j-k-1>=0; i-y-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+k>=0; -j+n-1>=0; x>=0; j-k-1>=0;
+                  i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+k-1>=0; -j+n-1>=0; x>=0; j-k-1>=0;
+                  i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y-1>=0; -j+n-1>=0; x>=0; k-y-1>=0; j-k-1>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+y-1>=0; x>=0; j-y-1>=0; i-x-1>=0;
+                  b-min>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+y-1>=0; x>=0; n-y-1>=0; j-k-1>=0; i-x-1>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -a+b=0; -j+y=0; -j+x=0; -i+k>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -j+x=0; -i+k>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -b+tmp=0; -j+y=0; -k+x=0; -i+k-1>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0;
+                  j-y-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -i+k-1>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -x+y>=0; k-y-1>=0; j-k-1>=0; 
+                  i>=0; b-min-1>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -k+y-1>=0; k-x-1>=0; j-y-1>=0; 
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+y-1>=0; n-y-1>=0; k-x-1>=0; j-k-1>=0; 
+                  i>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+k>=0; -j+n-1>=0; -k+x-1>=0; j-x-1>=0;
+                  i>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+x-1>=0; -x+y>=0; j-y-1>=0; i>=0;
+                  b-min>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+y-1>=0; -k+x-1>=0; n-y-1>=0; j-x-1>=0; 
+                  i>=0; a-min>=0|] or
+                (not x0l and x0r and not x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+x-1>=0; -x+y>=0; n-y-1>=0; j-k-1>=0; i>=0|] }[m */
+    if tmp < min then
+      /* [31mL65C23 unknown[m */
+      k = j; /* [31mL66C14 unknown[m */
+      x2l = x <= k; /* [31mL67C19 unknown[m */
+      x2r = x >= k; /* [31mL68C19 unknown[m */
+      y2l = y <= k; /* [31mL69C19 unknown[m */
+      y2r = y >= k; /* [31mL70C19 unknown[m */
+      min = tmp; /* [31mL71C18 unknown[m */
+    endif; /* [31m(L72C12)
+              { (x0l and x0r and x1l and not x1r and x2l and x2r and y0l
+                 and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -a+tmp>=0;
+                  -i+j-1>=0; -j+n-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -b+tmp=0; -i+x=0; -i+k=0; -j+y=0; -a+b>=0;
+                  -i+j-1>=0; -j+n-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -a+tmp>=0; -a+b>=0; -i+y-1>=0;
+                  -j+n-1>=0; j-y-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and x2r and not y0l
+                 and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -i+k=0; -a+tmp>=0; -i+j-1>=0; -j+y-1>=0;
+                  n-y-1>=0; i>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r and y0l
+                 and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -j+n-1>=0; -min+tmp>=0;
+                  j-k>=0; i>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                [|-b+tmp=0; -b+min=0; -i+x=0; -j+y=0; -j+k=0; -i+j-1>=0;
+                  -j+n-1>=0; i>=0; a-b-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -i+x=0; -j+y=0; -i+k-1>=0; -j+n-1>=0; j-k-1>=0;
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+x=0; -k+y=0; -b+tmp>=0; -i+k-1>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0; a-b-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x=0; -i+y-1>=0; -j+n-1>=0; -min+tmp>=0; k-y-1>=0;
+                  j-k>=0; i>=0; b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+n-1>=0; -k+y-1>=0; -min+tmp>=0;
+                  j-y-1>=0; i>=0; b-min>=0; a-min-1>=0|] or
+                (x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x=0; -i+k-1>=0; -j+y-1>=0; -min+tmp>=0; n-y-1>=0;
+                  j-k>=0; i>=0; a-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -i+y=0; -i+k=0; -b+tmp>=0; -i+j-1>=0; -j+n-1>=0;
+                  x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y=0; -i+k-1>=0; -j+n-1>=0; -min+tmp>=0; x>=0; j-k>=0;
+                  i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and y0l and not y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+k>=0; -i+j-1>=0; -j+n-1>=0; -min+tmp>=0; -x+y>=0; 
+                  x>=0; j-k>=0; i-y-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                [|-b+tmp=0; -b+min=0; -j+y=0; -j+k=0; -i+j-1>=0; -j+n-1>=0;
+                  x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+k>=0; -j+n-1>=0; x>=0; j-k-1>=0;
+                  i-x-1>=0; b-min>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -b+tmp>=0; -i+k-1>=0; -j+n-1>=0; 
+                  x>=0; j-k-1>=0; i-x-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+y-1>=0; -j+n-1>=0; -min+tmp>=0; x>=0; k-y-1>=0; 
+                  j-k>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+y-1>=0; -min+tmp>=0; x>=0; j-y-1>=0;
+                  i-x-1>=0; b-min>=0|] or
+                (x0l and not x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -i+j-1>=0; -j+y-1>=0; -min+tmp>=0; x>=0; n-y-1>=0;
+                  j-k>=0; i-x-1>=0|] or
+                (not x0l and x0r and x1l and x1r and x2l and x2r and not y0l
+                 and y0r and y1l and y1r and y2l and y2r) and
+                [|-a+tmp=0; -a+min=0; -a+b=0; -j+y=0; -j+x=0; -j+k=0;
+                  -i+j-1>=0; -j+n-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and x1r and x2l and x2r and not y0l
+                 and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -a+min=0; -j+x=0; -j+k=0; -i+j-1>=0; -j+y-1>=0;
+                  n-y-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -a+b=0; -j+y=0; -j+x=0; -i+k>=0; -j+n-1>=0;
+                  j-k-1>=0; i>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+tmp=0; -j+x=0; -i+k>=0; -j+y-1>=0; n-y-1>=0; j-k-1>=0;
+                  i>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -b+tmp=0; -j+y=0; -k+x=0; -a+b>=0; -i+k-1>=0;
+                  -j+n-1>=0; j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -a+tmp>=0; -i+k-1>=0;
+                  -j+n-1>=0; j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+tmp>=0; -a+b>=0; -i+k-1>=0; -j+n-1>=0;
+                  -k+y-1>=0; j-y-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+tmp>=0; -i+k-1>=0; -j+y-1>=0;
+                  n-y-1>=0; j-k-1>=0; i>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and y2l and y2r) and
+                [|-b+tmp=0; -b+min=0; -j+y=0; -j+k=0; -i+x-1>=0; -j+n-1>=0;
+                  j-x-1>=0; i>=0; a-b-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+x-1>=0; -j+n-1>=0; k-x-1>=0; j-k-1>=0;
+                  i>=0; b-min>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -b+tmp>=0; -i+x-1>=0; -j+n-1>=0;
+                  k-x-1>=0; j-k-1>=0; i>=0; a-b-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and y2l and not y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -min+tmp>=0; -x+y>=0; k-y-1>=0;
+                  j-k>=0; i>=0; b-min-1>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+n-1>=0; -k+y-1>=0; -min+tmp>=0; k-x-1>=0;
+                  j-y-1>=0; i>=0; b-min>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and x2l and not x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+x-1>=0; -j+y-1>=0; -min+tmp>=0; n-y-1>=0; k-x-1>=0;
+                  j-k>=0; i>=0; a-min-1>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and y1r and not y2l and y2r) and
+                [|-b+tmp=0; -j+y=0; -i+k>=0; -j+n-1>=0; -k+x-1>=0; j-x-1>=0;
+                  i>=0; b-min>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and y1l and not y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+n-1>=0; -k+x-1>=0; -min+tmp>=0; -x+y>=0;
+                  j-y-1>=0; i>=0; b-min>=0; a-min>=0|] or
+                (not x0l and x0r and x1l and not x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -j+y-1>=0; -k+x-1>=0; -min+tmp>=0; n-y-1>=0;
+                  j-x-1>=0; i>=0; a-min>=0|] or
+                (not x0l and x0r and not x1l and x1r and not x2l and x2r
+                 and not y0l and y0r and not y1l and y1r and not y2l and y2r) and
+                [|-i+k>=0; -i+j-1>=0; -j+x-1>=0; -min+tmp>=0; -x+y>=0;
+                  n-y-1>=0; j-k>=0; i>=0|] }[m */
+    j = j + 1; /* [31mL73C14 unknown[m */
+    tmp = random; /* [31mL74C19 unknown[m */
+  done; /* [31mL75C9 unknown[m */
+  j = random; /* [31mL77C15 unknown[m */
+  x1l = random; /* [31mL78C17 unknown[m */
+  x1r = random; /* [31mL79C17 unknown[m */
+  y1l = random; /* [31mL80C17 unknown[m */
+  y1r = random; /* [31m(L81C17)
+                   { (x0l and x0r and x2l and x2r and y0l and y0r and y2l
+                      and y2r) and
+                     [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+n-2>=0;
+                       i>=0|] or
+                     (x0l and x0r and x2l and x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0;
+                       n-y-1>=0; i>=0|] or
+                     (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                      and not y2r) and
+                     [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0; 
+                       i>=0; a-min-1>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; 
+                       i>=0; a-b-1>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                       b-min-1>=0; a-min-1>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                       b-min>=0; a-min-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and y0l and y0r
+                      and y2l and y2r) and
+                     [|-b+min=0; -i+y=0; -i+k=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                       b-min-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                      and y2l and not y2r) and
+                     [|-i+n-2>=0; -i+k>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-b+min=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0;
+                       b-min-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+k>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                     (not x0l and x0r and x2l and x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0;
+                       -k+n-1>=0; i>=0|] or
+                     (not x0l and x0r and x2l and x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -k+y-1>=0;
+                       n-y-1>=0; i>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-b+min=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0;
+                       i>=0; a-b-1>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0;
+                       b-min-1>=0; a-min-1>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0;
+                       b-min>=0; a-min-1>=0|] or
+                     (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+k>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                       a-min>=0|] }[m */
+  if k > i then
+    /* [31mL83C15 unknown[m */
+    tmp = random; /* [31m(L84C19)
+                     { (x0l and x0r and x2l and not x2r and y0l and y0r
+                        and y2l and not y2r) and
+                       [|-a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0; 
+                         i>=0; a-min-1>=0|] or
+                       (x0l and x0r and x2l and not x2r and not y0l and y0r
+                        and y2l and y2r) and
+                       [|-b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0;
+                         i>=0; a-b-1>=0|] or
+                       (x0l and x0r and x2l and not x2r and not y0l and y0r
+                        and y2l and not y2r) and
+                       [|-i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                         b-min-1>=0; a-min-1>=0|] or
+                       (x0l and x0r and x2l and not x2r and not y0l and y0r
+                        and not y2l and y2r) and
+                       [|-i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                         b-min>=0; a-min-1>=0|] or
+                       (x0l and not x0r and x2l and not x2r and y0l and y0r
+                        and y2l and not y2r) and
+                       [|-i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                         b-min-1>=0|] or
+                       (x0l and not x0r and x2l and not x2r and y0l
+                        and not y0r and y2l and not y2r) and
+                       [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                       (x0l and not x0r and x2l and not x2r and not y0l
+                        and y0r and y2l and y2r) and
+                       [|-b+min=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0;
+                         i-x-1>=0|] or
+                       (x0l and not x0r and x2l and not x2r and not y0l
+                        and y0r and y2l and not y2r) and
+                       [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0;
+                         b-min-1>=0|] or
+                       (x0l and not x0r and x2l and not x2r and not y0l
+                        and y0r and not y2l and y2r) and
+                       [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0;
+                         b-min>=0|] or
+                       (not x0l and x0r and x2l and x2r and not y0l and y0r
+                        and y2l and y2r) and
+                       [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0;
+                         -k+n-1>=0; i>=0|] or
+                       (not x0l and x0r and x2l and x2r and not y0l and y0r
+                        and not y2l and y2r) and
+                       [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -k+y-1>=0;
+                         n-y-1>=0; i>=0|] or
+                       (not x0l and x0r and x2l and not x2r and not y0l
+                        and y0r and y2l and y2r) and
+                       [|-b+min=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0;
+                         i>=0; a-b-1>=0|] or
+                       (not x0l and x0r and x2l and not x2r and not y0l
+                        and y0r and y2l and not y2r) and
+                       [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0;
+                         b-min-1>=0; a-min-1>=0|] or
+                       (not x0l and x0r and x2l and not x2r and not y0l
+                        and y0r and not y2l and y2r) and
+                       [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0;
+                         b-min>=0; a-min-1>=0|] or
+                       (not x0l and x0r and not x2l and x2r and not y0l
+                        and y0r and not y2l and y2r) and
+                       [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0;
+                         b-min>=0; a-min>=0|] }[m */
+    if x0l and x0r then
+      /* [31mL85C25 unknown[m */
+      assume tmp == a; /* [31mL86C24 unknown[m */
+    endif; /* [31m(L87C12)
+              { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0; a-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                 and y2l and not y2r) and
+                [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                  a-b-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                  a-min>=0|] }[m */
+    if y0l and y0r then
+      /* [31mL88C25 unknown[m */
+      assume tmp == b; /* [31mL89C24 unknown[m */
+    endif; /* [31m(L90C12)
+              { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0; a-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-b+tmp=0; -i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                 and y2l and not y2r) and
+                [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+min=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+min=0; -k+x=0; -a+b>=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                  a-b-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                  a-min>=0|] }[m */
+    if x2l and x2r then
+      /* [31mL91C25 unknown[m */
+      a = tmp; /* [31mL92C16 unknown[m */
+    endif; /* [31m(L93C12)
+              { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -b+min=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-b-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0; a-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-b+tmp=0; -i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                 and y2l and not y2r) and
+                [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -b+min=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -k+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+min=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                  a-b-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                  a-min>=0|] }[m */
+    if y2l and y2r then
+      /* [31mL94C25 unknown[m */
+      b = tmp; /* [31mL95C16 unknown[m */
+    endif; /* [31m(L96C12)
+              { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -a+b=0; -i+y=0; -i+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -a+b=0; -i+x=0; -k+y=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+tmp=0; -i+x=0; -i+y-1>=0; -k+n-1>=0; k-y-1>=0; i>=0;
+                  b-min-1>=0; a-min-1>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -i+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0; a-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-b+tmp=0; -i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                 and y2l and not y2r) and
+                [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+tmp=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -k+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+tmp=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                  a-min>=0|] }[m */
+    if x0l and x0r then
+      /* [31mL97C25 unknown[m */
+      a = min; /* [31mL98C16 unknown[m */
+    endif; /* [31m(L99C12)
+              { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+min=0; -b+tmp=0; -i+y=0; -i+x=0; -a+b-1>=0; -i+k-1>=0;
+                  -k+n-1>=0; i>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+min=0; -b+tmp=0; -i+x=0; -k+y=0; -a+b-1>=0; -i+k-1>=0;
+                  -k+n-1>=0; i>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+                 and not y2r) and
+                [|-a+min=0; -i+x=0; -a+tmp-1>=0; -a+b-1>=0; -i+y-1>=0;
+                  -k+n-1>=0; k-y-1>=0; i>=0|] or
+                (x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+min=0; -i+x=0; -a+tmp-1>=0; -a+b>=0; -i+k-1>=0;
+                  -k+y-1>=0; n-y-1>=0; i>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+                 and not y2r) and
+                [|-b+tmp=0; -i+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0;
+                  b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                 and y2l and not y2r) and
+                [|-i+k-1>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+tmp=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+                (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+                 and y2r) and
+                [|-a+tmp=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0;
+                  i>=0|] or
+                (not x0l and x0r and x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-a+tmp=0; -k+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                  b-min>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and y2r) and
+                [|-b+tmp=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and y2l and not y2r) and
+                [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                  a-min-1>=0|] or
+                (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                 and not y2l and y2r) and
+                [|-i+k-1>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                  a-min>=0|] }[m */
+    if y0l and y0r then
+      /* [31mL100C25 unknown[m */
+      b = min; /* [31mL101C16 unknown[m */
+    endif; /* [31mL102C12 unknown[m */
+  endif; /* [31m(L103C10)
+            { (x0l and x0r and x2l and x2r and y0l and y0r and y2l and y2r) and
+              [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -i+k=0; -i+n-2>=0; i>=0|] or
+              (x0l and x0r and x2l and x2r and not y0l and y0r and not y2l
+               and y2r) and
+              [|-a+min=0; -i+x=0; -i+k=0; -a+b>=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+              (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+               and not y2r) and
+              [|-a+min=0; -a+b=0; -i+y=0; -i+x=0; -a+tmp-1>=0; -i+k-1>=0;
+                -k+n-1>=0; i>=0|] or
+              (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+               and y2r) and
+              [|-a+min=0; -b+tmp=0; -i+x=0; -k+y=0; -a+b-1>=0; -i+k-1>=0;
+                -k+n-1>=0; i>=0|] or
+              (x0l and x0r and x2l and not x2r and not y0l and y0r and y2l
+               and not y2r) and
+              [|-a+min=0; -i+x=0; -a+tmp-1>=0; -a+b-1>=0; -i+y-1>=0;
+                -k+n-1>=0; k-y-1>=0; i>=0|] or
+              (x0l and x0r and x2l and not x2r and not y0l and y0r
+               and not y2l and y2r) and
+              [|-a+min=0; -i+x=0; -a+tmp-1>=0; -a+b>=0; -i+k-1>=0; -k+y-1>=0;
+                n-y-1>=0; i>=0|] or
+              (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+               and y2r) and
+              [|-b+min=0; -i+y=0; -i+k=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+              (x0l and not x0r and x2l and not x2r and y0l and y0r and y2l
+               and not y2r) and
+              [|-b+min=0; -i+y=0; -b+tmp-1>=0; -i+k-1>=0; -k+n-1>=0; 
+                x>=0; i-x-1>=0|] or
+              (x0l and not x0r and x2l and not x2r and y0l and not y0r
+               and y2l and not y2r) and
+              [|-i+n-2>=0; -i+k>=0; -k+n-1>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+              (x0l and not x0r and x2l and not x2r and not y0l and y0r
+               and y2l and y2r) and
+              [|-b+tmp=0; -k+y=0; -i+k-1>=0; -k+n-1>=0; x>=0; i-x-1>=0|] or
+              (x0l and not x0r and x2l and not x2r and not y0l and y0r
+               and y2l and not y2r) and
+              [|-i+y-1>=0; -k+n-1>=0; x>=0; k-y-1>=0; i-x-1>=0; b-min-1>=0|] or
+              (x0l and not x0r and x2l and not x2r and not y0l and y0r
+               and not y2l and y2r) and
+              [|-i+k>=0; -k+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0; b-min>=0|] or
+              (not x0l and x0r and x2l and x2r and not y0l and y0r and y2l
+               and y2r) and
+              [|-a+tmp=0; -a+b=0; -k+y=0; -k+x=0; -i+k-1>=0; -k+n-1>=0; i>=0|] or
+              (not x0l and x0r and x2l and x2r and not y0l and y0r
+               and not y2l and y2r) and
+              [|-a+tmp=0; -k+x=0; -i+k-1>=0; -k+y-1>=0; n-y-1>=0; i>=0;
+                b-min>=0|] or
+              (not x0l and x0r and x2l and not x2r and not y0l and y0r
+               and y2l and y2r) and
+              [|-b+tmp=0; -k+y=0; -i+x-1>=0; -k+n-1>=0; k-x-1>=0; i>=0;
+                a-min-1>=0|] or
+              (not x0l and x0r and x2l and not x2r and not y0l and y0r
+               and y2l and not y2r) and
+              [|-i+x-1>=0; -k+n-1>=0; -x+y>=0; k-y-1>=0; i>=0; b-min-1>=0;
+                a-min-1>=0|] or
+              (not x0l and x0r and x2l and not x2r and not y0l and y0r
+               and not y2l and y2r) and
+              [|-i+x-1>=0; -k+y-1>=0; n-y-1>=0; k-x-1>=0; i>=0; b-min>=0;
+                a-min-1>=0|] or
+              (not x0l and x0r and not x2l and x2r and not y0l and y0r
+               and not y2l and y2r) and
+              [|-i+k>=0; -k+x-1>=0; -x+y>=0; n-y-1>=0; i>=0; b-min>=0;
+                a-min>=0|] }[m */
+  min = random; /* [31mL105C15 unknown[m */
+  tmp = random; /* [31mL106C15 unknown[m */
+  k = random; /* [31mL107C13 unknown[m */
+  x1l = random; /* [31mL108C15 unknown[m */
+  x1r = random; /* [31m(L109C15)
+                   { (x0l and x0r and x2l and not x2r and y0l and y0r and y2l
+                      and not y2r
+                      or x0l and x0r and x2l and x2r and y0l and y0r and y2l
+                         and y2r) and
+                     [|-a+b=0; -i+y=0; -i+x=0; -i+n-2>=0; i>=0|] or
+                     (x0l and x0r and x2l and x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x=0; -a+b>=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-i+x=0; -a+b-1>=0; -i+y-1>=0; n-y-1>=0; i>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+x=0; -a+b-1>=0; -i+y-1>=0; n-y-2>=0; i>=0|] or
+                     (x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x=0; -a+b>=0; -i+y-2>=0; n-y-1>=0; i>=0|] or
+                     (x0l and not x0r and x2l and not x2r and y0l and y0r
+                      and y2l) and
+                     [|-i+y=0; -i+n-2>=0; x>=0; i-x-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and y0l and not y0r
+                      and y2l and not y2r) and
+                     [|-i+n-2>=0; -x+y>=0; x>=0; i-y-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                      and y2r) and
+                     [|-i+y-1>=0; x>=0; n-y-1>=0; i-x-1>=0|] or
+                     (x0l and not x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+y-1>=0; x>=0; n-y-2>=0; i-x-1>=0|] or
+                     (not x0l and x0r and x2l and x2r and not y0l and y0r
+                      and y2l and y2r) and
+                     [|-a+b=0; -x+y=0; -i+x-1>=0; n-x-1>=0; i>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and y2r
+                      or not x0l and x0r and x2l and x2r and not y0l and y0r
+                         and not y2l and y2r) and
+                     [|-i+x-1>=0; -x+y-1>=0; n-y-1>=0; i>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and y2l and not y2r) and
+                     [|-i+x-1>=0; -x+y>=0; n-y-2>=0; i>=0|] or
+                     (not x0l and x0r and x2l and not x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x-1>=0; -x+y-2>=0; n-y-1>=0; i>=0|] or
+                     (not x0l and x0r and not x2l and x2r and not y0l and y0r
+                      and not y2l and y2r) and
+                     [|-i+x-1>=0; -x+y>=0; n-y-1>=0; i>=0|] }[m */
+end
+
+Size of (explored) equation system: 18 variables, 30 functions
+Time = 2.259000
+manager.size=472,472

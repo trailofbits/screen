@@ -77,6 +77,8 @@ struct ScreenPass : public ModulePass {
     static char ID; 
     std::vector<std::vector<Function *>> cfg_paths_funcs;
 
+    std::set<const llvm::Function *> visitedFuncs;
+  
     //TODO: intelligently pair annotations, check if same parent function  then
     //proxmity in code? (inst count of func to determine this)
 
@@ -102,7 +104,7 @@ struct ScreenPass : public ModulePass {
     // @brief A Region that also includes data that we're tracking about it
     // 
     // A Region is supposed to mark code we're interested in for later analysis,
-    // where as RegionStats is the structure used to collect data baout a region
+    // where as RegionStats is the structure used to collect data about a region
     // as we're processing it.
     struct RegionStats : public Region {
         RegionStats() : branches(0), instructions(0) { }
@@ -123,6 +125,14 @@ struct ScreenPass : public ModulePass {
 
     using RegionStatsMap = std::map<std::string, RegionStats>;
 
+
+    struct GlobalStats{
+      GlobalStats() : LOC(0) { }
+      int LOC;
+    };
+
+    GlobalStats gStats;
+  
     virtual const char *getPassName() const 
     {
         return "screen";
@@ -195,8 +205,10 @@ struct ScreenPass : public ModulePass {
     // This is called from function analysis and arbitrary span analysis.
     void surveyInstruction(const Instruction &I, RegionStats &stats, std::vector<BranchCond> &BranchCondVec)
     {
-	if (isa<BranchInst>(I)) {
-            stats.branches += 1;
+ 
+
+      if (isa<BranchInst>(I)) {
+	stats.branches += 1;
         
 	    // get Condition of the branch instruction
 	    if(cast<BranchInst>(I).isConditional()){
@@ -236,7 +248,13 @@ struct ScreenPass : public ModulePass {
         FuncStatsMap map;
 
         auto Fs = collectAnnotatedFunctions(M);
-        
+
+	typedef std::vector<const Function*>::iterator func_it;
+
+	for (func_it i = Fs.begin(); i != Fs.end(); i++) {
+	  visitedFuncs.insert(*i);
+	}
+
         auto accFunc = [this](FuncStatsMap &map, const Function *F) -> FuncStatsMap& {
             RegionStats info;
 
@@ -424,13 +442,27 @@ struct ScreenPass : public ModulePass {
         for (auto r : funcStats) {
             auto f = r.first;
             auto span = r.second;
-
             O << " - func name: " << f->getName() << ", branches: "
               << span.branches << ", instructions " << span.instructions
               << "\n";
         }
     }
-    
+  
+    void dumpGlobalStats()
+    {
+      std::set<const llvm::Function *>::iterator it;
+      for (it = visitedFuncs.begin(); it!= visitedFuncs.end(); ++it){
+	gStats.LOC += getLOCinFunction(*it);
+      }
+      
+      if (started)
+	out_fd << ",";
+      
+      out_fd << "{ \"global stats\": {\n"
+	     << "    \"analyzed LOCs\": " << gStats.LOC << "}\n"
+	     << "}";
+    }
+  
     void dumpRegionStats(const std::string &name, const RegionStats &R, std::vector<BranchCond> cmps)
     {
         if (started)
@@ -513,6 +545,19 @@ struct ScreenPass : public ModulePass {
         started = true;
     }
 
+    int getLOCinFunction(const llvm::Function *F) {
+      std::set<unsigned> lineNums;
+      for (const BasicBlock &BB: *F) {
+        for (const Instruction &I: BB) {
+	  if (DILocation *Loc = I.getDebugLoc()) { 
+	    unsigned Line = Loc->getLine();
+	    lineNums.insert(Line);
+	  }      
+        }
+      }
+      return lineNums.size();
+    }
+
     void cfgReworkDemo(const Module &M)
     {
         Function *entry = M.getFunction(kSymbolName);
@@ -542,14 +587,23 @@ struct ScreenPass : public ModulePass {
                 // consider this span finished and move the region being
                 // tracked to the completed map.
                 } else if (I.isIdenticalTo(span.end)) {
+		  auto p = T.pathVisited(name);
+		  typedef std::vector<
+		    std::pair<const llvm::CallInst*,
+			      const llvm::Function *>>::iterator vector_it;
+
                     if (completed.find(name) != completed.end()) {
-                        completed[name].callPaths.push_back(T.pathVisited(name));
+                        completed[name].callPaths.push_back(p);
+			for (vector_it i = p.begin(); i != p.end(); i++) 
+			  visitedFuncs.insert(i->second);
                     } else {
                         RegionStats trackedSpan = inProgress[name];
 
                         trackedSpan.end = span.end;
 
-                        trackedSpan.callPaths.push_back(T.pathVisited(name));
+                        trackedSpan.callPaths.push_back(p);
+			for (vector_it i = p.begin(); i != p.end(); i++) 
+			  visitedFuncs.insert(i->second);
 
                         completed[name] = trackedSpan;
 
@@ -685,6 +739,7 @@ struct ScreenPass : public ModulePass {
         cfgReworkDemo(M);
 
         function_annotation_stats(M);
+	dumpGlobalStats();
 
         out_fd << "]\n";
         out_fd.flush();

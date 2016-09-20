@@ -1,0 +1,124 @@
+typedef kind = enum { LOW, MIDDLE, HIGH };
+
+var n: int, i: int, p: int, q: int, read: kind, read2: kind,
+  datax: kind, x: int,
+  x0l: bool, x0r: bool,
+  x1l: bool, x1r: bool,
+  x2l: bool, x2r: bool,
+  datay: kind, y: int,
+  y0l: bool, y0r: bool,
+  y1l: bool, y1r: bool,
+  y2l: bool, y2r: bool;
+
+begin
+  assume 0<=x and x<y and y<n;
+  p = -1;
+  q = n;
+  i = 0;
+
+  x0l = false;
+  x0r = false;
+  x1l = false;
+  x1r = false;
+  x2l = false;
+  x2r = false;
+
+  y0l = false;
+  y0r = false;
+  y1l = false;
+  y1r = false;
+  y2l = false;
+  y2r = false;
+
+  while i<q do
+    if p<-1 then fail; endif;
+    if p>=i then fail; endif;
+    if i>=q then fail; endif;
+    if q>n then fail; endif;
+
+    if x>=q and datax!=HIGH then fail; endif;
+    if x<=p and datax!=LOW then fail; endif;
+    if x>p and x<i and (datax==LOW or datax==HIGH) then fail; endif;
+
+    if y>=q and datay!=HIGH then fail; endif;
+    if y<=p and datay!=LOW then fail; endif;
+    if y>p and y<i and (datay==LOW or datay==HIGH) then fail; endif;
+
+    x0l = x<=i;
+    x0r = x>=i;
+    y0l = y<=i;
+    y0r = y>=i;
+    read = random;
+    if x0l and x0r then
+      assume read == datax;
+    endif;
+    if y0l and y0r then
+      assume read == datay;
+    endif;
+
+    if read == LOW then
+      p = p+1;
+
+      read2 = random;
+      x1l = x<=p;
+      x1r = x>=p;
+      y1l = y<=p;
+      y1r = y>=p;
+      if x1l and x1r then
+        assume read2 == datax;
+        datax = read;
+      endif;
+      if y1l and y1r then
+        assume read2 == datay;
+        datay = read;
+      endif;
+      if x0l and x0r then
+        datax = read2;
+      endif;
+      if y0l and y0r then
+        datay = read2;
+      endif;
+
+      i = i+1;
+    else
+
+      if read == HIGH then
+        q = q-1;
+
+        read2 = random;
+        x2l = x<=q;
+        x2r = x>=q;
+        y2l = y<=q;
+        y2r = y>=q;
+        if x2l and x2r then
+          assume read2 == datax;
+          datax = read;
+        endif;
+        if y2l and y2r then
+          assume read2 == datay;
+          datay = read;
+        endif;
+        if x0l and x0r then
+          datax = read2;
+        endif;
+        if y0l and y0r then
+          datay = read2;
+        endif;
+      else
+        i = i+1;
+      endif;
+    endif;
+    read = random;
+    read2 = random;
+  done;
+  /* assume x<=p;
+  assume not (datax==LOW);
+  OK */
+  /* assume x>=q;
+  assume not (datax==HIGH);
+  OK */
+  i = random;
+  assume y>p and y<q;
+  assume datay == LOW;
+  fail;
+end

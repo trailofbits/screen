@@ -1,0 +1,125 @@
+load_package redlog;
+rlset z;
+
+COMMENT uninitialized, test==-1, postcondition i>=n-1
+f :=
+  (-i+n-1=0 and x>=0 and i-x-2>=0) or
+  (-i+x=0 and -i+n-1=0 and i-2>=0) or
+  (-i+x+1=0 and -i+n-1=0 and i-2>=0);
+end;
+
+COMMENT initialized ==-1, test==-1, postcondition i>=n-1
+f :=
+  (-i+x=0 and -i+n-1=0 and i-2>=0) or
+  (-i+n-1=0 and x>=0 and i-x-2>=0) or
+  (-i+x+1=0 and -i+n-1=0 and i-2>=0);
+
+COMMENT initialized ==42, test<=-1 && >=-1, postcondition i>=n-1 PROVES
+f := (-i+n-1=0 and x>=0 and i-x-2>=0);
+
+COMMENT uninitialized, test<=-1 && >=-1, postcondition i>=n-1 PROVES
+f:= (-i+n-1=0 and x>=0 and i-x-2>=0) or
+    (-i+x=0 and -i+n-1=0 and i-2>=0);
+
+COMMENT YES YES YES
+COMMENT uninitialized, test<=-1 && >=-1, postcondition i>=n-1 PROVES
+f:=
+  (-i+n-1>=0 and x>=0 and n-x-3>=0 and i-x-1>=0) or
+  (-i+x-1>=0 and n-x-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-2=0 and i-1>=0) or
+  (-i+x=0 and -i+n-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-1=0 and i-2>=0) or
+  (-n+x+1=0 and -i+n-2>=0 and n-3>=0 and i>=0) or
+  (-n+x+2=0 and -i+n-3>=0 and i>=0);
+g := n>2 and all(x, (x >= 0 and x<n) impl f);
+h := rlqe(g impl i<=n-2);
+COMMENT h->TRUE
+
+COMMENT initialized >=0, test==-1, postcondition i>=n-1
+f :=
+  (-i+n-1=0 and x>=0 and i-x-2>=0) or
+  (-i+x+1=0 and -i+n-1=0 and i-2>=0);
+-> FALSE
+end;
+
+COMMENT with thresholds
+f :=
+  (-i+x+1=0 and -i+n-1=0 and i-2>=0) or
+  (-i+x=0 and -i+n-2=0 and i-1>=0) or
+  (-i+n-1>=0 and x>=0 and n-x-3>=0 and i-x-1>=0) or
+  (-i+x=0 and -i+n-1=0 and i-2>=0) or
+  (-i+x-1>=0 and n-x-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-3>=0 and i>=0) or
+  (-n+x+1=0 and -i+n-2>=0 and n-3>=0 and i>=0) or
+  (-n+x+2=0 and -i+n-3>=0 and i>=0);
+
+COMMENT without thresholds
+f :=
+  [|-n+x+2=0; -i+n-3>=0; i>=0|] or
+  (stop and flag2 = hit and flag3 = hit) and
+  [|-i+x=0; -i+n-2=0; i-1>=0|] or
+  (stop and flag2 = left and flag3 = hit) and
+  [|-i+x=0; -i+n-3>=0; i>=0|] or
+  (stop and flag2 = right and flag3 = hit) and
+  [|-i+x=0; -i+n-1=0; i-2>=0|] or
+  (stop and flag2 = left and flag3 = right) and
+  [|-i+x-1>=0; n-x-3>=0; i>=0|] or
+  (stop and flag2 = left and flag3 = left) and
+  [|-i+n-1>=0; x>=0; n-x-3>=0; i-x-1>=0|] or
+  (stop and flag2 = hit and flag3 = left) and
+  [|-i+x+1=0; -i+n-1=0; i-2>=0|] or
+  (stop and flag2 = right and flag3 = right) and
+  [|-n+x+1=0; -i+n-2>=0; n-3>=0; i>=0|]
+
+COMMENT with t=42 initialization, test==-1  => PROVES
+f :=
+  (-i+x-1>=0 and n-x-3>=0 and i>=0) or
+  (-n+x+1=0 and -i+n-2>=0 and n-3>=0 and i>=0) or
+  (-n+x+2=0 and -i+n-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-2=0 and i-1>=0) or
+  (-i+n-1>=0 and x>=0 and n-x-3>=0 and i-x-1>=0) or
+  (-i+x+1=0 and -i+n-1=0 and i-2>=0);
+
+COMMENT with t=42 initialization, test <0 => PROVES
+f :=
+  (-i+x-1>=0 and n-x-3>=0 and i>=0) or
+  (-n+x+1=0 and -i+n-2>=0 and n-3>=0 and i>=0) or
+  (-n+x+2=0 and -i+n-3>=0 and i>=0) or
+  (-i+n-1>=0 and x>=0 and n-x-3>=0 and i-x-1>=0) or
+  (-i+x=0 and -i+n-2=0 and i-1>=0);
+end;
+
+COMMENT octagons without t=42 initialization, test <0 => does not prove
+f :=
+   (i>=0 and -i+n-4>=0 and i+n-4>=0 and n-4>=0 and -i+x-1>=0 and
+    i+x-1>=0 and n+x-5>=0 and x-1>=0 and n-x-3>=0) or
+   (i-1>=0 and -i+n-2>=0 and i+n-4>=0 and n-3>=0 and i-n+2>=0 and
+    -i+x>=0 and i+x-2>=0 and -n+x+2>=0 and n+x-4>=0 and x-1>=0 and
+    i-x>=0 and n-x-2>=0) or
+   (i>=0 and -i+n-3>=0 and i+n-3>=0 and n-3>=0 and -i+x>=0 and i+x>=0 and
+    n+x-3>=0 and x>=0 and i-x>=0 and n-x-3>=0) or
+   (i-2>=0 and -i+n-1>=0 and i+n-5>=0 and n-3>=0 and i-n+1>=0 and
+    -i+x>=0 and i+x-4>=0 and -n+x+1>=0 and n+x-5>=0 and x-2>=0 and
+    i-x>=0 and n-x-1>=0) or
+   (i>=0 and -i+n-3>=0 and i+n-3>=0 and n-3>=0 and -i+x-1>=0 and
+    i+x-1>=0 and -n+x+2>=0 and n+x-4>=0 and x-1>=0 and n-x-2>=0) or
+   (i-1>=0 and -i+n-1>=0 and i+n-4>=0 and n-3>=0 and i+x-1>=0 and
+    n+x-3>=0 and x>=0 and i-x-1>=0 and n-x-3>=0) or
+   (i>=0 and -i+n-2>=0 and i+n-3>=0 and n-3>=0 and -i+x-1>=0 and
+    i+x-2>=0 and -n+x+1>=0 and n+x-5>=0 and x-2>=0 and n-x-1>=0);
+end;
+
+g := n>2 and all(x, (x >= 0 and x<n) impl f);
+
+h:=rlsimpl(rlqe g);
+
+COMMENT polyhedra without t=42 initialization, test <0 => does not prove
+f :=
+  (-i+n-1>=0 and x>=0 and n-x-3>=0 and i-x-1>=0) or
+  (-i+x-1>=0 and n-x-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-2=0 and i-1>=0) or
+  (-i+x=0 and -i+n-3>=0 and i>=0) or
+  (-i+x=0 and -i+n-1=0 and i-2>=0) or
+  (-n+x+1=0 and -i+n-2>=0 and n-3>=0 and i>=0) or
+  (-n+x+2=0 and -i+n-3>=0 and i>=0);
+end;
