@@ -1,6 +1,6 @@
 #ifndef EXPANDASSUME_H
 #define EXPANDASSUME_H
-#include "llvm/Config/config.h"
+#include "llvm/Config/llvm-config.h"
 #include "llvm/Analysis/CFG.h"
 #include "llvm/IR/InstVisitor.h"
 #include "llvm/IR/Constants.h"

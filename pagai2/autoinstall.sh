@@ -5,6 +5,6 @@
 
 set -e
 
-(cd external/ && make)
+./fetch_externals.sh
 cmake .
 make $(PARALLEL_MAKE_OPTS)
