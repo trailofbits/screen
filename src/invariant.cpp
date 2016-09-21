@@ -28,6 +28,7 @@
 
 #include "range_parse.h"
 #include "traverse.h"
+#include "annotation.h"
 #include <sstream>
 
 using namespace llvm;
@@ -79,71 +80,10 @@ namespace {
 
     static char ID;
 
-    struct Region {
-      Region() :start(nullptr) ,end(nullptr) { }
-
-      const Instruction *start;
-      const Instruction *end;
-    };
-
-
     virtual const char *getPassName() const
     {
       return "screen-invariant";
     }
-
-    std::string annotationToString(const IntrinsicInst &I) {
-      GlobalVariable* annotationStrVar =
-        dyn_cast<GlobalVariable>(I.getOperand(1)->stripPointerCasts());
-
-      ConstantDataArray* annotationStrValArray =
-        dyn_cast<ConstantDataArray> (annotationStrVar->getInitializer());
-
-      StringRef annotationStrValCString =
-        annotationStrValArray->getAsCString();
-
-      return std::string {annotationStrValCString};
-    }
-
-    enum AnnotationType {
-      kAnnotationStart,
-      kAnnotationEnd,
-      kInvalidAnnotation
-    };
-
-    std::pair<AnnotationType, std::string>
-      parseAnnotation(std::string annotation) {
-        if (annotation.compare(0, kPrefix.length(), kPrefix) != 0) {
-          return {kInvalidAnnotation, ""};
-        }
-
-        std::string start = "_start";
-        std::string end = "_end";
-        std::string prefix{kPrefix};
-
-        auto a_ptr = annotation.begin();
-        auto p_ptr = prefix.begin();
-
-        for( ; *a_ptr == *p_ptr && a_ptr != annotation.end() &&
-            p_ptr != prefix.end();
-            a_ptr++, p_ptr++) {
-        }
-
-
-        std::string postfix(a_ptr, annotation.end());
-
-        if (std::equal(start.rbegin(), start.rend(), annotation.rbegin())) {
-          // 6 = strlen("_start")
-          auto name = postfix.substr(0, postfix.size() - 6);
-          return { kAnnotationStart, name};
-        } else if (std::equal(end.rbegin(), end.rend(), annotation.rbegin())) {
-          // 4 = strlen("_end")
-          auto name = postfix.substr(0, postfix.size() - 4);
-          return { kAnnotationEnd, name};
-        }
-
-        return { kInvalidAnnotation, "" };
-      }
 
     using RegionMap = std::map<std::string, Region>;
 
@@ -191,101 +131,6 @@ namespace {
       return true;
     }
 
-
-    bool endsWith(std::string const &str, std::string const &end) {
-      if (str.length() >= end.length()) {
-        return (0 == str.compare(str.length() - end.length(), end.length(), end));
-      } else {
-        return false;
-      }
-    }
-
-    bool addAnnotations(Module &M, std::string file) {
-      RangeParse parser(file);
-      if (!parser.valid()) {
-        return false;
-      }
-      DebugInfoFinder finder;
-      finder.processModule(M);
-
-      // Add annotations to functions
-      for (auto &entry : parser.locations()) {
-        if (entry.kind != RangeParse::kFunction)
-          continue;
-
-        for (auto sub : finder.subprograms()) {
-          auto fileName = sub->getFile()->getFilename().str();
-          auto funcName = sub->getName().str();
-
-          if (endsWith(fileName, entry.file)) {
-            if (funcName == entry.name) {
-              Function *F = M.getFunction(sub->getName());
-              externallyAnnotatedFunctions.push_back(F);
-              entry.added = true;
-            }
-          }
-        }
-      }
-
-      using InstructionPair = std::tuple<const Instruction *, const Instruction *>;
-      std::map<std::string, InstructionPair> toAdd;
-
-      // Collect instruction annotations
-      for (auto &F : M.functions()) {
-        for (auto &BB : F) {
-          for (auto &I : BB) {
-            if (DILocation *L = I.getDebugLoc()) {
-              unsigned line = L->getLine();
-              for (auto &entry : parser.locations()) {
-                if (entry.added == true)
-                  continue;
-
-                if (entry.kind == RangeParse::kFunction)
-                  continue;
-
-                auto file = entry.file;
-                auto lineno = entry.lineno;
-
-                if (!endsWith(L->getFilename(), file))
-                  continue;
-
-                if (lineno != line)
-                  continue;
-
-                if (entry.kind == RangeParse::kStart) {
-                  std::get<0>(toAdd[entry.name]) = &I;
-                } else if (entry.kind == RangeParse::kEnd) {
-                  std::get<1>(toAdd[entry.name]) = &I;
-                }
-
-                entry.added = true;
-              }
-            }
-          }
-        }
-      }
-
-      for (auto &tup : toAdd) {
-        const Instruction *start, *end;
-        std::tie(start, end) = std::get<1>(tup);
-        auto name = std::get<0>(tup);
-        if (start == nullptr || end == nullptr) {
-          errs() << "Unmatched range definition for '" << name << "\n";
-        };
-
-        std::remove_reference<decltype(externallyAnnotatedRanges[0])>::type namedRange;
-        std::get<0>(namedRange) = name;
-        std::get<1>(namedRange) = start;
-        std::get<2>(namedRange) = end;
-        outs() << "Adding " << name << "\n";
-        externallyAnnotatedRanges.push_back(namedRange);
-      }
-
-
-
-      return true;
-    }
-
     virtual bool runOnModule(Module &M)
     {
       if (kOutputName == "") {
@@ -293,7 +138,7 @@ namespace {
         return false;
       }
       if (kAnnotationFile.getNumOccurrences() > 0) {
-        if (addAnnotations(M, kAnnotationFile) == false) {
+        if (addAnnotations(M, kAnnotationFile, externallyAnnotatedFunctions, externallyAnnotatedRanges) == false) {
           errs() << "Bad annotations file format\n";
           return false;
         }
