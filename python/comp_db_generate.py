@@ -19,7 +19,7 @@ import sys
 import json
 import argparse
 
-VALID_COMPILERS = ('gcc', 'clang', 'cc')
+VALID_COMPILERS = ('gcc', 'clang', 'cc', 'ar')
 
 class BitcodeCompilation(object):
     '''
@@ -27,6 +27,8 @@ class BitcodeCompilation(object):
     bitcode files instead of object files.
     '''
     def __init__(self, llvm_root, verbose=False):
+        self.archived = []
+        self.asm = []
         self.produced_bc = []
         self.produced_lib_bc = []
         self.llvm_root = llvm_root
@@ -55,6 +57,8 @@ class BitcodeCompilation(object):
             if arg == '-o':
                 i += 1
                 d['output'] = cmdline[i]
+            elif '.a' in arg:
+                d['output'] = cmdline[i]
             elif arg.startswith('-'):
                 d['flags'].append(arg)
             else:
@@ -71,20 +75,38 @@ class BitcodeCompilation(object):
         cmd = []
 
         bc_name = info['bc']
-        src_ext = info['source'][0].rsplit('.', 1)[1]
+        f = None
+        for j in range(len(info['source'])):
+            i = info['source'][j]
+            if '.c' in i:
+                print(i)
+                f = i
+            if '.s' in i:
+                self.asm.append(i)
+                print(i)
+                f = "ASM"
+            if 'd.tmp' in i:
+                print(i)
+                info['source'][j] = i.rsplit('.tmp', 1)[0] 
+        if f == None:
+            raise "Source file not found!"
+        if f == "ASM":
+            return ""
+        src_ext = f.rsplit('.', 1)[1]
 
         if src_ext in ['c']:
-            cmd.append(self.llvm_root + '/bin/clang')
+            cmd.append(self.llvm_root + '/bin/clang-3.8')
         elif src_ext in ['cc', 'cpp', 'cxx']:
             cmd.append(self.llvm_root + '/bin/clang++')
         else:
             raise "Unsupported filetype"
-
+        
         cmd += info['flags']
         cmd.append('-emit-llvm')
         cmd.append('-g -O0')
         cmd += info['source']
         cmd += ['-o', bc_name]
+    
 
         return cmd
 
@@ -96,7 +118,9 @@ class BitcodeCompilation(object):
         #cmd += info['flags']
         cmd += ['-o', bc_name]
 
-        sources = [_.rsplit('.',1)[0]+'.bc' for _ in info['source']]
+        remove_asm = []
+        remove_asm = [e for e in info['source'] if e.replace('.o','') not in '\n'.join(self.asm)]
+        sources = [_.rsplit('.',1)[0]+'.bc' for _ in remove_asm]
         for v in sources:
             full_path = os.path.realpath(os.path.join(pwd, v))
             if not full_path in self.produced_bc:
@@ -113,7 +137,6 @@ class BitcodeCompilation(object):
     def add_bitcode_cmd(self, captured_cmd):
         pwd = captured_cmd['directory']
         info = self.extract(captured_cmd['command'])
-
         if not info['output']:
             self.error("Command missing output flag. ({})".format(info))
             return
@@ -127,6 +150,14 @@ class BitcodeCompilation(object):
             cmd = self.make_compile_cmd(info, pwd)
         elif info['output'].endswith('.so'):
             cmd = self.make_link_cmd(info, pwd)
+        elif info['output'].endswith('.a'):
+            if info['output'].replace('./','') in self.archived:
+                return
+            cmd = self.make_link_cmd(info, pwd)
+            self.archived.append(info['output'])
+            print("\nArchived libs\n")
+            print(self.asm)
+            print(self.archived)
 
         if cmd:
             self.commands.append((captured_cmd['directory'], cmd))
@@ -139,6 +170,10 @@ class BitcodeCompilation(object):
 
         for pwd, cmd in self.commands:
             cmdline = ' '.join(cmd)
+            # find /usr/local/ and replace with ./
+            cmdline = cmdline.replace('/usr/local', '.')
+            # account for escape strings in bash 
+            cmdline = cmdline.replace('\"', '\"\\\"')
             dest.write('pushd {}\n'.format(pwd))
             dest.write(cmdline + '\n')
             dest.write('popd\n\n')
