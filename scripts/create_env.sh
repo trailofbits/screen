@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PWD=$(dirname $0)
-PWD=$(realpath ${PWD})
-BUILD=${PWD}/build
+BASE=$(realpath ${PWD}/..)
+BUILD=${BASE}/build
 BIN=${BUILD}/llvm/bin
 
 if [ ! -d ${BIN} ]; then
@@ -11,7 +11,7 @@ if [ ! -d ${BIN} ]; then
 fi
 
 if [ "${1}" == "" ]; then
-  echo "[!] Usage: ./build.sh [output]" > /dev/stderr
+  echo "[!] Usage: ./create_env.sh [output]" > /dev/stderr
   exit 2
 fi
 
