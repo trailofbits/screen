@@ -4,6 +4,14 @@
      "cfg": [
               ["main", "fun1", "fun2", "fun3", "fun4"]
        ],
-     "cmp_inst_0": ["not_equals", "local_var", "1"]
+     "cmp_inst_0": ["not_equals", "local_var", "1"]}}
+,{ "foo": {
+     "branches": 0,
+     "instructions": 5,
+
 }}
+,{ "main": {
+     "branches": 3,
+     "instructions": 32,
+     "cmp_inst_0": ["not_equals", "local_var", "1"]}}
 ]

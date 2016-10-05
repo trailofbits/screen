@@ -105,7 +105,7 @@ B2: main-> printf-> foo-> printf-> printf
 
 sophia@litterbox:~/SCR/screen/ $ ./pagai/src/pagai -i test.bc --output-bc-v2 test_annotated.bc 
 
-sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load ./build/lib/range.dylib -invariant_analysis -invariant-output=OUTPUT_INVARIANTS test_annotated.bc -o test_fin.bc
+sophia@litterbox:~/SCR/screen/ $ ./build/llvm/bin/opt -load ./build/lib/screen.dylib -invariant_analysis -invariant-output=OUTPUT_INVARIANTS test_annotated.bc -o test_fin.bc
 
 sophia@litterbox:~/SCR/screen/ $ cat OUTPUT_INVARIANTS
 [{ "main-19" : 
