@@ -1,9 +1,10 @@
+#include <sstream>
+
 #include <fstream>
 #include "llvm/ADT/DenseMap.h"
 #include "llvm/IR/DebugInfo.h" 
 #include "llvm/IR/IntrinsicInst.h"
 #include "llvm/Pass.h"
-#include "RangeAnalysis.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/InstIterator.h"
