@@ -1,31 +1,14 @@
 #!/usr/bin/env bash
 
-cd $(dirname $0)
-LLVM_BIN=build/llvm/bin
-case $OSTYPE in
-  darwin*) 
-    EXT=dylib
-    ;;
-  linux*)
-    EXT=so
-    ;;
-  *)
-    echo "Could not detect OS (${OSTYPE})"
-    exit 2
-    ;;
-esac
+eval $(./create_env.sh examples)
 
-
-if [ ! -d ${LLVM_BIN} ]; then
-  echo "[!] LLVM not found. Run ./build.sh"
-  exit 1
-fi
+cd ../
 
 echo "[+] Compiling & Running Passes on Openssl Demos..."
 echo
 ./pagai/src/pagai -i ./openssl_demos/aesni_cbc_hmac_sha1_cipher.bc --output-bc-v2 ./openssl_demos/aesni_cbc_hmac_sha1_cipher.bc
 echo
-${LLVM_BIN}/opt -mem2reg -load build/lib/range.${EXT} openssl_demos/aesni_cbc_hmac_sha1_cipher.bc -o openssl_demos/aesni_cbc_hmac_sha1_cipher_transformed.bc -range_analysis -range-debug -invariant_analysis -invariant-debug 
+${LLVM_OPT} -mem2reg -load build/lib/range.${EXT} openssl_demos/aesni_cbc_hmac_sha1_cipher.bc -o openssl_demos/aesni_cbc_hmac_sha1_cipher_transformed.bc -range_analysis -range-debug -invariant_analysis -invariant-debug 
 echo
 cat openssl_demos/OUTPUT
 echo

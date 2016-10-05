@@ -1,9 +1,0 @@
-[{ "basic_loop": {
-     "branches": 4,
-     "instructions": 11,
-     "cfg": [
-              ["main"]
-       ],
-     "cmp_inst_0": ["signed_less_than", "local_var", "local_var"]
-}}
-]
