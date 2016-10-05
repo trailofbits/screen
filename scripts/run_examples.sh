@@ -2,8 +2,12 @@
 
 echo "RUNNING EXAMPLE SIDE CHANNELS"
 
-cd $(dirname $0)
-LLVM_BIN=build/llvm/bin
+PWD=$(dirname $0)
+BASE=$(realpath ${PWD}/..)
+BUILD=${BASE}/build
+cd $BASE
+
+LLVM_BIN=${BUILD}/llvm/bin
 case $OSTYPE in
   darwin*) 
     EXT=dylib
