@@ -1,19 +1,13 @@
 # screen
-The goal of this project are to create a LLVM pass which runs over the S2N codebase on each commit and performs compiler assisted invariant detection.
+The goal of this project is to create a LLVM pass which runs over the S2N codebase on each commit and performs compiler assisted invariant detection.
 
 This lets us find every control-flow and variable range deviation automatically, on every checkin.
 
-
-Current S2N defenses:
-- constant time routines to maintain speed
-- if any errors in client<->server connection: randomization [10,30]
-- human review for memory, want: taint analysis to verify code paths are constant, memory access patterns side channels
-
 Purpose of this tool, using annotations:
 
-1. A-B no branches
-2. A-C no branches that depend on secret memory
-3. A-D branch that depend on secret memory: print upper bound of set (e.g., proof that no new memory access patterns)
+1. A-B , verify no branches present
+2. A-C , verify no branches that depend on secret memory present
+3. A-D , in the case of a branch that depends on secret memory: print bounds of access (e.g., proof that no new memory access patterns)
 
 Targeting: arm, x86
 
